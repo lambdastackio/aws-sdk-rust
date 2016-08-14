@@ -1,0 +1,26 @@
+[package]
+name = "aws-sdk-rust"
+version = "0.1.0"
+authors = ["Chris Jones <chris.jones@lambdastack.io>"]
+license = "Apache-2.0"
+readme = "README.md"
+keywords = ["aws", "s3"]
+repository = "https://github.com/lambdastackio/aws-sdk-rsut"
+homepage = "https://github.com/lambdastackio/aws-sdk-rsut"
+documentation = "https://github.com/lambdastackio/aws-sdk-rsut"
+description = """
+AWS SDK for Rust. WIP and under heavy development - warning.
+"""
+
+[dependencies]
+chrono = "0.2.21"
+hyper = "0.9.10"
+log = "0.3.6"
+openssl = "0.7.9"
+regex = "0.1.65"
+rustc-serialize = "0.3.19"
+serde = "0.8.0"
+serde_json = "0.8.0"
+time = "0.1.35"
+url = "1.2.0"
+xml-rs = "0.1.26"
