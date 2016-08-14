@@ -48,6 +48,7 @@ const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
+/// version - represents the Signature version. The default is 4 but it can also be set to 2 for older environments.
 #[derive(Debug)]
 pub struct SignedRequest<'a> {
     method: String,
@@ -61,11 +62,12 @@ pub struct SignedRequest<'a> {
     content_type: Option<String>,
     canonical_query_string: String,
     canonical_uri: String,
+    version: String,
 }
 
 impl <'a> SignedRequest <'a> {
     /// Default constructor
-    pub fn new(method: &str, service: &str, region: Region, path: &str) -> SignedRequest<'a> {
+    pub fn new(method: &str, service: &str, region: Region, path: &str, version: &str) -> SignedRequest<'a> {
         SignedRequest {
             method: method.to_string(),
             service: service.to_string(),
@@ -78,6 +80,7 @@ impl <'a> SignedRequest <'a> {
             content_type: None,
             canonical_query_string: String::new(),
             canonical_uri: String::new(),
+            version: version.to_string(),
          }
     }
 
@@ -85,10 +88,16 @@ impl <'a> SignedRequest <'a> {
         self.content_type = Some(content_type);
     }
 
+    pub fn set_version(&mut self, version: String) {
+        self.version = version;
+    }
+
+    // NOTE: Use this for adding an actual endpoint such as s3.us-east-1.amazon.com or one of your choice.
     pub fn set_hostname(&mut self, hostname: Option<String>) {
         self.hostname = hostname;
     }
 
+    // NOTE: This pulls from default service types like S3 etc. Only use this if use AWS directly.
     pub fn set_endpoint_prefix(&mut self, endpoint_prefix: String) {
         self.hostname = Some(build_hostname(&endpoint_prefix, self.region));
     }
@@ -99,6 +108,10 @@ impl <'a> SignedRequest <'a> {
 
     pub fn method(&self) -> &str {
         &self.method
+    }
+
+    pub fn version(&self) -> &str {
+        &self.version
     }
 
     pub fn path(&self) -> &str {
@@ -161,6 +174,17 @@ impl <'a> SignedRequest <'a> {
     }
 
     pub fn sign(&mut self, creds: &AwsCredentials) {
+        if self.version == "V2" {
+            self.sign_v2(&creds);
+        } else {
+            self.sign_v4(&creds);
+        }
+    }
+
+    fn sign_v2(&mut self, creds: &AwsCredentials) {
+    }
+
+    fn sign_v4(&mut self, creds: &AwsCredentials) {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
@@ -357,6 +381,7 @@ fn to_hexdigest_from_bytes(val: &[u8]) -> String {
     h.to_hex().to_string()
 }
 
+// NOTE: Used to build a hostname from a set of defaults. Use set_hostname is preferred.
 fn build_hostname(service: &str, region: Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {

@@ -160,28 +160,59 @@ impl ListBucketsOutputWriter {
     }
 }
 
+
+// This creates the default endpoint to be used on initial create.
+fn default_endpoint(region: Region) -> String {
+    let endpoint: String = match region {
+        Region::UsEast1 => "s3.amazonaws.com".to_string(),
+        Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
+        _ => format!("s3.amazonaws.com"),
+    };
+
+    endpoint
+}
+
 #[derive(Debug)]
 pub struct S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequest {
             credentials_provider: P,
             region: Region,
             dispatcher: D,
+            endpoint: String,
+            version: String
         }
 
 impl<P> S3Client<P, Client> where P: AwsCredentialsProvider {
-    pub fn new(credentials_provider: P, region: Region) -> Self {
+    pub fn new<S>(credentials_provider: P, region: Region, version: S) -> Self where S:Into<String> {
         let mut client = Client::new();
         client.set_redirect_policy(RedirectPolicy::FollowNone);
-        S3Client::with_request_dispatcher(client, credentials_provider, region)
+        S3Client::with_request_dispatcher(client, credentials_provider, region, version)
     }
 }
 
+// NOTE: dispatcher is the hyper client dispatcher that makes the HTTP(s) requests
 impl<P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequest {
-    pub fn with_request_dispatcher(request_dispatcher: D, credentials_provider: P, region: Region) -> Self {
+    pub fn with_request_dispatcher<S>(request_dispatcher: D, credentials_provider: P, region: Region, version: S)
+        -> Self where S:Into<String> {
         S3Client {
             credentials_provider: credentials_provider,
             region: region,
+            endpoint: default_endpoint(region),
+            version: version.into(),
             dispatcher: request_dispatcher
         }
+    }
+
+    /// set_endpoint - Sets the correct endpoint.
+    ///
+    /// The default value of the endpoint is created during the 'new' method. This sets it to
+    /// s3.amazon.com
+    pub fn set_endpoint<S>(&mut self, endpoint: S) where S:Into<String> {
+        self.endpoint = endpoint.into().to_owned();
+    }
+
+    /// Gets the endpoint value
+    pub fn endpoint(&self) -> &str {
+        &self.endpoint
     }
 
     /// Creates a new bucket.
@@ -189,7 +220,7 @@ impl<P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequ
     pub fn create_bucket(&self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, S3Error> {
         let region = Region::UsEast1;
         let mut create_config : Vec<u8>;
-        let mut request = SignedRequest::new("PUT", "s3", region, "");
+        let mut request = SignedRequest::new("PUT", "s3", region, "", &self.version);
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
@@ -199,7 +230,7 @@ impl<P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequ
         }
 
         match input.acl {
-            None => (),
+            None => {},
             Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(canned_acl)),
         }
 
@@ -222,7 +253,9 @@ impl<P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequ
     /// Returns a list of all buckets owned by the authenticated sender of the
     /// request.
     pub fn list_buckets(&self) -> Result<ListBucketsOutput, S3Error> {
-        let mut request = SignedRequest::new("GET", "s3", self.region, "/");
+        let mut request = SignedRequest::new("GET", "s3", self.region, "/", &self.version);
+        request.set_hostname(Some(self.endpoint.to_owned()));
+
         let mut params = Params::new();
         params.put("Action", "ListBuckets");
         request.set_params(params);
@@ -243,15 +276,17 @@ impl<P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequ
     }
 
     fn hostname(&self, bucket: Option<&BucketName>) -> String {
+        /*
         let host = match self.region {
                     Region::UsEast1 => "s3.amazonaws.com".to_string(),
                     Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", self.region),
                     _ => format!("s3-{}.amazonaws.com", self.region),
                 };
+        */
 
         match bucket {
-            Some(b) => format!("{}.s3.amazonaws.com", b),
-            None => host,
+            Some(b) => format!("{}.{}", b, self.endpoint),
+            None => format!("{}", self.endpoint),
         }
     }
 }

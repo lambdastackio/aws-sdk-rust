@@ -62,13 +62,19 @@ fn main() {
             "<whatever your secret_access_key>",
             None).unwrap()
     );
-    
+
     let provider = DefaultCredentialsProvider::new(param_provider).unwrap();
     */
 
     // Allow the defaults w/o ParametersProvider - pass in 'None' in ::new(None)
     let provider = DefaultCredentialsProvider::new(None).unwrap();
-    let mut client = S3Client::new(provider, Region::UsEast1);
+
+    // V4 is the default signature for AWS. However, other systems also use V2.
+    let mut client = S3Client::new(provider, Region::UsEast1, "V4");
+
+    // If you wish to override the defaults of AWS then you can call the method below before
+    // making any requests.
+    // client.set_endpoint("<whatever url you want>");
 
     match client.list_buckets() {
       Ok(output) => {
