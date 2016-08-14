@@ -5,11 +5,11 @@ authors = ["Chris Jones <chris.jones@lambdastack.io>"]
 license = "Apache-2.0"
 readme = "README.md"
 keywords = ["aws", "s3"]
-repository = "https://github.com/lambdastackio/aws-sdk-rsut"
-homepage = "https://github.com/lambdastackio/aws-sdk-rsut"
-documentation = "https://github.com/lambdastackio/aws-sdk-rsut"
+repository = "https://github.com/lambdastackio/aws-sdk-rust"
+homepage = "https://github.com/lambdastackio/aws-sdk-rust"
+documentation = "https://github.com/lambdastackio/aws-sdk-rust"
 description = """
-AWS SDK for Rust. WIP and under heavy development - warning.
+BETA! - AWS SDK for Rust (only S3 currently). WIP and under heavy development - warning.
 """
 
 [dependencies]
