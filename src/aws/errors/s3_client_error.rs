@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 use aws::s3::s3client::{ObjectVersionId, ObjectVersionIdWriter, ObjectVersionIdParser, Code, CodeWriter, CodeParser, ObjectKey, ObjectKeyWriter, ObjectKeyParser, S3ClientMessage, S3ClientMessageWriter, S3ClientMessageParser};
 use aws::common::xmlutil::{XmlParseError, Peek, Next};
 use aws::common::xmlutil::{characters, start_element, end_element, string_field, peek_at_name};

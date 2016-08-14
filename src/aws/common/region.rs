@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 //! AWS Regions and helper functions.
 //!
 //! Mostly used for translating the Region enum to a string AWS accepts.

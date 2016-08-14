@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 use std::num::ParseIntError;
 use std::str::ParseBoolError;
 use std::error::Error;

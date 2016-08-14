@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 //! AWS API requests.
 //!
 //! Wraps the Hyper library to send PUT, POST, DELETE and GET requests.

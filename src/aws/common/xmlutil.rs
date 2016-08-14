@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 
 //! Tools for handling XML from AWS with helper functions for testing.
 //!

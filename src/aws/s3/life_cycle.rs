@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 #[derive(Debug, Default)]
 pub struct LifecycleExpiration {
     /// Indicates at what date the object is to be moved or deleted. Should be in GMT

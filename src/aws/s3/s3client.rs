@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 #![allow(unused_variables, unused_mut)]
 use std::fmt;
 use std::ascii::AsciiExt;

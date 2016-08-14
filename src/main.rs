@@ -18,15 +18,38 @@
 
 extern crate aws_sdk_rust;
 
-use aws_sdk_rust::aws::common::credentials::DefaultCredentialsProvider;
+use aws_sdk_rust::aws::common::credentials::{DefaultCredentialsProvider, ParametersProvider};
 use aws_sdk_rust::aws::common::region::Region;
 use aws_sdk_rust::aws::s3::s3client::S3Client;
 
 fn main() {
-    let provider = DefaultCredentialsProvider::new().unwrap();
-    println!("step 1");
+    // DefaultCredentialsProvider will end up cycling through the credentials provider list in
+    // the following order:
+    // 1. Environment - Checks the envrionment variables:
+    //      AWS_ACCESS_KEY_ID
+    //      AWS_SECRET_ACCESS_KEY
+    //      AWS_SESSION_TOKEN
+    // 2. Parameters passed in via ParametersProvider (see example below)
+    // 3. Profile provider - ~/.aws/credentials
+    // 4. IAM Provider
+
+    // Option to initialize the ParametersProvider
+    /* Example of using parameters for passing the credentials.
+    let param_provider: Option<ParametersProvider>;
+    param_provider = Some(
+        ParametersProvider::with_params(
+            "<whatever your access_key_id>",
+            "<whatever your secret_access_key>",
+            None).unwrap()
+    );
+    
+    let provider = DefaultCredentialsProvider::new(param_provider).unwrap();
+    */
+
+    // Allow the defaults w/o ParametersProvider - pass in 'None' in ::new(None)
+    let provider = DefaultCredentialsProvider::new(None).unwrap();
+
     let mut client = S3Client::new(provider, Region::UsEast1);
-    println!("step 2");
 
     match client.list_buckets() {
       Ok(output) => {

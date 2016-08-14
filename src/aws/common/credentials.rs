@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 use std::fmt;
 use std::env::*;
 use std::env;
@@ -105,7 +109,6 @@ pub struct EnvironmentProvider;
 
 impl AwsCredentialsProvider for EnvironmentProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-		//credentials_from_environment()
         let env_key = match var("AWS_ACCESS_KEY_ID") {
             Ok(val) => val,
             Err(_) => return Err(CredentialsError::new("No AWS_ACCESS_KEY_ID in environment"))
@@ -134,36 +137,49 @@ impl AwsCredentialsProvider for EnvironmentProvider {
         Ok(AwsCredentials::new(env_key, env_secret, token, in_ten_minutes()))
     }
 }
-/*
-fn credentials_from_environment() -> Result<AwsCredentials, CredentialsError> {
-    let env_key = match var("AWS_ACCESS_KEY_ID") {
-        Ok(val) => val,
-        Err(_) => return Err(CredentialsError::new("No AWS_ACCESS_KEY_ID in environment"))
-    };
-    let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
-        Ok(val) => val,
-        Err(_) => return Err(CredentialsError::new("No AWS_SECRET_ACCESS_KEY in environment"))
-    };
 
-    if env_key.is_empty() || env_secret.is_empty() {
-        return Err(CredentialsError::new("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment."));
+/// Provides AWS credentials via parameters.
+#[derive(Clone, Debug)]
+pub struct ParametersProvider {
+    credentials: Option<AwsCredentials>
+}
+
+impl ParametersProvider {
+    pub fn new() -> Result<ParametersProvider, CredentialsError> {
+        Ok(ParametersProvider{
+            credentials: None
+        })
     }
 
-    // Present when using temporary credentials, e.g. on Lambda with IAM roles
-    let token = match var("AWS_SESSION_TOKEN") {
-        Ok(val) => {
-            if val.is_empty() {
-                None
-            } else {
-                Some(val)
-            }
-        }
-        Err(_) => None,
-    };
+    pub fn with_params<K, S>(
+        access_key_id:K,
+        secret_access_key:S,
+        token:Option<String>)
+        -> Result<ParametersProvider, CredentialsError> where K:Into<String>, S:Into<String> {
 
-    Ok(AwsCredentials::new(env_key, env_secret, token, in_ten_minutes()))
+        let key = access_key_id.into();
+        let secret = secret_access_key.into();
+
+        if key.is_empty() || secret.is_empty() {
+            return Err(CredentialsError::new("Keys are invalid."));
+        }
+
+        Ok(ParametersProvider {
+            credentials: Some(AwsCredentials::new(key, secret, token, in_ten_minutes()))
+        })
+    }
 }
-*/
+
+impl AwsCredentialsProvider for ParametersProvider {
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let creds = match self.credentials {
+            Some(ref cred) => self.credentials.to_owned().unwrap(),
+            None => return Err(CredentialsError::new("No credentials.")),
+        };
+
+        Ok(creds)
+    }
+}
 
 /// Provides AWS credentials from a profile in a credentials file.
 ///
@@ -315,6 +331,7 @@ fn parse_credentials_file(location: &Path) -> Result<HashMap<String, AwsCredenti
 }
 
 /// Provides AWS credentials from a resource's IAM role.
+#[derive(Clone, Debug)]
 pub struct IamProvider;
 
 impl AwsCredentialsProvider for IamProvider {
@@ -384,11 +401,11 @@ impl AwsCredentialsProvider for IamProvider {
     }
 }
 
-/// Wrapper for ProvideAwsCredentials that caches the credentials returned by the
+/// Wrapper for AwsCredentialsProvider that caches the credentials returned by the
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
 pub struct BaseAutoRefreshingProvider<P, T> {
-	credentials_provider: P,
+	pub credentials_provider: P,
 	cached_credentials: T
 }
 
@@ -450,12 +467,12 @@ impl <P: AwsCredentialsProvider> AwsCredentialsProvider for BaseAutoRefreshingPr
 pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
 
 impl DefaultCredentialsProvider {
-    pub fn new() -> Result<DefaultCredentialsProvider, CredentialsError> {
-        Ok(try!(AutoRefreshingProvider::with_refcell(ChainProvider::new())))
+    pub fn new(parameters_provider: Option<ParametersProvider>) -> Result<DefaultCredentialsProvider, CredentialsError> {
+        Ok(try!(AutoRefreshingProvider::with_refcell(ChainProvider::new(parameters_provider))))
     }
 }
 
-/// The credentials provider you probably want to use if you do require your AWS services.
+/// The credentials provider you probably want to use if you do require your AWS services sync.
 /// Wraps a ChainProvider in an AutoRefreshingProvider that uses a Mutex to lock credentials in a
 /// threadsafe manner.
 ///
@@ -467,8 +484,8 @@ impl DefaultCredentialsProvider {
 pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
 
 impl DefaultCredentialsProviderSync {
-    pub fn new() -> Result<DefaultCredentialsProviderSync, CredentialsError> {
-        Ok(try!(AutoRefreshingProviderSync::with_mutex(ChainProvider::new())))
+    pub fn new(parameters_provider: Option<ParametersProvider>) -> Result<DefaultCredentialsProviderSync, CredentialsError> {
+        Ok(try!(AutoRefreshingProviderSync::with_mutex(ChainProvider::new(parameters_provider))))
     }
 }
 
@@ -477,18 +494,29 @@ impl DefaultCredentialsProviderSync {
 /// The following sources are checked in order for credentials when calling `credentials`:
 ///
 /// 1. Environment variables: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
-/// 2. AWS credentials file. Usually located at `~/.aws/credentials`.
-/// 3. IAM instance profile. Will only work if running on an EC2 instance with an instance profile/role.
+/// 2. Parameters option. This is set in your code however you wish to set it. For example,
+///    you could read from your own config file and set them or however.
+/// 3. AWS credentials file. Usually located at `~/.aws/credentials`.
+/// 4. IAM instance profile. Will only work if running on an EC2 instance with an instance profile/role.
 ///
 /// If the sources are exhausted without finding credentials, an error is returned.
+/// NOTE: If the chain makes it to the IAM provider then TCP timeout may cause a wait.
+///
 #[derive(Debug, Clone)]
 pub struct ChainProvider {
+    parameters_provider: Option<ParametersProvider>,
     profile_provider: Option<ProfileProvider>,
 }
 
 impl AwsCredentialsProvider for ChainProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
     	EnvironmentProvider.credentials()
+            .or_else(|_| {
+                match self.parameters_provider {
+                    Some(ref provider) => provider.credentials(),
+                    None => Err(CredentialsError::new(""))
+                }
+            })
     		.or_else(|_| {
                 match self.profile_provider {
                     Some(ref provider) => provider.credentials(),
@@ -502,15 +530,29 @@ impl AwsCredentialsProvider for ChainProvider {
 
 impl ChainProvider {
     /// Create a new `ChainProvider` using a `ProfileProvider` with the default settings.
-    pub fn new() -> ChainProvider {
+    pub fn new(parameters_provider: Option<ParametersProvider>) -> ChainProvider {
         ChainProvider {
+            parameters_provider: parameters_provider,
             profile_provider: ProfileProvider::new().ok(),
         }
     }
 
-    /// Create a new `ChainProvider` using the provided `ProfileProvider`.
-    pub fn with_profile_provider(profile_provider: ProfileProvider) -> ChainProvider {
+    /// Create a new `ChainProvider` using the provided `ParametersProvider`.
+    pub fn with_param_provider(&self,
+        parameters_provider: ParametersProvider
+        ) -> ChainProvider {
         ChainProvider {
+            parameters_provider: Some(parameters_provider),
+            profile_provider: None,
+        }
+    }
+
+    /// Create a new `ChainProvider` using the provided `ProfileProvider`.
+    pub fn with_profile_provider(&self,
+        profile_provider: ProfileProvider
+        ) -> ChainProvider {
+        ChainProvider {
+            parameters_provider: None,
             profile_provider: Some(profile_provider),
         }
     }

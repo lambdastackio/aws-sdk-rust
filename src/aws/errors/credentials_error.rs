@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 use std::fmt;
 use std::error::Error;
 use std::io::Error as IoError;

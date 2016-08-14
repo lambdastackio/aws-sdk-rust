@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 //! Parameters for talking to query-based AWS services.
 //!
 //! Key-value pairs for AWS query requests.

@@ -14,6 +14,10 @@
  limitations under the License.
 */
 
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
 #[derive(Debug, Default)]
 pub struct PutBucketNotificationRequest {
     pub notification_configuration: NotificationConfigurationDeprecated,
