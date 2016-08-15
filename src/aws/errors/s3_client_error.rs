@@ -18,10 +18,10 @@
  Portions borrowed from the rusoto project. See README.md
 */
 
-use aws::s3::s3client::{ObjectVersionId, ObjectVersionIdWriter, ObjectVersionIdParser, Code, CodeWriter, CodeParser, ObjectKey, ObjectKeyWriter, ObjectKeyParser, S3ClientMessage, S3ClientMessageWriter, S3ClientMessageParser};
 use aws::common::xmlutil::{XmlParseError, Peek, Next};
 use aws::common::xmlutil::{characters, start_element, end_element, string_field, peek_at_name};
 use aws::common::params::Params;
+use aws::s3::writeparse::*;
 
 #[derive(Debug, Default)]
 pub struct S3ClientError {
@@ -32,10 +32,10 @@ pub struct S3ClientError {
 }
 
 /// Parse `S`3ClientError from XML
-struct S3ClientErrorParser;
+pub struct S3ClientErrorParser;
 
 impl S3ClientErrorParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<S3ClientError, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<S3ClientError, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = S3ClientError::default();
         loop {
@@ -64,10 +64,10 @@ impl S3ClientErrorParser {
 }
 
 /// Write `S3ClientError` contents to a `SignedRequest`
-struct S3ClientErrorWriter;
+pub struct S3ClientErrorWriter;
 
 impl S3ClientErrorWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &S3ClientError) {
+    pub fn write_params(params: &mut Params, name: &str, obj: &S3ClientError) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "VersionId"), &obj.version_id);

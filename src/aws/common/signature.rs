@@ -63,6 +63,7 @@ pub struct SignedRequest<'a> {
     canonical_query_string: String,
     canonical_uri: String,
     version: String,
+    secure: bool,
 }
 
 impl <'a> SignedRequest <'a> {
@@ -81,6 +82,7 @@ impl <'a> SignedRequest <'a> {
             canonical_query_string: String::new(),
             canonical_uri: String::new(),
             version: version.to_string(),
+            secure: true,
          }
     }
 
@@ -173,6 +175,16 @@ impl <'a> SignedRequest <'a> {
         self.params = params;
     }
 
+    /// set_secure(secure: bool) - Allows you to override the default secure flag.
+    pub fn set_secure(&mut self, secure: bool) {
+        self.secure = secure;
+    }
+
+    /// secure() - Returns the secure bool flag
+    pub fn secure(&self) -> bool {
+        self.secure
+    }
+
     pub fn sign(&mut self, creds: &AwsCredentials) {
         if self.version == "V2" {
             self.sign_v2(&creds);
@@ -182,6 +194,85 @@ impl <'a> SignedRequest <'a> {
     }
 
     fn sign_v2(&mut self, creds: &AwsCredentials) {
+        debug!("Creating request to send to AWS.");
+        let hostname = match self.hostname {
+            Some(ref h) => h.to_string(),
+            None => build_hostname(&self.service, self.region)
+        };
+
+        // Gotta remove and re-add headers since by default they append the value.  If we're following
+        // a 307 redirect we end up with Three Stooges in the headers with duplicate values.
+        self.remove_header("host");
+        self.add_header("host", &hostname);
+
+        if let Some(ref token) = *creds.token() {
+            self.remove_header("X-Amz-Security-Token");
+            self.add_header("X-Amz-Security-Token", token);
+        }
+
+        self.canonical_query_string = build_canonical_query_string(&self.params);
+
+        let date = now_utc();
+        self.remove_header("x-amz-date");
+        self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
+
+        // build the canonical request
+        let signed_headers = signed_headers(&self.headers);
+        self.canonical_uri = canonical_uri(&self.path);
+        let canonical_headers = canonical_headers(&self.headers);
+
+        let canonical_request : String;
+
+        // V2...
+        match self.payload {
+            None => {
+                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+                    &self.method,
+                    self.canonical_uri,
+                    self.canonical_query_string,
+                    canonical_headers,
+                    signed_headers,
+                    &to_hexdigest_from_string(""));
+                self.remove_header("x-amz-content-sha256");
+                self.add_header("x-amz-content-sha256", &to_hexdigest_from_string(""));
+            }
+            Some(payload) => {
+                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+                    &self.method,
+                    self.canonical_uri,
+                    self.canonical_query_string,
+                    canonical_headers,
+                    signed_headers,
+                    &to_hexdigest_from_bytes(payload));
+                self.remove_header("x-amz-content-sha256");
+                self.add_header("x-amz-content-sha256", &to_hexdigest_from_bytes(payload));
+                self.remove_header("content-length");
+                self.add_header("content-length", &format!("{}", payload.len()));
+            }
+        }
+
+        self.remove_header("content-type");
+        let ct = match self.content_type {
+            Some(ref h) => h.to_string(),
+            None => String::from("application/octet-stream")
+        };
+
+        self.add_header("content-type", &ct);
+
+        // use the hashed canonical request to build the string to sign
+        let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
+        let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), self.region, &self.service);
+        let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
+
+        // construct the signing key and sign the string with it
+        let signing_key = signing_key(creds.aws_secret_access_key(), date, &self.region.to_string(), &self.service);
+        let signature = signature(&string_to_sign, signing_key);
+
+        // build the actual auth header
+        let auth_header = format!("AWS4-HMAC-SHA256 Credential={}/{}, SignedHeaders={}, Signature={}",
+                   &creds.aws_access_key_id(), scope, signed_headers, signature);
+        self.remove_header("authorization");
+        self.add_header("authorization", &auth_header);
     }
 
     fn sign_v4(&mut self, creds: &AwsCredentials) {
@@ -227,7 +318,6 @@ impl <'a> SignedRequest <'a> {
                 self.add_header("x-amz-content-sha256", &to_hexdigest_from_string(""));
             }
             Some(payload) => {
-                // This is hashing the payload twice, booo:
                 canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
                     &self.method,
                     self.canonical_uri,

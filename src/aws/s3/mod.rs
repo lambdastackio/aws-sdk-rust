@@ -15,5 +15,8 @@
 */
 
 pub mod s3client;
+pub mod bucket;
+pub mod writeparse;
+
 //pub mod bucket_notification;
 //pub mod life_cycle;
