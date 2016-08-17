@@ -20,11 +20,6 @@ extern crate aws_sdk_rust;
 extern crate url;
 extern crate hyper;
 
-//use std::str::FromStr;
-
-//use url::Url;
-
-//use aws_sdk_rust::aws::common::credentials::{DefaultCredentialsProvider, ParametersProvider};
 use aws_sdk_rust::aws::common::credentials::DefaultCredentialsProvider;
 use aws_sdk_rust::aws::common::region::Region;
 use aws_sdk_rust::aws::s3::s3client::S3Client;
@@ -42,6 +37,8 @@ fn main() {
 
     // Option to initialize the ParametersProvider
     /* Example of using parameters for passing the credentials.
+    use aws_sdk_rust::aws::common::credentials::{DefaultCredentialsProvider, ParametersProvider};
+
     let param_provider: Option<ParametersProvider>;
     param_provider = Some(
         ParametersProvider::with_params(
