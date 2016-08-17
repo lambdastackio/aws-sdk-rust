@@ -14,6 +14,7 @@
  limitations under the License.
 */
 
+pub mod endpoint;
 pub mod s3client;
 pub mod bucket;
 pub mod writeparse;

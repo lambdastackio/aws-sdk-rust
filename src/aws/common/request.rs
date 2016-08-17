@@ -113,6 +113,7 @@ impl DispatchSignedRequest for Client {
             }
         }
 
+        // SENDS
         let mut hyper_response = match request.payload() {
             None => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send()),
             Some(payload_contents) => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents).send()),

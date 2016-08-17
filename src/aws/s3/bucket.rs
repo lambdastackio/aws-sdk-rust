@@ -18,11 +18,7 @@
  Portions borrowed from the rusoto project. See README.md
 */
 
-use xml::*;
-
-use aws::common::params::{Params, ServiceParams};
 use aws::common::region::Region;
-use aws::common::xmlutil::*;
 use aws::s3::writeparse::*;
 
 /// Helper function to determine if a create config is needed.

@@ -31,7 +31,6 @@ use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
-use hyper::status::StatusCode;
 use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
 use openssl::crypto::hmac::hmac;
@@ -44,7 +43,7 @@ use aws::common::credentials::AwsCredentials;
 use aws::common::params::Params;
 use aws::common::region::Region;
 
-const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
+//const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process

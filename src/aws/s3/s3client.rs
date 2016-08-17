@@ -19,21 +19,12 @@
 */
 
 #![allow(unused_variables, unused_mut)]
-use std::fmt;
-use std::ascii::AsciiExt;
-use std::collections::HashMap;
-use std::error::Error;
-use std::io::BufReader;
-use std::io::Read;
-use std::num::ParseIntError;
-use std::str::{FromStr, ParseBoolError};
 use std::str;
+use std::env;
 
 use hyper::client::{Client, RedirectPolicy};
-use openssl::crypto::hash::Type::MD5;
-use openssl::crypto::hash::hash;
-use rustc_serialize::base64::{ToBase64, STANDARD};
-use xml::*;
+use url::Url;
+use xml::reader::EventReader;
 
 use aws::common::credentials::{AwsCredentialsProvider, AwsCredentials};
 use aws::common::region::Region;
@@ -42,9 +33,10 @@ use aws::common::params::{Params, ServiceParams};
 use aws::common::signature::SignedRequest;
 use aws::common::request::{DispatchSignedRequest, HttpResponse};
 use aws::errors::s3_error::S3Error;
-use aws::errors::credentials_error::CredentialsError;
 use aws::s3::writeparse::*;
 use aws::s3::bucket::*;
+
+//header! { (ProxyAuthorization, "Proxy-Authorization") => [String] }
 
 // This creates the default endpoint to be used on initial create.
 fn default_endpoint(region: Region) -> String {
@@ -57,6 +49,48 @@ fn default_endpoint(region: Region) -> String {
     endpoint
 }
 
+pub fn http_client(proxy: Option<Url>) -> Client {
+    // Set proxy here if enabled...
+    let mut proxy_url: String = String::new();
+    let mut proxy_port: u16 = 0;
+
+    let is_proxy = match proxy {
+        Some(url) => {
+            proxy_url = url.host_str().unwrap_or("").to_string();
+            proxy_port = url.port_or_known_default().unwrap();
+            true
+        }
+        None => {
+            // Check envrionment var http_proxy
+            // TODO: https_proxy
+            match env::var("http_proxy") {
+                Ok(url) => {
+                    let url = Url::parse(&url).unwrap();
+                    proxy_url = url.host_str().unwrap_or("").to_string();
+                    proxy_port = url.port_or_known_default().unwrap();
+                    true
+                }
+                _ => {
+                    match env::var("HTTP_PROXY") {
+                        Ok(url) => {
+                            let url = Url::parse(&url).unwrap();
+                            proxy_url = url.host_str().unwrap_or("").to_string();
+                            proxy_port = url.port_or_known_default().unwrap();
+                            true
+                        }
+                        _ => false,
+                    }
+                }
+            }
+
+        }
+    };
+
+    match is_proxy {
+        true => Client::with_http_proxy(proxy_url, proxy_port),
+        _ => Client::new()
+    }
+}
 
 /// S3Client - Base client all
 /// Virtual Hosting S3 docs - http://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html
@@ -66,28 +100,33 @@ pub struct S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequ
             credentials_provider: P,
             region: Region,
             dispatcher: D,
-            endpoint: String,
-            version: String
+            endpoint: String,  // NOTE: Change to Url type
+            version: String,
         }
 
-impl<P> S3Client<P, Client> where P: AwsCredentialsProvider {
-    pub fn new<S>(credentials_provider: P, region: Region, version: S) -> Self where S:Into<String> {
-        let mut client = Client::new();
+impl <P> S3Client<P, Client> where P: AwsCredentialsProvider {
+    pub fn new<S>(credentials_provider: P, region: Region, version: S, proxy: Option<Url>) -> Self where S:Into<String> {
+
+        let mut client = http_client(proxy);
+
         client.set_redirect_policy(RedirectPolicy::FollowNone);
         S3Client::with_request_dispatcher(client, credentials_provider, region, version)
     }
 }
 
 // NOTE: dispatcher is the hyper client dispatcher that makes the HTTP(s) requests
-impl<P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequest {
-    pub fn with_request_dispatcher<S>(request_dispatcher: D, credentials_provider: P, region: Region, version: S)
+impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequest {
+    pub fn with_request_dispatcher<S>(request_dispatcher: D,
+        credentials_provider: P,
+        region: Region,
+        version: S)
         -> Self where S:Into<String> {
         S3Client {
             credentials_provider: credentials_provider,
             region: region,
             endpoint: default_endpoint(region),
             version: version.into(),
-            dispatcher: request_dispatcher
+            dispatcher: request_dispatcher,
         }
     }
 

@@ -18,20 +18,10 @@
  Portions borrowed from the rusoto project. See README.md
 */
 
-use std::fmt;
-use std::ascii::AsciiExt;
-use std::collections::HashMap;
-use std::error::Error;
-use std::io::BufReader;
-use std::io::Read;
-use std::num::ParseIntError;
-use std::str::{FromStr, ParseBoolError};
+use std::str::FromStr;
 use std::str;
 
-use xml::*;
-
 use aws::common::params::{Params, ServiceParams};
-use aws::common::region::Region;
 use aws::common::xmlutil::*;
 use aws::s3::bucket::Bucket;
 
@@ -212,6 +202,7 @@ pub type Buckets = Vec<Bucket>;
 pub struct BucketsParser;
 
 impl BucketsParser {
+    #[allow(unused_variables)]
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Buckets, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Bucket" {
@@ -253,7 +244,7 @@ pub struct BucketAlreadyExistsParser;
 impl BucketAlreadyExistsParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketAlreadyExists, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = BucketAlreadyExists::default();
+        let obj = BucketAlreadyExists::default();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
@@ -263,6 +254,7 @@ impl BucketAlreadyExistsParser {
 pub struct BucketAlreadyExistsWriter;
 
 impl BucketAlreadyExistsWriter {
+    #[allow(unused_variables)]
     pub fn write_params(params: &mut Params, name: &str, obj: &BucketAlreadyExists) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }

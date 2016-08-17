@@ -17,8 +17,15 @@
 // Sample access code and testing ground for the library.
 
 extern crate aws_sdk_rust;
+extern crate url;
+extern crate hyper;
 
-use aws_sdk_rust::aws::common::credentials::{DefaultCredentialsProvider, ParametersProvider};
+//use std::str::FromStr;
+
+//use url::Url;
+
+//use aws_sdk_rust::aws::common::credentials::{DefaultCredentialsProvider, ParametersProvider};
+use aws_sdk_rust::aws::common::credentials::DefaultCredentialsProvider;
 use aws_sdk_rust::aws::common::region::Region;
 use aws_sdk_rust::aws::s3::s3client::S3Client;
 
@@ -50,12 +57,11 @@ fn main() {
     let provider = DefaultCredentialsProvider::new(None).unwrap();
 
     // V4 is the default signature for AWS. However, other systems also use V2.
-    let mut client = S3Client::new(provider, Region::UsEast1, "V4");
+    let client = S3Client::new(provider, Region::UsEast1, "V4", None);
 
     // If you wish to override the defaults of AWS then you can call the method below before
     // making any requests.
     // client.set_endpoint("<whatever url you want>");
-
     println!("Endpoint: {}", client.endpoint());
 
     match client.list_buckets() {

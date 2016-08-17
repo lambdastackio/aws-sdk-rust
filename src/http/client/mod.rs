@@ -14,21 +14,6 @@
  limitations under the License.
 */
 
-#[macro_use]
-extern crate log;
-extern crate chrono;
-extern crate openssl;
-extern crate regex;
-extern crate rustc_serialize;
-extern crate serde;
-extern crate serde_json;
-extern crate time;
-extern crate url;
-extern crate xml;
-extern crate httparse;
-
-#[macro_use]
-extern crate hyper;
-
-pub mod aws;
-pub mod http;
+pub mod error;
+pub mod net;
+pub mod proxy;

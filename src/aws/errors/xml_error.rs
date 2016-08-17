@@ -69,13 +69,15 @@ impl XmlErrorDeserializer {
 	}
 }
 
-
 pub type Errors = Vec<String>;
 
 /// Parse `Errors` from XML
+#[allow(dead_code)]
 struct ErrorsParser;
 
 impl ErrorsParser {
+	#[allow(dead_code)]
+	#[allow(unused_variables)]
     fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Errors, XmlParseError> {
         let mut obj : Vec<String> = Vec::new();
         while try!(peek_at_name(stack)) == "Error" {
@@ -84,7 +86,6 @@ impl ErrorsParser {
         Ok(obj)
     }
 
-    // hand crafted:
     fn parse_single_error<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
         // TODO: go back to try!
 
@@ -96,9 +97,11 @@ impl ErrorsParser {
 }
 
 /// Write `Errors` contents to a `SignedRequest`
+#[allow(dead_code)]
 struct ErrorsWriter;
 
 impl ErrorsWriter {
+	#[allow(dead_code)]
     fn write_params(params: &mut Params, name: &str, obj: &Errors) {
         let mut index = 1;
         for element in obj.iter() {
@@ -108,7 +111,7 @@ impl ErrorsWriter {
         }
     }
 
-    // hand crafted:
+	#[allow(dead_code)]
     fn write_param(params: &mut Params, key: &str, value: &str) {
         params.put(key, value);
     }

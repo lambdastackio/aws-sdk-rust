@@ -19,7 +19,7 @@
 */
 
 use aws::common::xmlutil::{XmlParseError, Peek, Next};
-use aws::common::xmlutil::{characters, start_element, end_element, string_field, peek_at_name};
+use aws::common::xmlutil::{start_element, end_element, peek_at_name};
 use aws::common::params::Params;
 use aws::s3::writeparse::*;
 

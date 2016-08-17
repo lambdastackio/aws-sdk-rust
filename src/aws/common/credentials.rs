@@ -18,16 +18,15 @@
  Portions borrowed from the rusoto project. See README.md
 */
 
-use std::fmt;
 use std::env::*;
 use std::env;
-use std::error::Error;
+//use std::error::Error;
 use std::fs;
 use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::io::prelude::*;
 use std::io::BufReader;
-use std::io::Error as IoError;
+//use std::io::Error as IoError;
 use std::ascii::AsciiExt;
 use std::collections::HashMap;
 use std::sync::Mutex;
@@ -37,7 +36,7 @@ use std::time::Duration as StdDuration;
 use hyper::Client;
 use hyper::header::Connection;
 use regex::Regex;
-use chrono::{Duration, UTC, DateTime, ParseError};
+use chrono::{Duration, UTC, DateTime}; //, ParseError};
 use serde_json::{Value, from_str};
 
 use aws::errors::credentials_error::CredentialsError;
@@ -173,8 +172,8 @@ impl ParametersProvider {
 impl AwsCredentialsProvider for ParametersProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         let creds = match self.credentials {
-            Some(ref cred) => self.credentials.to_owned().unwrap(),
             None => return Err(CredentialsError::new("No credentials.")),
+            Some(_) => self.credentials.to_owned().unwrap(),
         };
 
         Ok(creds)
