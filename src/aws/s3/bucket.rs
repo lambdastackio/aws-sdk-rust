@@ -38,8 +38,8 @@ pub fn create_bucket_config_xml(region: Region) -> Vec<u8> {
         }
         _ => {
             let xml = format!("<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">
-        <LocationConstraint>{}</LocationConstraint>
-        </CreateBucketConfiguration >", region);
+                <LocationConstraint>{}</LocationConstraint>
+                </CreateBucketConfiguration >", region);
             xml.into_bytes()
         }
     }

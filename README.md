@@ -5,6 +5,16 @@ AWS SDK with initial emphasis on S3. Supports both V2 and V4 authentication sign
 ## S3
 The initial access is for solid AWS S3 support. The SDK is built to allow non-aws environments that support an S3 API interface such as Ceph and other object stores to accessible from Rust.
 
+## Proxy
+In many corporate environments the use of proxies are mandatory. Proxies are usually handled by setting the following environment variables:
+```
+http_proxy=<whatever your proxy url>:<whatever port if any>
+https_proxy=<whatever your proxy url>:<whatever port if any>
+no_proxy=<whatever IPs, domains, hosts, etc that should not go through a proxy (separate by commas)>
+```
+
+You can also pass in the proxy settings via Url to the S3Client or pass in `None`. This will allow you to use your own config file if desired so that you can read in the proxy settings and pass them S3Client.
+
 ## Configuring Credentials
 
 Before using the SDK, ensure that you've configured credentials. The best
@@ -13,8 +23,8 @@ way to configure credentials on a development machine is to use the
 
 ```
 [default]
-aws_access_key_id = AKID1234567890
-aws_secret_access_key = MY-SECRET-KEY
+aws_access_key_id = <whatever access_key_id>
+aws_secret_access_key = <whatever secret_access_key>
 ```
 
 You can learn more about the credentials file from this
@@ -23,13 +33,13 @@ You can learn more about the credentials file from this
 Alternatively, you can set the following environment variables:
 
 ```
-AWS_ACCESS_KEY_ID=AKID1234567890
-AWS_SECRET_ACCESS_KEY=MY-SECRET-KEY
+AWS_ACCESS_KEY_ID=<whatever access_key_id>
+AWS_SECRET_ACCESS_KEY=<whatever secret_access_key>
 ```
 
 ## Using the Rust SDK
 
-To use a service in the SDK, create a service variable by calling the `S3Client::new()`
+To use a service in the SDK, create a service variable by calling the `S3Client::new(...)`
 function. Once you have a service client, you can call API operations which each
 return response data and a possible error.
 
@@ -42,6 +52,7 @@ extern crate hyper;
 
 use aws_sdk_rust::aws::common::credentials::DefaultCredentialsProvider;
 use aws_sdk_rust::aws::common::region::Region;
+use aws_sdk_rust::aws::s3::endpoint::Endpoint;
 use aws_sdk_rust::aws::s3::s3client::S3Client;
 
 fn main() {
@@ -74,12 +85,8 @@ fn main() {
     let provider = DefaultCredentialsProvider::new(None).unwrap();
 
     // V4 is the default signature for AWS. However, other systems also use V2.
-    let client = S3Client::new(provider, Region::UsEast1, "V4", None);
-
-    // If you wish to override the defaults of AWS then you can call the method below before
-    // making any requests.
-    // client.set_endpoint("<whatever url you want>");
-    println!("Endpoint: {}", client.endpoint());
+    let endpoint = Endpoint::new(Region::UsEast1, "V4", None, None);
+    let client = S3Client::new(provider, endpoint);
 
     match client.list_buckets() {
       Ok(output) => {

@@ -14,10 +14,54 @@
  limitations under the License.
 */
 
-
+use url::Url;
 use aws::common::region::Region;
 
+/// Endpoint allows you to set a custom endpoint and/or a proxy for a given region and associate this
+/// as an endpoint of where S3Client will look for the data.
 #[allow(dead_code)]
+#[derive(Debug, Clone)]
 pub struct Endpoint {
-    region: Region,
+    pub region: Region,
+    pub signature: String,
+    pub endpoint: Option<Url>,
+    pub proxy: Option<Url>
+}
+
+impl Endpoint {
+    /// Endpoint::new accepts Region, an optional Url and an optional proxy url:port.
+    pub fn new<S>(region: Region, signature: S, endpoint: Option<Url>, proxy: Option<Url>)
+    -> Self where S:Into<String> {
+        Endpoint{
+            region: region,
+            signature: signature.into(),
+            endpoint: default_endpoint(region, endpoint),
+            proxy: proxy }
+    }
+
+    pub fn hostname(&self) -> Option<String> {
+        match self.endpoint {
+            None => None,
+            Some(ref url) => Some(url.host_str().unwrap().to_string()),
+        }
+    }
+}
+
+// This creates the default endpoint to be used on initial create if endpoint is None
+fn default_endpoint(region: Region, endpoint: Option<Url>) -> Option<Url> {
+    let final_endpoint: Url;
+    match endpoint {
+        Some(url) => final_endpoint = url,
+        None => {
+            // NOTE: Must include the correct scheme (http or https)
+            let endpoint: String = match region {
+                Region::UsEast1 => "https://s3.amazonaws.com".to_string(),
+                Region::CnNorth1 => format!("https://s3.{}.amazonaws.com.cn", region),
+                _ => format!("https://s3.amazonaws.com"),
+            };
+            final_endpoint = Url::parse(&endpoint).unwrap();
+        }
+    };
+
+    Some(final_endpoint)
 }

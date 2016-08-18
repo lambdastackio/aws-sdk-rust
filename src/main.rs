@@ -21,7 +21,9 @@ extern crate url;
 extern crate hyper;
 
 use aws_sdk_rust::aws::common::credentials::DefaultCredentialsProvider;
+use aws_sdk_rust::aws::s3::bucket::CreateBucketRequest;
 use aws_sdk_rust::aws::common::region::Region;
+use aws_sdk_rust::aws::s3::endpoint::Endpoint;
 use aws_sdk_rust::aws::s3::s3client::S3Client;
 
 fn main() {
@@ -54,12 +56,26 @@ fn main() {
     let provider = DefaultCredentialsProvider::new(None).unwrap();
 
     // V4 is the default signature for AWS. However, other systems also use V2.
-    let client = S3Client::new(provider, Region::UsEast1, "V4", None);
+    let endpoint = Endpoint::new(Region::UsEast1, "V4", None, None);
+    let client = S3Client::new(provider, endpoint);
 
-    // If you wish to override the defaults of AWS then you can call the method below before
-    // making any requests.
-    // client.set_endpoint("<whatever url you want>");
-    println!("Endpoint: {}", client.endpoint());
+    // NOTE: Going to simplify this with a new method!
+    let bucket = CreateBucketRequest{
+        grant_full_control: None,
+        create_bucket_configuration: None,
+        grant_write_acp: None,
+        bucket: "<whatever your bucket name>".to_string(),
+        acl: None,
+        grant_write: None,
+        grant_read: None,
+        grant_read_acp: None,
+
+    };
+
+    match client.create_bucket(&bucket) {
+        Ok(bucket) => println!("{:?}", bucket),
+        Err(e) => println!("{:?}", e)
+    }
 
     match client.list_buckets() {
       Ok(output) => {

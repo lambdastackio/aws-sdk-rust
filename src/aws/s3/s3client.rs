@@ -35,22 +35,13 @@ use aws::common::request::{DispatchSignedRequest, HttpResponse};
 use aws::errors::s3_error::S3Error;
 use aws::s3::writeparse::*;
 use aws::s3::bucket::*;
+use aws::s3::endpoint::Endpoint;
 
 //header! { (ProxyAuthorization, "Proxy-Authorization") => [String] }
 
-// This creates the default endpoint to be used on initial create.
-fn default_endpoint(region: Region) -> String {
-    let endpoint: String = match region {
-        Region::UsEast1 => "s3.amazonaws.com".to_string(),
-        Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
-        _ => format!("s3.amazonaws.com"),
-    };
-
-    endpoint
-}
-
+/// Returns a valid hyper client. If proxies are passed in then a proxy version of the client is returned.
+/// If None is passed then in then the default Client is returned.
 pub fn http_client(proxy: Option<Url>) -> Client {
-    // Set proxy here if enabled...
     let mut proxy_url: String = String::new();
     let mut proxy_port: u16 = 0;
 
@@ -97,58 +88,63 @@ pub fn http_client(proxy: Option<Url>) -> Client {
 ///
 #[derive(Debug)]
 pub struct S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequest {
-            credentials_provider: P,
-            region: Region,
-            dispatcher: D,
-            endpoint: String,  // NOTE: Change to Url type
-            version: String,
-        }
+        credentials_provider: P,
+        dispatcher: D,
+        region: Region,
+        endpoint: Endpoint,
+        //endpoint: String,
+        //version: String,
+    }
 
 impl <P> S3Client<P, Client> where P: AwsCredentialsProvider {
-    pub fn new<S>(credentials_provider: P, region: Region, version: S, proxy: Option<Url>) -> Self where S:Into<String> {
-
-        let mut client = http_client(proxy);
+    //pub fn new<S>(credentials_provider: P, region: Region, version: S, proxy: Option<Url>) -> Self where S:Into<String> {
+    pub fn new(credentials_provider: P, endpoint: Endpoint) -> Self {
+        // Hyper client
+        let mut client = http_client(endpoint.proxy.clone());
 
         client.set_redirect_policy(RedirectPolicy::FollowNone);
-        S3Client::with_request_dispatcher(client, credentials_provider, region, version)
+        S3Client::with_request_dispatcher(client, credentials_provider, endpoint)
+        //S3Client::with_request_dispatcher(client, credentials_provider, region, version)
     }
 }
 
 // NOTE: dispatcher is the hyper client dispatcher that makes the HTTP(s) requests
 impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedRequest {
-    pub fn with_request_dispatcher<S>(request_dispatcher: D,
+    pub fn with_request_dispatcher(request_dispatcher: D,
         credentials_provider: P,
-        region: Region,
-        version: S)
-        -> Self where S:Into<String> {
+        endpoint: Endpoint)
+        //region: Region,
+        //version: S)
+        //-> Self where S:Into<String> {
+        -> Self {
         S3Client {
             credentials_provider: credentials_provider,
-            region: region,
-            endpoint: default_endpoint(region),
-            version: version.into(),
+            region: endpoint.region.clone(),
+            endpoint: endpoint,
+            //endpoint: default_endpoint(region),
+            //version: version.into(),
             dispatcher: request_dispatcher,
         }
+    }
+
+    pub fn endpoint(&self) -> &Endpoint {
+            &self.endpoint
     }
 
     /// set_endpoint - Sets the correct endpoint.
     ///
     /// The default value of the endpoint is created during the 'new' method. This sets it to
     /// s3.amazon.com as the default.
-    pub fn set_endpoint<S>(&mut self, endpoint: S) where S:Into<String> {
-        self.endpoint = endpoint.into().to_owned();
-    }
-
-    /// Gets the endpoint value
-    pub fn endpoint(&self) -> &str {
-        &self.endpoint
-    }
+    //pub fn set_endpoint<S>(&mut self, endpoint: S) where S:Into<String> {
+    //    self.endpoint = endpoint.into().to_owned();
+    //}
 
     /// Creates a new bucket.
     /// All requests go to the us-east-1/us-standard endpoint, but can create buckets anywhere.
     pub fn create_bucket(&self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, S3Error> {
         let region = Region::UsEast1;
         let mut create_config : Vec<u8>;
-        let mut request = SignedRequest::new("PUT", "s3", region, "", &self.version);
+        let mut request = SignedRequest::new("PUT", "s3", region, "", &self.endpoint.signature);
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
@@ -181,8 +177,8 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
     /// Returns a list of all buckets owned by the authenticated sender of the
     /// request.
     pub fn list_buckets(&self) -> Result<ListBucketsOutput, S3Error> {
-        let mut request = SignedRequest::new("GET", "s3", self.region, "/", &self.version);
-        request.set_hostname(Some(self.endpoint.to_owned()));
+        let mut request = SignedRequest::new("GET", "s3", self.region, "/", &self.endpoint.signature);
+        request.set_hostname(self.endpoint.hostname());
 
         let mut params = Params::new();
         params.put("Action", "ListBuckets");
@@ -205,8 +201,8 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
 
     fn hostname(&self, bucket: Option<&BucketName>) -> String {
         match bucket {
-            Some(b) => format!("{}.{}", b, self.endpoint),
-            None => format!("{}", self.endpoint),
+            Some(b) => format!("{}.{}", b, self.endpoint.hostname().unwrap()),
+            None => format!("{}", self.endpoint.hostname().unwrap()),
         }
     }
 }
