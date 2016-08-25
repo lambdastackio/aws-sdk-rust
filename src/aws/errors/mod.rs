@@ -14,7 +14,8 @@
  limitations under the License.
 */
 
-pub mod s3_error;
-pub mod s3_client_error;
-pub mod credentials_error;
-pub mod xml_error;
+pub mod s3;
+pub mod creds;
+pub mod xml;
+pub mod aws;
+pub mod http;

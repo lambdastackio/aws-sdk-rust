@@ -17,7 +17,9 @@
 pub mod endpoint;
 pub mod s3client;
 pub mod bucket;
+pub mod object;
+pub mod policy;
 pub mod writeparse;
-
-//pub mod bucket_notification;
-//pub mod life_cycle;
+pub mod acl;
+pub mod grant;
+pub mod header;

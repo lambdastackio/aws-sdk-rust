@@ -29,6 +29,8 @@ pub struct CredentialsError{
     pub message: String
 }
 
+// Impls below...
+
 impl CredentialsError {
     pub fn new(message: &str) -> CredentialsError {
         CredentialsError {

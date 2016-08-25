@@ -27,8 +27,49 @@
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use std::collections::HashMap;
+use std::iter::IntoIterator;
+use std::io::Read;
+
 use xml::reader::*;
 use xml::reader::events::*;
+
+// Helper for pretty output
+pub fn indent(size: usize) -> String {
+    const INDENT: &'static str = "    ";
+    (0..size).map(|_| INDENT)
+             .fold(String::with_capacity(size*INDENT.len()), |r, s| r + s)
+}
+
+// don't use this function
+pub fn pretty_print_xml(xml_body: &str, skip: bool) {
+    let mut parser = EventReader::from_str(xml_body);
+    let mut depth = 0;
+    let parser_stack = parser.events().peekable();
+    let mut reader = XmlResponse::new(parser_stack);
+
+    if skip {
+        reader.next();
+        reader.next();
+    }
+
+    for e in reader.next() {
+        println!("{:?}", e);
+        match e {
+            XmlEvent::StartElement { name, .. } => {
+                println!("{}+{}", indent(depth), name);
+                depth += 1;
+            }
+            XmlEvent::EndElement { name } => {
+                depth -= 1;
+                println!("{}-{}", indent(depth), name);
+            }
+            _ => {
+                println!("Error: {:?}", e);
+                break;
+            }
+        }
+    }
+}
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -118,10 +159,24 @@ pub fn string_field<T: Peek + Next>(name: &str, stack: &mut T) -> Result<String,
 
 /// return some XML Characters
 pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
+    let is_end = peek_is_end_element(stack);
+    if is_end.unwrap() {
+        return Ok("".to_string());
+    }
+
     if let Some(XmlEvent::Characters(data)) = stack.next() {
         Ok(data.to_string())
     } else {
-         Err(XmlParseError::new("Expected characters"))
+        Err(XmlParseError::new("Expected characters"))
+    }
+}
+
+pub fn peek_is_end_element<T: Peek + Next>(stack: &mut T) -> Result<bool, XmlParseError> {
+    let current = stack.peek();
+    if let Some(&XmlEvent::EndElement{ref name, ..}) = current {
+        Ok(true)
+    } else {
+        Ok(false)
     }
 }
 

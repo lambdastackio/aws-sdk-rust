@@ -39,7 +39,7 @@ use regex::Regex;
 use chrono::{Duration, UTC, DateTime}; //, ParseError};
 use serde_json::{Value, from_str};
 
-use aws::errors::credentials_error::CredentialsError;
+use aws::errors::creds::CredentialsError;
 
 /// AwsCredentials - Base struct for AWS
 ///

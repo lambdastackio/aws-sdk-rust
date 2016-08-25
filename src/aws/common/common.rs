@@ -1,0 +1,274 @@
+/*
+ Copyright 2016 LambdaStack All rights reserved.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+
+use std::str::FromStr;
+use std::str;
+
+use aws::common::xmlutil::*;
+use aws::common::params::*;
+
+pub type Body = Vec<u8>;
+
+pub type MaxKeys = i32;
+
+pub type URI = String;
+
+pub type ID = String;
+
+pub type Type = String;
+
+pub type EmailAddress = String;
+
+pub type DisplayName = String;
+
+pub type Code = String;
+
+pub type Value = String;
+
+#[derive(Debug, Default)]
+pub struct Owner {
+    pub display_name: DisplayName,
+    pub id: ID,
+}
+
+/// Parse `Body` from XML
+pub struct BodyParser;
+
+/// Write `Body` contents to a `SignedRequest`
+pub struct BodyWriter;
+
+/// Parse `MaxKeys` from XML
+pub struct MaxKeysParser;
+
+/// Write `MaxKeys` contents to a `SignedRequest`
+pub struct MaxKeysWriter;
+
+/// Parse `URI` from XML
+pub struct URIParser;
+
+/// Write `URI` contents to a `SignedRequest`
+pub struct URIWriter;
+
+/// Parse `ID` from XML
+pub struct IDParser;
+
+/// Write `ID` contents to a `SignedRequest`
+pub struct IDWriter;
+
+/// Parse `Type` from XML
+pub struct TypeParser;
+
+/// Write `Type` contents to a `SignedRequest`
+pub struct TypeWriter;
+
+/// Parse `EmailAddress` from XML
+pub struct EmailAddressParser;
+
+/// Write `EmailAddress` contents to a `SignedRequest`
+pub struct EmailAddressWriter;
+
+/// Parse `DisplayName` from XML
+pub struct DisplayNameParser;
+
+/// Write `DisplayName` contents to a `SignedRequest`
+pub struct DisplayNameWriter;
+
+/// Parse `Owner` from XML
+pub struct OwnerParser;
+
+/// Write `Owner` contents to a `SignedRequest`
+pub struct OwnerWriter;
+
+/// Parse `Code` from XML
+pub struct CodeParser;
+
+/// Write `Code` contents to a `SignedRequest`
+pub struct CodeWriter;
+
+/// Parse `Value` from XML
+pub struct ValueParser;
+
+/// Write `Value` contents to a `SignedRequest`
+pub struct ValueWriter;
+
+// Impls below...
+
+impl BodyParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Body, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack)).into_bytes();
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl BodyWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Body) {
+        params.put(name, str::from_utf8(obj).unwrap());
+    }
+}
+
+impl MaxKeysParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxKeys, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl MaxKeysWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MaxKeys) {
+        params.put(name, &obj.to_string());
+    }
+}
+
+impl URIParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<URI, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl URIWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &URI) {
+        params.put(name, obj);
+    }
+}
+
+impl IDParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ID, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl IDWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &ID) {
+        params.put(name, obj);
+    }
+}
+
+impl TypeParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Type, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl TypeWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Type) {
+        params.put(name, obj);
+    }
+}
+
+impl EmailAddressParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<EmailAddress, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl EmailAddressWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &EmailAddress) {
+        params.put(name, obj);
+    }
+}
+
+impl DisplayNameParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DisplayName, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl DisplayNameWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &DisplayName) {
+        params.put(name, obj);
+    }
+}
+
+impl OwnerParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Owner, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = Owner::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            match current_name.as_ref() {
+                "DisplayName" => {
+                    obj.display_name = try!(DisplayNameParser::parse_xml("DisplayName", stack));
+                    continue;
+                },
+                "ID" => {
+                    obj.id = try!(IDParser::parse_xml("ID", stack));
+                    continue;
+                },
+                _ => break,
+            }
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl OwnerWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Owner) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        DisplayNameWriter::write_params(params, &(prefix.to_string() + "DisplayName"), &obj.display_name);
+        IDWriter::write_params(params, &(prefix.to_string() + "ID"), &obj.id);
+    }
+}
+
+impl CodeParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Code, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl CodeWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Code) {
+        params.put(name, obj);
+    }
+}
+
+impl ValueParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Value, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl ValueWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Value) {
+        params.put(name, obj);
+    }
+}

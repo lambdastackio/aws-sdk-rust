@@ -18,10 +18,25 @@
  Portions borrowed from the rusoto project. See README.md
 */
 
-use aws::common::xmlutil::{XmlParseError, Peek, Next};
-use aws::common::xmlutil::{start_element, end_element, peek_at_name};
-use aws::common::params::Params;
+use std::num::ParseIntError;
+use std::str::ParseBoolError;
+use std::error::Error;
+use std::fmt;
+
+use aws::errors::aws::*;
+use aws::errors::creds::CredentialsError;
+use aws::common::xmlutil::*;
+use aws::common::params::*;
+use aws::common::common::*;
 use aws::s3::writeparse::*;
+use aws::s3::object::*;
+
+// S3 Specific Errors
+#[derive(Debug)]
+pub struct S3Error {
+    pub message: String,
+    pub aws: AWSError
+}
 
 #[derive(Debug, Default)]
 pub struct S3ClientError {
@@ -33,6 +48,59 @@ pub struct S3ClientError {
 
 /// Parse `S`3ClientError from XML
 pub struct S3ClientErrorParser;
+
+/// Write `S3ClientError` contents to a `SignedRequest`
+pub struct S3ClientErrorWriter;
+
+
+// Impls below...
+
+impl S3Error {
+    pub fn new<S>(message: S) -> S3Error where S: Into<String> {
+        S3Error { message: message.into(), aws: AWSError::default() }
+    }
+
+    pub fn with_aws<S>(message: S, aws: AWSError) -> S3Error where S: Into<String> {
+        S3Error { message: message.into(), aws: aws }
+    }
+}
+
+impl fmt::Display for S3Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+
+impl Error for S3Error {
+    fn description(&self) -> &str {
+        &self.message
+    }
+}
+
+impl From<CredentialsError> for S3Error {
+    fn from(err: CredentialsError) -> S3Error {
+        S3Error { message: err.description().to_owned(), aws: AWSError::default() }
+    }
+}
+
+impl From<ParseIntError> for S3Error {
+    fn from(err: ParseIntError) -> S3Error {
+        S3Error { message: err.description().to_owned(), aws: AWSError::default() }
+    }
+}
+
+impl From<ParseBoolError> for S3Error {
+    fn from(err: ParseBoolError) -> S3Error {
+        S3Error { message: err.description().to_owned(), aws: AWSError::default() }
+    }
+}
+
+impl From<XmlParseError> for S3Error {
+    fn from(err: XmlParseError) -> S3Error {
+        let XmlParseError(message) = err;
+        S3Error { message: message.to_owned(), aws: AWSError::default() }
+    }
+}
 
 impl S3ClientErrorParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<S3ClientError, XmlParseError> {
@@ -62,9 +130,6 @@ impl S3ClientErrorParser {
         Ok(obj)
     }
 }
-
-/// Write `S3ClientError` contents to a `SignedRequest`
-pub struct S3ClientErrorWriter;
 
 impl S3ClientErrorWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &S3ClientError) {

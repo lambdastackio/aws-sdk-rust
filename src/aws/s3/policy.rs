@@ -14,11 +14,16 @@
  limitations under the License.
 */
 
-pub mod common;
-pub mod credentials;
-pub mod region;
-pub mod xmlutil;
-pub mod signature;
-pub mod params;
-pub mod request;
-pub mod macros;
+/*
+ Portions borrowed from the rusoto project. See README.md
+*/
+
+use std::str::FromStr;
+use std::str;
+
+use aws::common::params::{Params, ServiceParams};
+use aws::common::xmlutil::*;
+use aws::s3::bucket::*;
+use aws::s3::writeparse::*;
+
+pub type Policy = String;

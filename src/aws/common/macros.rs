@@ -14,11 +14,13 @@
  limitations under the License.
 */
 
-pub mod common;
-pub mod credentials;
-pub mod region;
-pub mod xmlutil;
-pub mod signature;
-pub mod params;
-pub mod request;
-pub mod macros;
+macro_rules! string_get_set {
+  ($x:ident) => {
+    pub fn set_$x(&mut self, value: &str) {
+      self.$x = value.to_string()
+    }
+    pub fn $x(&self) -> &str {
+      &self.$x
+    }
+  }
+}

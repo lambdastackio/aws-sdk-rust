@@ -83,6 +83,7 @@ impl DispatchSignedRequest for Client {
             "PUT" => Method::Put,
             "DELETE" => Method::Delete,
             "GET" => Method::Get,
+            "HEAD" => Method::Head,
             v @ _ => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) })
 
         };
@@ -93,7 +94,7 @@ impl DispatchSignedRequest for Client {
             hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
         }
 
-        let mut final_uri = format!("{}://{}{}", if request.secure() {"https"} else {"https"}, request.hostname(), request.path());
+        let mut final_uri = format!("{}://{}{}", if request.ssl() {"https"} else {"http"}, request.hostname(), request.path());
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }
