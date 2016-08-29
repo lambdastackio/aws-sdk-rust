@@ -9,7 +9,7 @@ repository = "https://github.com/lambdastackio/aws-sdk-rust"
 homepage = "https://github.com/lambdastackio/aws-sdk-rust"
 documentation = "https://github.com/lambdastackio/aws-sdk-rust"
 description = """
-BETA! - AWS SDK for Rust (only S3 currently). Allows for proxies. For a full AWS SDK look at rusoto. WIP and under heavy development - warning.
+BETA! - AWS SDK for Rust (only S3 currently). Allows for proxies. For a full AWS SDK look at rusoto. WIP and under heavy development with possible breaking changes - warning.
 """
 
 [dependencies]

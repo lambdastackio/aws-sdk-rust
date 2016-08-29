@@ -16,7 +16,7 @@
 
 use aws::common::params::{Params, ServiceParams};
 use aws::common::xmlutil::*;
-use aws::s3::writeparse::*;
+//use aws::s3::writeparse::*;
 
 pub type ContentRange = String;
 
@@ -37,6 +37,8 @@ pub type AllowedHeaders = Vec<AllowedHeader>;
 pub type Range = String;
 
 pub type AcceptRanges = String;
+
+pub type MissingHeaderName = String;
 
 /// Parse `ContentRange` from XML
 pub struct ContentRangeParser;
@@ -97,6 +99,12 @@ pub struct AcceptRangesParser;
 
 /// Write `AcceptRanges` contents to a `SignedRequest`
 pub struct AcceptRangesWriter;
+
+/// Parse `MissingHeaderName` from XML
+pub struct MissingHeaderNameParser;
+
+/// Write `MissingHeaderName` contents to a `SignedRequest`
+pub struct MissingHeaderNameWriter;
 
 // Impls below...
 
@@ -252,6 +260,21 @@ impl AcceptRangesParser {
 
 impl AcceptRangesWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &AcceptRanges) {
+        params.put(name, obj);
+    }
+}
+
+impl MissingHeaderNameParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MissingHeaderName, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl MissingHeaderNameWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &AllowedHeader) {
         params.put(name, obj);
     }
 }

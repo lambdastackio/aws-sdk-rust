@@ -27,8 +27,8 @@
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use std::collections::HashMap;
-use std::iter::IntoIterator;
-use std::io::Read;
+//use std::iter::IntoIterator;
+//use std::io::Read;
 
 use xml::reader::*;
 use xml::reader::events::*;
@@ -232,7 +232,7 @@ pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
         match stack.next() {
             None => break,
             Some(XmlEvent::StartElement { .. }) => deep += 1,
-            Some(XmlEvent::EndElement { ..}) => {
+            Some(XmlEvent::EndElement { .. }) => {
                 if deep > 1 {
                     deep -= 1;
                 } else {

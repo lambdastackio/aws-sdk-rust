@@ -16,6 +16,9 @@
 
 // Sample access code and testing ground for the library.
 
+// Allow unused_imports file wide because it allows you to comment out parts of the code without
+// seeing warnings.
+#![allow(unused_imports)]
 extern crate aws_sdk_rust;
 extern crate url;
 extern crate hyper;
@@ -28,6 +31,7 @@ use aws_sdk_rust::aws::common::credentials::DefaultCredentialsProvider;
 // NOTE: The bucket and obect use is using * but you may want to use specific items instead of everything
 use aws_sdk_rust::aws::s3::bucket::*;
 use aws_sdk_rust::aws::s3::object::*;
+use aws_sdk_rust::aws::s3::acl::*;
 
 use aws_sdk_rust::aws::common::region::Region;
 use aws_sdk_rust::aws::s3::endpoint::Endpoint;
@@ -71,7 +75,7 @@ fn main() {
     let client = S3Client::new(provider, endpoint);
 
     // For cli version see s3lsio cli
-    let mut bucket_name : &str = "cm2test";
+    let bucket_name : &str = "cm2test";
 
 /*
     let mut bucket = CreateBucketRequest::default();
@@ -101,14 +105,23 @@ fn main() {
     }
 */
 /*
-    let mut bucket_acl = GetBucketAclRequest::default();
-    bucket_acl.bucket = bucket_name.to_string();
+    let mut put_bucket_acl = PutBucketAclRequest::default();
+    put_bucket_acl.bucket = bucket_name.to_string();
+    put_bucket_acl.acl = Some(CannedAcl::PublicRead);
 
-    match client.get_bucket_acl(&bucket_acl) {
+    match client.put_bucket_acl(&put_bucket_acl) {
         Ok(bucket) => println!("{:?}", bucket),
         Err(e) => println!("{:?}", e)
     }
 */
+
+    let mut get_bucket_acl = GetBucketAclRequest::default();
+    get_bucket_acl.bucket = bucket_name.to_string();
+
+    match client.get_bucket_acl(&get_bucket_acl) {
+        Ok(bucket) => println!("{:?}", bucket),
+        Err(e) => println!("{:?}", e)
+    }
 
 /*
     let mut put_object = PutObjectRequest::default();

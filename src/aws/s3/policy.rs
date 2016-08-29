@@ -18,12 +18,12 @@
  Portions borrowed from the rusoto project. See README.md
 */
 
-use std::str::FromStr;
-use std::str;
+//use std::str::FromStr;
+//use std::str;
 
-use aws::common::params::{Params, ServiceParams};
-use aws::common::xmlutil::*;
-use aws::s3::bucket::*;
-use aws::s3::writeparse::*;
+//use aws::common::params::{Params, ServiceParams};
+//use aws::common::xmlutil::*;
+//use aws::s3::bucket::*;
+//use aws::s3::writeparse::*;
 
 pub type Policy = String;

@@ -36,13 +36,13 @@ pub type DisplayName = String;
 
 pub type Code = String;
 
-pub type Value = String;
+pub type HostId = String;
 
-#[derive(Debug, Default)]
-pub struct Owner {
-    pub display_name: DisplayName,
-    pub id: ID,
-}
+pub type RequestId = String;
+
+pub type Resource = String;
+
+pub type Value = String;
 
 /// Parse `Body` from XML
 pub struct BodyParser;
@@ -98,11 +98,35 @@ pub struct CodeParser;
 /// Write `Code` contents to a `SignedRequest`
 pub struct CodeWriter;
 
+/// Parse `HostId` from XML
+pub struct HostIdParser;
+
+/// Write `HostId` contents to a `SignedRequest`
+pub struct HostIdWriter;
+
+/// Parse `RequestId` from XML
+pub struct RequestIdParser;
+
+/// Write `RequestId` contents to a `SignedRequest`
+pub struct RequestIdWriter;
+
+/// Parse `Resource` from XML
+pub struct ResourceParser;
+
+/// Write `Resource` contents to a `SignedRequest`
+pub struct ResourceWriter;
+
 /// Parse `Value` from XML
 pub struct ValueParser;
 
 /// Write `Value` contents to a `SignedRequest`
 pub struct ValueWriter;
+
+#[derive(Debug, Default)]
+pub struct Owner {
+    pub display_name: DisplayName,
+    pub id: ID,
+}
 
 // Impls below...
 
@@ -253,6 +277,51 @@ impl CodeParser {
 }
 
 impl CodeWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Code) {
+        params.put(name, obj);
+    }
+}
+
+impl HostIdParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HostId, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl HostIdWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Code) {
+        params.put(name, obj);
+    }
+}
+
+impl RequestIdParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RequestId, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl RequestIdWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Code) {
+        params.put(name, obj);
+    }
+}
+
+impl ResourceParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Resource, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl ResourceWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &Code) {
         params.put(name, obj);
     }

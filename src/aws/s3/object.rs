@@ -129,7 +129,6 @@ pub struct ExpiresParser;
 /// Write `Expires` contents to a `SignedRequest`
 pub struct ExpiresWriter;
 
-
 #[derive(Debug, Default)]
 pub struct Object {
     pub last_modified: LastModified,

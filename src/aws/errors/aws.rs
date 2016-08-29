@@ -17,22 +17,28 @@
 use std::error::Error;
 use std::fmt;
 
-use aws::errors::creds::CredentialsError;
+//use aws::errors::creds::CredentialsError;
 use aws::common::xmlutil::*;
+use aws::common::common::*;
+use aws::s3::header::*;
+use aws::s3::writeparse::*;
 
 /// AWSError - Default XML error returned from AWS S3.
 ///
 #[derive(Debug, Default, Clone)]
 pub struct AWSError {
     pub code: String,
+    pub host_id: String,
     pub message: String,
     pub request_id: String,
     pub resource: String,
+    pub missing_header_name: String,
 }
 
 impl fmt::Display for AWSError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Error code: {} - {}", self.code, self.description())
+        //write!(f, "Error code: {} - {}", self.code, self.description())
+        write!(f, "Error code: {}", self.description())
     }
 }
 
@@ -48,29 +54,33 @@ impl AWSError {
         let mut obj = AWSError::default();
         loop {
             let current_name = try!(peek_at_name(stack));
+            if current_name == "HostId" {
+                obj.host_id = try!(HostIdParser::parse_xml("HostId", stack));
+                continue;
+            }
             if current_name == "RequestId" {
-                obj.request_id = try!(characters(stack));
+                obj.request_id = try!(RequestIdParser::parse_xml("RequestId", stack));
                 continue;
             }
             if current_name == "Code" {
-                obj.code = try!(characters(stack));
+                obj.code =  try!(CodeParser::parse_xml("Code", stack));
                 continue;
             }
             if current_name == "Message" {
-                obj.message = try!(characters(stack));
+                obj.message = try!(S3ClientMessageParser::parse_xml("Message", stack));
                 continue;
             }
             if current_name == "Resource" {
-                obj.resource = try!(characters(stack));
+                obj.resource = try!(ResourceParser::parse_xml("Resource", stack));
                 continue;
             }
-            // Cycle through until end tag - Ignore other dynamically added messages.
-            if current_name == tag_name {
-                break;
+            if current_name == "MissingHeaderName" {
+                obj.missing_header_name = try!(MissingHeaderNameParser::parse_xml("MissingHeaderName", stack));
+                continue;
             }
+            break;
         }
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
-
 }

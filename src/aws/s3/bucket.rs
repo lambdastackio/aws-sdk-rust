@@ -19,7 +19,7 @@
 */
 
 use aws::common::region::Region;
-use aws::common::common::*;
+//use aws::common::common::*;
 use aws::errors::http::*;
 use aws::s3::writeparse::*;
 use aws::s3::object::*;
@@ -27,30 +27,6 @@ use aws::s3::policy::*;
 use aws::s3::acl::*;
 use aws::s3::header::*;
 use aws::s3::grant::*;
-
-/// Helper function to determine if a create config is needed.
-pub fn needs_create_bucket_config(region: Region) -> bool {
-    match region {
-        Region::UsEast1 => false,
-        _ => true,
-    }
-}
-
-// This is a bit hacky to get functionality until we figure out an XML writing util.
-/// Manually writes out bucket configuration (location constraint) in XML.
-pub fn create_bucket_config_xml(region: Region) -> Vec<u8> {
-    match region {
-        Region::UsEast1 => {
-            Vec::new() // shouldn't actually execute this: panic! or unreachable! this?
-        }
-        _ => {
-            let xml = format!("<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">
-                <LocationConstraint>{}</LocationConstraint>
-                </CreateBucketConfiguration >", region);
-            xml.into_bytes()
-        }
-    }
-}
 
 #[derive(Debug, Default)]
 pub struct TopicConfigurationDeprecated {
@@ -351,4 +327,30 @@ pub struct PutBucketWebsiteRequest {
     pub content_md5: Option<ContentMD5>,
     pub bucket: BucketName,
     pub website_configuration: WebsiteConfiguration,
+}
+
+// Impls and functions below...
+
+/// Helper function to determine if a create config is needed.
+pub fn needs_create_bucket_config(region: Region) -> bool {
+    match region {
+        Region::UsEast1 => false,
+        _ => true,
+    }
+}
+
+// This is a bit hacky to get functionality until we figure out an XML writing util.
+/// Manually writes out bucket configuration (location constraint) in XML.
+pub fn create_bucket_config_xml(region: Region) -> Vec<u8> {
+    match region {
+        Region::UsEast1 => {
+            Vec::new() // shouldn't actually execute this: panic! or unreachable! this?
+        }
+        _ => {
+            let xml = format!("<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">
+                <LocationConstraint>{}</LocationConstraint>
+                </CreateBucketConfiguration >", region);
+            xml.into_bytes()
+        }
+    }
 }

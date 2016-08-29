@@ -24,8 +24,8 @@ use std::collections::HashMap;
 use std::str::FromStr;
 use std::str;
 use std::env;
-use rustc_serialize::hex::ToHex;
-use rustc_serialize::base64::{ToBase64, STANDARD};
+//use rustc_serialize::hex::ToHex;
+//use rustc_serialize::base64::{ToBase64, STANDARD};
 
 use hyper::client::{Client, RedirectPolicy};
 use url::Url;
@@ -37,18 +37,18 @@ use aws::common::xmlutil::*;
 use aws::common::params::{Params, ServiceParams};
 use aws::common::signature::SignedRequest;
 use aws::common::request::{DispatchSignedRequest, HttpResponse};
-use aws::common::common::*;
+//use aws::common::common::*;
 use aws::errors::s3::*;
 use aws::errors::aws::*;
-use aws::errors::http::*;
+//use aws::errors::http::*;
 use aws::s3::endpoint::*;
 use aws::s3::writeparse::*;
 use aws::s3::bucket::*;
 use aws::s3::object::*;
-use aws::s3::policy::*;
+//use aws::s3::policy::*;
 use aws::s3::acl::*;
-use aws::s3::grant::*;
-use aws::s3::header::*;
+//use aws::s3::grant::*;
+//use aws::s3::header::*;
 
 //header! { (ProxyAuthorization, "Proxy-Authorization") => [String] }
 
@@ -169,8 +169,12 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
                 }
             }
             _ => {
-                println!("Error body: {}", result.body);
-                Err(S3Error::new(format!("error in create_bucket: {}", status)))
+                let mut reader = EventReader::from_str(&result.body);
+                let mut stack = XmlResponse::new(reader.events().peekable());
+                stack.next(); // xml start tag
+
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error creating bucket", aws))
             }
         }
     }
@@ -182,7 +186,7 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
     /// head_bucket returns Ok(()) if found and you have permission else error.
     pub fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), S3Error> {
         let mut request = SignedRequest::new("HEAD", "s3", self.region, &input.bucket, "/", &self.endpoint.signature);
-        let mut params = Params::new();
+        //let mut params = Params::new();
         //params.put("Action", "HeadBucket");
         //HeadBucketRequestWriter::write_params(&mut params, "", input);
         //request.set_params(params);
@@ -196,11 +200,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
         stack.next();
+
         match status {
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new(format!("error in bucket head check: {}", status))) }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error bucket head", aws))
+            }
         }
     }
 
@@ -224,10 +232,12 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
 
         match status {
             200 => {
-                // was "ListBucketsOutput"
                 Ok(try!(ListBucketsOutputParser::parse_xml("ListAllMyBucketsResult", &mut stack)))
             }
-            val @ _ => { Err(S3Error::new(format!("error in list_buckets: {}", val))) }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error listing buckets", aws))
+            }
         }
     }
 
@@ -249,19 +259,23 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
         stack.next();
+
         match status {
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error putting bucket lifecycle", aws))
+            }
         }
     }
 
     pub fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), S3Error> {
         let mut request = SignedRequest::new("PUT", "s3", self.region, &input.bucket, "/?acl", &self.endpoint.signature);
-        //let mut params = Params::new();
-        //params.put("Action", "PutBucketAcl");
-        //request.set_params(params);
+
+        // Not doing anything but allow unused_variables is set above to kill warning.
+        let acls = build_acls(&mut request, &input);
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -271,12 +285,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
-        stack.next();
+
         match status {
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error putting bucket acl", aws))
+            }
         }
     }
 
@@ -297,12 +314,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut reader = EventReader::from_str(&result.body);
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
-         stack.next();
+
          match status {
              200 => {
                  Ok(())
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error putting bucket policy", aws))
+             }
          }
      }
 
@@ -322,12 +342,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut reader = EventReader::from_str(&result.body);
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
-         stack.next();
+
          match status {
              200 => {
                  Ok(())
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error putting bucket website", aws))
+             }
          }
      }
 
@@ -350,11 +373,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
          stack.next();
+
          match status {
              200 => {
                  Ok(())
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error putting bucket logging", aws))
+             }
          }
      }
 
@@ -376,11 +403,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
          stack.next();
+
          match status {
              200 => {
                  Ok(())
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error putting bucket replication", aws))
+             }
          }
      }
 
@@ -409,11 +440,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
          stack.next();
+
          match status {
              200 => {
                  Ok(())
              }
-             _ => { Err(S3Error::new(format!("error setting bucket versioning: {}", status))) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error putting bucket versioning", aws))
+             }
          }
      }
 
@@ -429,15 +464,18 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
          let status = result.status;
 
-         println!("{:?}", &result.body);
-
-         // TODO: Need to add a Error parse struct...
          match status {
              204 => {
                  Ok(())
              }
              _ => {
-                 Err(S3Error::new(format!("delete bucket error, status was {}", status)))
+                 let mut reader = EventReader::from_str(&result.body);
+                 let mut stack = XmlResponse::new(reader.events().peekable());
+                 stack.next(); // xml start tag
+                 stack.next();
+
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error deleting bucket", aws))
              }
          }
      }
@@ -459,11 +497,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
          stack.next();
+
          match status {
              200 => {
                  Ok(())
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error deleting bucket tagging", aws))
+             }
          }
      }
 
@@ -484,11 +526,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
          stack.next();
+
          match status {
              200 => {
                  Ok(())
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error deleting bucket cors", aws))
+             }
          }
      }
 
@@ -509,11 +555,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
         stack.next();
+
         match status {
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error deleting bucket website", aws))
+            }
         }
     }
 
@@ -534,11 +584,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
         stack.next();
+
         match status {
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error deleting bucket policy", aws))
+            }
         }
     }
 
@@ -558,11 +612,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
         stack.next();
+
         match status {
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error deleting bucket replication", aws))
+            }
         }
     }
 
@@ -583,15 +641,19 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
          stack.next();
+
          match status {
              200 => {
                  Ok(try!(GetBucketCorsOutputParser::parse_xml("GetBucketCorsOutput", &mut stack)))
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error getting bucket cors", aws))
+             }
          }
      }
     /// Gets the access control policy for the bucket.
-    pub fn get_bucket_acl(&self, input: &GetBucketAclRequest) -> Result<GetBucketAclOutput, S3Error> {
+    pub fn get_bucket_acl(&self, input: &GetBucketAclRequest) -> Result<AccessControlPolicy, S3Error> {
          let mut request = SignedRequest::new("GET", "s3", self.region, &input.bucket, "/?acl", &self.endpoint.signature);
          //let mut params = Params::new();
          //params.put("Action", "GetBucketAcl");
@@ -609,9 +671,7 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
 
          match status {
              200 => {
-                 println!("{:?}", result.body);
-
-                 Ok(try!(GetBucketAclOutputParser::parse_xml("AccessControlPolicy", &mut stack)))
+                 Ok(try!(AccessControlPolicyParser::parse_xml("AccessControlPolicy", &mut stack)))
              }
              _ => {
                  let aws = try!(AWSError::parse_xml("Error", &mut stack));
@@ -634,14 +694,18 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
 
          let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
          let status = result.status;
+         let mut reader = EventReader::from_str(&result.body);
+         let mut stack = XmlResponse::new(reader.events().peekable());
+         stack.next(); // xml start tag
+
          match status {
              200 => {
-                 let mut reader = EventReader::from_str(&result.body);
-                 let mut stack = XmlResponse::new(reader.events().peekable());
-                 stack.next(); // xml start tag
                  Ok(try!(GetBucketLoggingOutputParser::parse_xml("BucketLoggingStatus", &mut stack)))
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error getting bucket logging", aws))
+             }
          }
      }
 
@@ -658,23 +722,22 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
 
          let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
          let status = result.status;
+         let mut reader = EventReader::from_str(&result.body);
+         let mut stack = XmlResponse::new(reader.events().peekable());
+         stack.next(); // xml start tag
+
          match status {
              200 => {
-                 let mut reader = EventReader::from_str(&result.body);
-                 let mut stack = XmlResponse::new(reader.events().peekable());
-                 stack.next(); // xml start tag
                  Ok(try!(NotificationConfigurationParser::parse_xml("NotificationConfiguration", &mut stack)))
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error getting bucket notification", aws))
+             }
          }
      }
 
      pub fn get_bucket_versioning(&self, input: &GetBucketVersioningRequest) -> Result<GetBucketVersioningOutput, S3Error> {
-
-         //let path : String;
-
-         //path = format!("/{}/?versioning", input.bucket);
-
          let mut request = SignedRequest::new("GET", "s3", self.region, &input.bucket, "/?versioning", &self.endpoint.signature);
 
          //let mut params = Params::new();
@@ -696,7 +759,10 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
                  // AWS Returns VersioningConfiguration XML so parse and create GetBucketVersioningOutput
                  Ok(try!(GetBucketVersioningOutputParser::parse_xml("VersioningConfiguration", &mut stack)))
              }
-             _ => { Err(S3Error::new(format!("error getting bucket versioning: {}", status))) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error getting bucket versioning", aws))
+             }
          }
      }
 
@@ -717,28 +783,29 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
 
          let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
          let status = result.status;
+         let mut reader = EventReader::from_str(&result.body);
+         let mut stack = XmlResponse::new(reader.events().peekable());
+         stack.next(); // xml start tag
 
          match status {
              200 => {
-                 let mut reader = EventReader::from_str(&result.body);
-                 let mut stack = XmlResponse::new(reader.events().peekable());
-                 stack.next(); // xml start tag
                  Ok(try!(ListObjectsOutputParser::parse_xml("ListBucketResult", &mut stack)))
              }
-             _ => { Err(S3Error::new(format!("error listing objects: {}", status))) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error listing bucket objects", aws))
+             }
          }
      }
 
      /// Retrieves objects from Amazon S3.
      pub fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, S3Error> {
-         //let mut uri = String::from("/");
-         //uri = uri +  &input.key.to_string();
          let mut request = SignedRequest::new("GET", "s3", self.region, &input.bucket, &format!("/{}", input.key), &self.endpoint.signature);
-         //let mut params = Params::new();
 
          let hostname = self.hostname(Some(&input.bucket));
          request.set_hostname(Some(hostname));
 
+         //let mut params = Params::new();
          //params.put("Action", "GetObject");
          //GetObjectRequestWriter::write_params(&mut params, "", input);
          //request.set_params(params);
@@ -753,9 +820,12 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
                  Ok(s3_object)
              }
              _ => {
-                 println!("Error: Status code was {}", status);
-                 println!("Error response body: {}", result.body);
-                 Err(S3Error::new("error in get_object"))
+                 let mut reader = EventReader::from_str(&result.body);
+                 let mut stack = XmlResponse::new(reader.events().peekable());
+                 stack.next(); // xml start tag
+
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error getting object", aws))
              }
          }
      }
@@ -766,7 +836,6 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
              Some(ref value) => Ok(value.to_string()),
              _ => Ok(String::new())
          }
-         // Err(S3Error::new(format!("Couldn't find field {} in headers", header_name)))
      }
 
      /// Use the Hyper resposne to populate the GetObjectOutput
@@ -860,11 +929,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
          stack.next();
+
          match status {
              200 => {
                  Ok(try!(CopyObjectOutputParser::parse_xml("CopyObjectOutput", &mut stack)))
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error copying object", aws))
+             }
          }
      }
 
@@ -888,11 +961,15 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut reader = EventReader::from_str(&result.body);
          let mut stack = XmlResponse::new(reader.events().peekable());
          stack.next(); // xml start tag
+
          match status {
              200 => {
                  Ok(try!(CreateMultipartUploadOutputParser::parse_xml("InitiateMultipartUploadResult", &mut stack)))
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error creating multipart object upload", aws))
+             }
          }
      }
 
@@ -929,9 +1006,12 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
                  }
              }
              _ => {
-                 println!("Error: Status code was {}", status);
-                 println!("Error response body: {}", result.body);
-                 Err(S3Error::new("error: didn't get a 200."))
+                 let mut reader = EventReader::from_str(&result.body);
+                 let mut stack = XmlResponse::new(reader.events().peekable());
+                 stack.next(); // xml start tag
+
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error uploading a part", aws))
              }
          }
      }
@@ -953,17 +1033,17 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
          let status = result.status;
 
+         let mut reader = EventReader::from_str(&result.body);
+         let mut stack = XmlResponse::new(reader.events().peekable());
+         stack.next(); // xml start tag
+
          match status {
              200 => {
-                 let mut reader = EventReader::from_str(&result.body);
-                 let mut stack = XmlResponse::new(reader.events().peekable());
-                 stack.next(); // xml start tag
-
                  Ok(try!(CompleteMultipartUploadOutputParser::parse_xml("CompleteMultipartUploadResult", &mut stack)))
              }
              _ => {
-                 println!("Error response body: {}", result.body);
-                 Err(S3Error::new("error in complete_multipart_upload"))
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error completing multipart upload", aws))
              }
          }
      }
@@ -1021,10 +1101,16 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
                  Ok(DeleteObjectOutput::default())
              }
              _ => {
-                 Err(S3Error::new(format!("delete object error: {}", status)))
+                 let mut reader = EventReader::from_str(&result.body);
+                 let mut stack = XmlResponse::new(reader.events().peekable());
+                 stack.next(); // xml start tag
+
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error deleting object", aws))
              }
          }
      }
+
      /// Restores an archived copy of an object back into Amazon S3
      pub fn restore_object(&self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, S3Error> {
          let mut request = SignedRequest::new("POST", "s3", self.region, &input.bucket, &format!("/{}?restore", input.key), &self.endpoint.signature);
@@ -1034,15 +1120,19 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
          //request.set_params(params);
          let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
          let status = result.status;
+         let mut reader = EventReader::from_str(&result.body);
+         let mut stack = XmlResponse::new(reader.events().peekable());
+         stack.next(); // xml start tag
+         stack.next();
+
          match status {
              200 => {
-                 let mut reader = EventReader::from_str(&result.body);
-                 let mut stack = XmlResponse::new(reader.events().peekable());
-                 stack.next(); // xml start tag
-                 stack.next();
                  Ok(try!(RestoreObjectOutputParser::parse_xml("RestoreObjectOutput", &mut stack)))
              }
-             _ => { Err(S3Error::new("error")) }
+             _ => {
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error restoring object", aws))
+             }
          }
      }
 
@@ -1105,9 +1195,12 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
                  Ok(put_result)
              }
              _ => {
-                 println!("Error: Status code was {}", status);
-                 println!("Error response body: {}", result.body);
-                 Err(S3Error::new("error uploading object to S3"))
+                 let mut reader = EventReader::from_str(&result.body);
+                 let mut stack = XmlResponse::new(reader.events().peekable());
+                 stack.next(); // xml start tag
+
+                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                 Err(S3Error::with_aws("Error putting object", aws))
              }
          }
      }
@@ -1125,16 +1218,19 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
 
        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
        let status = result.status;
+       let mut reader = EventReader::from_str(&result.body);
+       let mut stack = XmlResponse::new(reader.events().peekable());
+
+       stack.next(); // xml start tag
+
        match status {
            200 => {
-               let mut reader = EventReader::from_str(&result.body);
-               let mut stack = XmlResponse::new(reader.events().peekable());
-
-               stack.next(); // xml start tag
-
                Ok(try!(ListVersionsResultParser::parse_xml("ListVersionsResult", &mut stack)))
            }
-           _ => { Err(S3Error::new(format!("error listing object versions: {}", status))) }
+           _ => {
+               let aws = try!(AWSError::parse_xml("Error", &mut stack));
+               Err(S3Error::with_aws("Error listing object versions", aws))
+           }
        }
     }
 
@@ -1143,18 +1239,6 @@ impl <P, D> S3Client<P, D> where P: AwsCredentialsProvider, D: DispatchSignedReq
             Some(b) => format!("{}.{}", b, self.endpoint.hostname().unwrap()),
             None => format!("{}", self.endpoint.hostname().unwrap()),
         }
-    }
-}
-
-/// Maps canned acl to AWS format.  EG public-read.
-pub fn canned_acl_in_aws_format(canned_acl: &CannedAcl) -> String {
-    match *canned_acl {
-        CannedAcl::Private => "private".to_string(),
-        CannedAcl::PublicRead => "public-read".to_string(),
-        CannedAcl::PublicReadWrite => "public-read-write".to_string(),
-        CannedAcl::AuthenticatedRead => "authenticated-read".to_string(),
-        CannedAcl::BucketOwnerRead => "bucket-owner-read".to_string(),
-        CannedAcl::BucketOwnerFullControl => "bucket-owner-full-control".to_string(),
     }
 }
 
@@ -1219,4 +1303,26 @@ fn sign_and_execute<D>(dispatcher: &D, signed_request: &mut SignedRequest, creds
     }
 
     response
+}
+
+fn build_acls(request: &mut SignedRequest, input: &PutBucketAclRequest) -> Result<(), S3Error> {
+    match input.acl {
+        Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(canned_acl)),
+        None => {},
+    }
+/*
+    match input.grant_write {
+        Some(ref grants) => {
+            let grant_str: String = String::new();
+            // Cycle through
+            for grant in grants {
+
+            }
+
+            request.add_header("x-amz-grant-write", ""),
+        }
+        None => {},
+    }
+*/
+    Ok(())
 }

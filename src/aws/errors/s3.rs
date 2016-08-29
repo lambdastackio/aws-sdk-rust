@@ -29,7 +29,7 @@ use aws::common::xmlutil::*;
 use aws::common::params::*;
 use aws::common::common::*;
 use aws::s3::writeparse::*;
-use aws::s3::object::*;
+//use aws::s3::object::*;
 
 // S3 Specific Errors
 #[derive(Debug)]

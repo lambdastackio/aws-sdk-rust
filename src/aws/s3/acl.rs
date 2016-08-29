@@ -20,7 +20,7 @@ use aws::common::common::*;
 use aws::s3::writeparse::*;
 use aws::s3::grant::*;
 use aws::s3::header::*;
-use aws::s3::bucket::*;
+//use aws::s3::bucket::*;
 use aws::s3::object::*;
 
 pub type ObjectCannedACL = String;
@@ -38,25 +38,70 @@ pub enum CannedAcl {
     BucketOwnerFullControl,
 }
 
+/// Parse `GetBucketAclRequest` from XML
+pub struct GetBucketAclRequestParser;
+
+/// Write `GetBucketAclRequest` contents to a `SignedRequest`
+pub struct GetBucketAclRequestWriter;
+
+/// Parse `PutObjectAclRequest` from XML
+pub struct PutObjectAclRequestParser;
+
+/*
+/// Parse `GetBucketAclOutput` from XML
+pub struct GetBucketAclOutputParser;
+
+/// Write `GetBucketAclOutput` contents to a `SignedRequest`
+pub struct GetBucketAclOutputWriter;
+*/
+
+/// Write `PutObjectAclRequest` contents to a `SignedRequest`
+pub struct PutObjectAclRequestWriter;
+
+/// Parse `AccessControlPolicy` from XML
+pub struct AccessControlPolicyParser;
+
+/// Write `AccessControlPolicy` contents to a `SignedRequest`
+pub struct AccessControlPolicyWriter;
+
+/// Parse `AccessControlList` from XML
+pub struct AccessControlListParser;
+
+/// Write `AccessControlList` contents to a `SignedRequest`
+pub struct AccessControlListWriter;
+
+/// Parse `ObjectCannedACL` from XML
+pub struct ObjectCannedACLParser;
+
+/// Write `ObjectCannedACL` contents to a `SignedRequest`
+pub struct ObjectCannedACLWriter;
+
+/// Parse `Permission` from XML
+pub struct PermissionParser;
+
+/// Write `Permission` contents to a `SignedRequest`
+pub struct PermissionWriter;
+
 #[derive(Debug, Default)]
 pub struct AccessControlPolicy {
     pub owner: Owner,
-    /// A list of grants.
-    pub grants: Grants,
+    pub acl: AccessControlList,
 }
 
 #[derive(Debug, Default)]
 pub struct AccessControlList {
-    pub grant: Grant,
-    pub acl: String, //AccessControlList,
+    pub grants: Grants,
 }
 
+// NOTE: May remove this one...
+/*
 #[derive(Debug, Default)]
 pub struct GetBucketAclOutput {
     pub owner: Owner,
     //pub acl: AccessControlList,
     pub grants: Grants,
 }
+*/
 
 #[derive(Debug, Default)]
 pub struct GetBucketAclRequest {
@@ -82,42 +127,6 @@ pub struct PutBucketAclRequest {
     /// Allows grantee to read the bucket ACL.
     pub grant_read_acp: Option<GrantReadACP>,
 }
-
-/// Parse `GetBucketAclRequest` from XML
-pub struct GetBucketAclRequestParser;
-
-/// Write `GetBucketAclRequest` contents to a `SignedRequest`
-pub struct GetBucketAclRequestWriter;
-
-/// Parse `PutObjectAclRequest` from XML
-pub struct PutObjectAclRequestParser;
-
-/// Parse `GetBucketAclOutput` from XML
-pub struct GetBucketAclOutputParser;
-
-/// Write `GetBucketAclOutput` contents to a `SignedRequest`
-pub struct GetBucketAclOutputWriter;
-
-/// Write `PutObjectAclRequest` contents to a `SignedRequest`
-pub struct PutObjectAclRequestWriter;
-
-/// Parse `AccessControlPolicy` from XML
-pub struct AccessControlPolicyParser;
-
-/// Write `AccessControlPolicy` contents to a `SignedRequest`
-pub struct AccessControlPolicyWriter;
-
-/// Parse `ObjectCannedACL` from XML
-pub struct ObjectCannedACLParser;
-
-/// Write `ObjectCannedACL` contents to a `SignedRequest`
-pub struct ObjectCannedACLWriter;
-
-/// Parse `Permission` from XML
-pub struct PermissionParser;
-
-/// Write `Permission` contents to a `SignedRequest`
-pub struct PermissionWriter;
 
 // Impls below...
 
@@ -174,61 +183,6 @@ impl PutObjectAclRequestParser {
     }
 }
 
-impl GetBucketAclRequestParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketAclRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-impl GetBucketAclRequestWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &GetBucketAclRequest) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-    }
-}
-
-impl GetBucketAclOutputParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketAclOutput::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Owner" {
-                obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
-                continue;
-            }
-            if current_name == "Grant" {
-                obj.grants = try!(GrantsParser::parse_xml("Grant", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-impl GetBucketAclOutputWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &GetBucketAclOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        GrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.grants);
-    }
-}
-
 impl PutObjectAclRequestWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &PutObjectAclRequest) {
         let mut prefix = name.to_string();
@@ -262,11 +216,35 @@ impl PutObjectAclRequestWriter {
     }
 }
 
-
-impl AccessControlPolicyParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AccessControlPolicy, XmlParseError> {
+impl GetBucketAclRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = AccessControlPolicy::default();
+        let mut obj = GetBucketAclRequest::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "Bucket" {
+                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl GetBucketAclRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &GetBucketAclRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+    }
+}
+/*
+impl GetBucketAclOutputParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = GetBucketAclOutput::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "Owner" {
@@ -284,16 +262,70 @@ impl AccessControlPolicyParser {
     }
 }
 
-
-impl AccessControlPolicyWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &AccessControlPolicy) {
+impl GetBucketAclOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &GetBucketAclOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
         GrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.grants);
     }
 }
+*/
 
+impl AccessControlPolicyParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AccessControlPolicy, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = AccessControlPolicy::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "Owner" {
+                obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
+                continue;
+            }
+            if current_name == "AccessControlList" {
+                obj.acl = try!(AccessControlListParser::parse_xml("AccessControlList", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl AccessControlPolicyWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &AccessControlPolicy) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
+        AccessControlListWriter::write_params(params, &(prefix.to_string() + "AccessControlList"), &obj.acl);
+    }
+}
+
+impl AccessControlListParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AccessControlList, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = AccessControlList::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "Grant" {
+                obj.grants = try!(GrantsParser::parse_xml("Grant", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl AccessControlListWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &AccessControlList) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        GrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.grants);
+    }
+}
 
 impl ObjectCannedACLParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectCannedACL, XmlParseError> {
@@ -304,13 +336,11 @@ impl ObjectCannedACLParser {
     }
 }
 
-
 impl ObjectCannedACLWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &ObjectCannedACL) {
         params.put(name, obj);
     }
 }
-
 
 impl PermissionParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Permission, XmlParseError> {
@@ -321,9 +351,20 @@ impl PermissionParser {
     }
 }
 
-
 impl PermissionWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &Permission) {
         params.put(name, obj);
+    }
+}
+
+/// Maps canned acl to AWS format.
+pub fn canned_acl_in_aws_format(canned_acl: &CannedAcl) -> String {
+    match *canned_acl {
+        CannedAcl::Private => "private".to_string(),
+        CannedAcl::PublicRead => "public-read".to_string(),
+        CannedAcl::PublicReadWrite => "public-read-write".to_string(),
+        CannedAcl::AuthenticatedRead => "authenticated-read".to_string(),
+        CannedAcl::BucketOwnerRead => "bucket-owner-read".to_string(),
+        CannedAcl::BucketOwnerFullControl => "bucket-owner-full-control".to_string(),
     }
 }

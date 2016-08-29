@@ -46,6 +46,8 @@ return response data and a possible error.
 To list buckets from S3, you could run:
 
 ```rust
+// NOTE: See the src/main.rs for more examples...
+ 
 extern crate aws_sdk_rust;
 extern crate url;
 extern crate hyper;

@@ -20,34 +20,6 @@ use aws::common::common::*;
 use aws::s3::writeparse::*;
 use aws::s3::acl::*;
 
-#[derive(Debug, Default)]
-pub struct TargetGrant {
-    pub grantee: Grantee,
-    /// Logging permissions assigned to the Grantee for the bucket.
-    pub permission: BucketLogsPermission,
-}
-
-#[derive(Debug, Default)]
-pub struct Grant {
-    pub grantee: Grantee,
-    /// Specifies the permission given to the grantee.
-    pub permission: Permission,
-}
-
-#[derive(Debug, Default)]
-pub struct Grantee {
-    /// Email address of the grantee.
-    pub email_address: Option<EmailAddress>,
-    /// Type of grantee
-    pub foo_type: Type,
-    /// Screen name of the grantee.
-    pub display_name: Option<DisplayName>,
-    /// The canonical user ID of the grantee.
-    pub id: Option<ID>,
-    /// URI of the grantee group.
-    pub uri: Option<URI>,
-}
-
 pub type GrantRead = String;
 
 pub type GrantWrite = String;
@@ -116,8 +88,35 @@ pub struct TargetGrantParser;
 /// Write `TargetGrant` contents to a `SignedRequest`
 pub struct TargetGrantWriter;
 
-// Impls below...
+#[derive(Debug, Default)]
+pub struct TargetGrant {
+    pub grantee: Grantee,
+    /// Logging permissions assigned to the Grantee for the bucket.
+    pub permission: BucketLogsPermission,
+}
 
+#[derive(Debug, Default)]
+pub struct Grant {
+    pub grantee: Grantee,
+    /// Specifies the permission given to the grantee.
+    pub permission: Permission,
+}
+
+#[derive(Debug, Default)]
+pub struct Grantee {
+    /// Email address of the grantee.
+    pub email_address: Option<EmailAddress>,
+    /// Type of grantee
+    pub foo_type: Type,
+    /// Screen name of the grantee.
+    pub display_name: Option<DisplayName>,
+    /// The canonical user ID of the grantee.
+    pub id: Option<ID>,
+    /// URI of the grantee group.
+    pub uri: Option<URI>,
+}
+
+// Impls below...
 
 impl GrantsParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grants, XmlParseError> {
@@ -268,7 +267,6 @@ impl GrantWriteACPWriter {
         params.put(name, obj);
     }
 }
-
 
 impl GrantWriteParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantWrite, XmlParseError> {
