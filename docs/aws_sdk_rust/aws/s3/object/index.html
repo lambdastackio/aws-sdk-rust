@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `object` mod in crate `aws_sdk_rust`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, object">
+
+    <title>aws_sdk_rust::aws::s3::object - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a></p><script>window.sidebarCurrent = {name: 'object', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a class='mod' href=''>object</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-2947' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#18-1826' title='goto source code'>[src]</a></span></h1>
+<h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CompleteMultipartUploadOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::CompleteMultipartUploadOutput'>CompleteMultipartUploadOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CompleteMultipartUploadOutputParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::CompleteMultipartUploadOutputParser'>CompleteMultipartUploadOutputParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>CompleteMultipartUploadOutput</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CompleteMultipartUploadOutputWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::CompleteMultipartUploadOutputWriter'>CompleteMultipartUploadOutputWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>CompleteMultipartUploadOutput</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CompleteMultipartUploadRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::CompleteMultipartUploadRequest'>CompleteMultipartUploadRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CopyObjectOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::CopyObjectOutput'>CopyObjectOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CopyObjectRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::CopyObjectRequest'>CopyObjectRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CopyObjectResult.html'
+                                  title='aws_sdk_rust::aws::s3::object::CopyObjectResult'>CopyObjectResult</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CreateMultipartUploadOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::CreateMultipartUploadOutput'>CreateMultipartUploadOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CreateMultipartUploadRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::CreateMultipartUploadRequest'>CreateMultipartUploadRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Delete.html'
+                                  title='aws_sdk_rust::aws::s3::object::Delete'>Delete</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.DeleteMarkerEntry.html'
+                                  title='aws_sdk_rust::aws::s3::object::DeleteMarkerEntry'>DeleteMarkerEntry</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.DeleteObjectOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::DeleteObjectOutput'>DeleteObjectOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.DeleteObjectRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::DeleteObjectRequest'>DeleteObjectRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.DeleteObjectsOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::DeleteObjectsOutput'>DeleteObjectsOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.DeleteObjectsRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::DeleteObjectsRequest'>DeleteObjectsRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.DeletedObject.html'
+                                  title='aws_sdk_rust::aws::s3::object::DeletedObject'>DeletedObject</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ErrorDocument.html'
+                                  title='aws_sdk_rust::aws::s3::object::ErrorDocument'>ErrorDocument</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ExpiresParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::ExpiresParser'>ExpiresParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>Expires</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ExpiresWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::ExpiresWriter'>ExpiresWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>Expires</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.GetObjectOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::GetObjectOutput'>GetObjectOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.GetObjectRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::GetObjectRequest'>GetObjectRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.GetObjectRequestParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::GetObjectRequestParser'>GetObjectRequestParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>GetObjectRequest</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.GetObjectRequestWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::GetObjectRequestWriter'>GetObjectRequestWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>GetObjectRequest</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.GetObjectTorrentRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::GetObjectTorrentRequest'>GetObjectTorrentRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.HeadObjectOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::HeadObjectOutput'>HeadObjectOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.IndexDocument.html'
+                                  title='aws_sdk_rust::aws::s3::object::IndexDocument'>IndexDocument</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Initiator.html'
+                                  title='aws_sdk_rust::aws::s3::object::Initiator'>Initiator</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.LambdaFunctionConfiguration.html'
+                                  title='aws_sdk_rust::aws::s3::object::LambdaFunctionConfiguration'>LambdaFunctionConfiguration</a></td>
+                           <td class='docblock short'>
+                                <p>Container for specifying the AWS Lambda notification configuration.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListMultipartUploadsOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListMultipartUploadsOutput'>ListMultipartUploadsOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListMultipartUploadsOutputParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListMultipartUploadsOutputParser'>ListMultipartUploadsOutputParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>ListMultipartUploadsOutput</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListMultipartUploadsOutputWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListMultipartUploadsOutputWriter'>ListMultipartUploadsOutputWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>ListMultipartUploadsOutput</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListObjectVersionsOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListObjectVersionsOutput'>ListObjectVersionsOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListObjectVersionsRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListObjectVersionsRequest'>ListObjectVersionsRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListObjectsOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListObjectsOutput'>ListObjectsOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListObjectsRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListObjectsRequest'>ListObjectsRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListVersionsResult.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListVersionsResult'>ListVersionsResult</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.MaxUploadsParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::MaxUploadsParser'>MaxUploadsParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>MaxUploads</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.MaxUploadsWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::MaxUploadsWriter'>MaxUploadsWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>MaxUploads</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.MultipartUpload.html'
+                                  title='aws_sdk_rust::aws::s3::object::MultipartUpload'>MultipartUpload</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.MultipartUploadListParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::MultipartUploadListParser'>MultipartUploadListParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>MultipartUploadList</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.MultipartUploadListWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::MultipartUploadListWriter'>MultipartUploadListWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>MultipartUploadList</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.MultipartUploadParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::MultipartUploadParser'>MultipartUploadParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>MultipartUpload</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.MultipartUploadWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::MultipartUploadWriter'>MultipartUploadWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>MultipartUpload</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.NextUploadIdMarkerParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::NextUploadIdMarkerParser'>NextUploadIdMarkerParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>NextUploadIdMarker</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.NextUploadIdMarkerWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::NextUploadIdMarkerWriter'>NextUploadIdMarkerWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>NextUploadIdMarker</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.NoncurrentVersionExpiration.html'
+                                  title='aws_sdk_rust::aws::s3::object::NoncurrentVersionExpiration'>NoncurrentVersionExpiration</a></td>
+                           <td class='docblock short'>
+                                <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3
+permanently deletes the noncurrent object versions. You set this lifecycle
+configuration action on a bucket that has versioning enabled (or suspended) to
+request that Amazon S3 delete noncurrent object versions at a specific period
+in the object&#39;s lifetime.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Object.html'
+                                  title='aws_sdk_rust::aws::s3::object::Object'>Object</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ObjectIdentifier.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectIdentifier'>ObjectIdentifier</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Part.html'
+                                  title='aws_sdk_rust::aws::s3::object::Part'>Part</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PartNumberParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::PartNumberParser'>PartNumberParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>PartNumber</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PartNumberWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::PartNumberWriter'>PartNumberWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>PartNumber</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PartParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::PartParser'>PartParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>Part</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PartWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::PartWriter'>PartWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>Part</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PutObjectAclRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::PutObjectAclRequest'>PutObjectAclRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PutObjectOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::PutObjectOutput'>PutObjectOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PutObjectOutputParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::PutObjectOutputParser'>PutObjectOutputParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>PutObjectOutput</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PutObjectOutputWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::PutObjectOutputWriter'>PutObjectOutputWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>PutObjectOutput</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PutObjectRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::PutObjectRequest'>PutObjectRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.QueueConfiguration.html'
+                                  title='aws_sdk_rust::aws::s3::object::QueueConfiguration'>QueueConfiguration</a></td>
+                           <td class='docblock short'>
+                                <p>Container for specifying an configuration when you want Amazon S3 to publish
+events to an Amazon Simple Queue Service (Amazon SQS) queue.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Redirect.html'
+                                  title='aws_sdk_rust::aws::s3::object::Redirect'>Redirect</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.RedirectAllRequestsTo.html'
+                                  title='aws_sdk_rust::aws::s3::object::RedirectAllRequestsTo'>RedirectAllRequestsTo</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ReplicationRule.html'
+                                  title='aws_sdk_rust::aws::s3::object::ReplicationRule'>ReplicationRule</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.RestoreObjectOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::RestoreObjectOutput'>RestoreObjectOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.RestoreObjectRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::RestoreObjectRequest'>RestoreObjectRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.RestoreRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::RestoreRequest'>RestoreRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Tag.html'
+                                  title='aws_sdk_rust::aws::s3::object::Tag'>Tag</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TagParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::TagParser'>TagParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>Tag</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TagSetParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::TagSetParser'>TagSetParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>TagSet</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TagSetWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::TagSetWriter'>TagSetWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>TagSet</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TagWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::TagWriter'>TagWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>Tag</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TopicConfiguration.html'
+                                  title='aws_sdk_rust::aws::s3::object::TopicConfiguration'>TopicConfiguration</a></td>
+                           <td class='docblock short'>
+                                <p>Container for specifying the configuration when you want Amazon S3 to publish
+events to an Amazon Simple Notification Service (Amazon SNS) topic.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.UploadIdMarkerParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::UploadIdMarkerParser'>UploadIdMarkerParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>UploadIdMarker</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.UploadIdMarkerWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::UploadIdMarkerWriter'>UploadIdMarkerWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>UploadIdMarker</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.UploadPartRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::UploadPartRequest'>UploadPartRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Expires.html'
+                                  title='aws_sdk_rust::aws::s3::object::Expires'>Expires</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MaxUploads.html'
+                                  title='aws_sdk_rust::aws::s3::object::MaxUploads'>MaxUploads</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MultipartUploadList.html'
+                                  title='aws_sdk_rust::aws::s3::object::MultipartUploadList'>MultipartUploadList</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.NextUploadIdMarker.html'
+                                  title='aws_sdk_rust::aws::s3::object::NextUploadIdMarker'>NextUploadIdMarker</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.ObjectVersionList.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectVersionList'>ObjectVersionList</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PartNumber.html'
+                                  title='aws_sdk_rust::aws::s3::object::PartNumber'>PartNumber</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.TagSet.html'
+                                  title='aws_sdk_rust::aws::s3::object::TagSet'>TagSet</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.UploadIdMarker.html'
+                                  title='aws_sdk_rust::aws::s3::object::UploadIdMarker'>UploadIdMarker</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../../";
+        window.currentCrate = "aws_sdk_rust";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../../jquery.js"></script>
+    <script src="../../../../main.js"></script>
+    
+    <script defer src="../../../../search-index.js"></script>
+</body>
+</html>

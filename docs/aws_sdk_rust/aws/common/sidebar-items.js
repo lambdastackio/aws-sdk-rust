@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["common",""],["credentials",""],["params","Parameters for talking to query-based AWS services."],["region","AWS Regions and helper functions."],["request","AWS API requests."],["signature","AWS API request signatures."],["xmlutil","Tools for handling XML from AWS with helper functions for testing."]]});

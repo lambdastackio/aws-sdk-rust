@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Region","An AWS region. CnNorth1 is currently untested due to Rusoto maintainers not having access to AWS China."]],"struct":[["ParseRegionError","An error produced when attempting to convert a `str` into a `Region` fails."]]});

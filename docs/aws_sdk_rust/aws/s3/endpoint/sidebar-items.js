@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Signature",""]],"struct":[["Endpoint","Endpoint allows you to set a custom endpoint and/or a proxy for a given region and associate this as an endpoint of where S3Client will look for the data."]]});

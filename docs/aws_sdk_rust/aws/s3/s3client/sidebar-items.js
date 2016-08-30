@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["http_client","Returns a valid hyper client. If proxies are passed in then a proxy version of the client is returned. If None is passed then in then the default Client is returned."]],"struct":[["S3Client","S3Client - Base client all Virtual Hosting S3 docs - http://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html"]]});

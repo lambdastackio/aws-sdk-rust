@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `xmlutil` mod in crate `aws_sdk_rust`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, xmlutil">
+
+    <title>aws_sdk_rust::aws::common::xmlutil - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a></p><script>window.sidebarCurrent = {name: 'xmlutil', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a>::<wbr><a class='mod' href=''>xmlutil</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-719' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/xmlutil.rs.html#20-362' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>Tools for handling XML from AWS with helper functions for testing.</p>
+
+<p>Wraps an XML stack via traits.
+Also provides a method of supplying an XML stack from a file for testing purposes.</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.XmlParseError.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::XmlParseError'>XmlParseError</a></td>
+                           <td class='docblock short'>
+                                <p>generic Error for XML parsing</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.XmlResponse.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::XmlResponse'>XmlResponse</a></td>
+                           <td class='docblock short'>
+                                <p>Wraps the Hyper Response type</p>
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.Next.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::Next'>Next</a></td>
+                           <td class='docblock short'>
+                                <p>Move to the next part of the XML stack</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.Peek.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::Peek'>Peek</a></td>
+                           <td class='docblock short'>
+                                <p>Peek at next items in the XML stack</p>
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.characters.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::characters'>characters</a></td>
+                           <td class='docblock short'>
+                                <p>return some XML Characters</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.end_element.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::end_element'>end_element</a></td>
+                           <td class='docblock short'>
+                                <p>consume an <code>EndElement</code> with a specific name or throw an <code>XmlParseError</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.end_element_skip.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::end_element_skip'>end_element_skip</a></td>
+                           <td class='docblock short'>
+                                <p>consume an <code>EndElement</code> with a specific name or throw an <code>XmlParseError</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.indent.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::indent'>indent</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.optional_string_field.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::optional_string_field'>optional_string_field</a></td>
+                           <td class='docblock short'>
+                                <p>parse Some(String) if the next tag has the right name, otherwise None</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.peek_at_name.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::peek_at_name'>peek_at_name</a></td>
+                           <td class='docblock short'>
+                                <p>get the name of the current element in the stack.  throw a parse error if it&#39;s not a <code>StartElement</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.peek_is_end_element.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::peek_is_end_element'>peek_is_end_element</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.pretty_print_xml.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::pretty_print_xml'>pretty_print_xml</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.skip_tree.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::skip_tree'>skip_tree</a></td>
+                           <td class='docblock short'>
+                                <p>skip a tag and all its children</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.start_element.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::start_element'>start_element</a></td>
+                           <td class='docblock short'>
+                                <p>consume a <code>StartElement</code> with a specific name or throw an <code>XmlParseError</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.string_field.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::string_field'>string_field</a></td>
+                           <td class='docblock short'>
+                                <p>return a string field with the right name or throw a parse error</p>
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.XmlStack.html'
+                                  title='aws_sdk_rust::aws::common::xmlutil::XmlStack'>XmlStack</a></td>
+                           <td class='docblock short'>
+                                <p>syntactic sugar for the XML event stack we pass around</p>
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../../";
+        window.currentCrate = "aws_sdk_rust";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../../jquery.js"></script>
+    <script src="../../../../main.js"></script>
+    
+    <script defer src="../../../../search-index.js"></script>
+</body>
+</html>

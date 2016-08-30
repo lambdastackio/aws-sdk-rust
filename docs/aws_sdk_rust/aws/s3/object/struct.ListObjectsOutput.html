@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ListObjectsOutput` struct in crate `aws_sdk_rust`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ListObjectsOutput">
+
+    <title>aws_sdk_rust::aws::s3::object::ListObjectsOutput - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>object</a></p><script>window.sidebarCurrent = {name: 'ListObjectsOutput', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>object</a>::<wbr><a class='struct' href=''>ListObjectsOutput</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-3774' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#781-802' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct ListObjectsOutput {
+    pub name: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.BucketName.html' title='aws_sdk_rust::aws::s3::writeparse::BucketName'>BucketName</a>,
+    pub next_marker: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.NextMarker.html' title='aws_sdk_rust::aws::s3::writeparse::NextMarker'>NextMarker</a>,
+    pub delimiter: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Delimiter.html' title='aws_sdk_rust::aws::s3::writeparse::Delimiter'>Delimiter</a>,
+    pub max_keys: <a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.MaxKeys.html' title='aws_sdk_rust::aws::common::common::MaxKeys'>MaxKeys</a>,
+    pub prefix: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Prefix.html' title='aws_sdk_rust::aws::s3::writeparse::Prefix'>Prefix</a>,
+    pub marker: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Marker.html' title='aws_sdk_rust::aws::s3::writeparse::Marker'>Marker</a>,
+    pub encoding_type: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.EncodingType.html' title='aws_sdk_rust::aws::s3::writeparse::EncodingType'>EncodingType</a>,
+    pub is_truncated: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.IsTruncated.html' title='aws_sdk_rust::aws::s3::writeparse::IsTruncated'>IsTruncated</a>,
+    pub contents: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ObjectList.html' title='aws_sdk_rust::aws::s3::writeparse::ObjectList'>ObjectList</a>,
+    pub common_prefixes: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.CommonPrefixList.html' title='aws_sdk_rust::aws::s3::writeparse::CommonPrefixList'>CommonPrefixList</a>,
+}</pre><h2 class='fields'>Fields</h2><span id='structfield.name' class='structfield'>
+                           <span id='name.v' class='invisible'>
+                           <code>name: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.BucketName.html' title='aws_sdk_rust::aws::s3::writeparse::BucketName'>BucketName</a></code>
+                           </span></span><span class='stab '></span><span id='structfield.next_marker' class='structfield'>
+                           <span id='next_marker.v' class='invisible'>
+                           <code>next_marker: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.NextMarker.html' title='aws_sdk_rust::aws::s3::writeparse::NextMarker'>NextMarker</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>When response is truncated (the IsTruncated element value in the response is
+true), you can use the key name in this field as marker in the subsequent
+request to get next set of objects. Amazon S3 lists objects in alphabetical
+order Note: This element is returned only if you have delimiter request
+parameter specified. If response does not include the NextMaker and it is
+truncated, you can use the value of the last Key in the response as the marker
+in the subsequent request to get the next set of object keys.</p>
+</div><span id='structfield.delimiter' class='structfield'>
+                           <span id='delimiter.v' class='invisible'>
+                           <code>delimiter: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Delimiter.html' title='aws_sdk_rust::aws::s3::writeparse::Delimiter'>Delimiter</a></code>
+                           </span></span><span class='stab '></span><span id='structfield.max_keys' class='structfield'>
+                           <span id='max_keys.v' class='invisible'>
+                           <code>max_keys: <a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.MaxKeys.html' title='aws_sdk_rust::aws::common::common::MaxKeys'>MaxKeys</a></code>
+                           </span></span><span class='stab '></span><span id='structfield.prefix' class='structfield'>
+                           <span id='prefix.v' class='invisible'>
+                           <code>prefix: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Prefix.html' title='aws_sdk_rust::aws::s3::writeparse::Prefix'>Prefix</a></code>
+                           </span></span><span class='stab '></span><span id='structfield.marker' class='structfield'>
+                           <span id='marker.v' class='invisible'>
+                           <code>marker: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Marker.html' title='aws_sdk_rust::aws::s3::writeparse::Marker'>Marker</a></code>
+                           </span></span><span class='stab '></span><span id='structfield.encoding_type' class='structfield'>
+                           <span id='encoding_type.v' class='invisible'>
+                           <code>encoding_type: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.EncodingType.html' title='aws_sdk_rust::aws::s3::writeparse::EncodingType'>EncodingType</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
+</div><span id='structfield.is_truncated' class='structfield'>
+                           <span id='is_truncated.v' class='invisible'>
+                           <code>is_truncated: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.IsTruncated.html' title='aws_sdk_rust::aws::s3::writeparse::IsTruncated'>IsTruncated</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>A flag that indicates whether or not Amazon S3 returned all of the results
+that satisfied the search criteria.</p>
+</div><span id='structfield.contents' class='structfield'>
+                           <span id='contents.v' class='invisible'>
+                           <code>contents: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ObjectList.html' title='aws_sdk_rust::aws::s3::writeparse::ObjectList'>ObjectList</a></code>
+                           </span></span><span class='stab '></span><span id='structfield.common_prefixes' class='structfield'>
+                           <span id='common_prefixes.v' class='invisible'>
+                           <code>common_prefixes: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.CommonPrefixList.html' title='aws_sdk_rust::aws::s3::writeparse::CommonPrefixList'>CommonPrefixList</a></code>
+                           </span></span><span class='stab '></span><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.ListObjectsOutput.html' title='aws_sdk_rust::aws::s3::object::ListObjectsOutput'>ListObjectsOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-3757' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#780' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class='method'><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.ListObjectsOutput.html' title='aws_sdk_rust::aws::s3::object::ListObjectsOutput'>ListObjectsOutput</a></code></span></h4>
+<div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.ListObjectsOutput.html' title='aws_sdk_rust::aws::s3::object::ListObjectsOutput'>ListObjectsOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-3759' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#780' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../../";
+        window.currentCrate = "aws_sdk_rust";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../../jquery.js"></script>
+    <script src="../../../../main.js"></script>
+    
+    <script defer src="../../../../search-index.js"></script>
+</body>
+</html>

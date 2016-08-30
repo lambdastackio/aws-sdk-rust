@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["S3ClientError",""],["S3ClientErrorParser","Parse `S`3ClientError from XML"],["S3ClientErrorWriter","Write `S3ClientError` contents to a `SignedRequest`"],["S3Error",""]]});

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `PutBucketAclRequest` struct in crate `aws_sdk_rust`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, PutBucketAclRequest">
+
+    <title>aws_sdk_rust::aws::s3::acl::PutBucketAclRequest - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>acl</a></p><script>window.sidebarCurrent = {name: 'PutBucketAclRequest', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>acl</a>::<wbr><a class='struct' href=''>PutBucketAclRequest</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-10157' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/acl.rs.html#112-129' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct PutBucketAclRequest {
+    pub grant_full_control: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantFullControl.html' title='aws_sdk_rust::aws::s3::grant::GrantFullControl'>GrantFullControl</a>&gt;,
+    pub grant_write_acp: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantWriteACP.html' title='aws_sdk_rust::aws::s3::grant::GrantWriteACP'>GrantWriteACP</a>&gt;,
+    pub content_md5: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.ContentMD5.html' title='aws_sdk_rust::aws::s3::header::ContentMD5'>ContentMD5</a>&gt;,
+    pub bucket: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.BucketName.html' title='aws_sdk_rust::aws::s3::writeparse::BucketName'>BucketName</a>,
+    pub acl: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='enum' href='../../../../aws_sdk_rust/aws/s3/acl/enum.CannedAcl.html' title='aws_sdk_rust::aws::s3::acl::CannedAcl'>CannedAcl</a>&gt;,
+    pub access_control_policy: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/acl/struct.AccessControlPolicy.html' title='aws_sdk_rust::aws::s3::acl::AccessControlPolicy'>AccessControlPolicy</a>&gt;,
+    pub grant_write: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantWrite.html' title='aws_sdk_rust::aws::s3::grant::GrantWrite'>GrantWrite</a>&gt;,
+    pub grant_read: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantRead.html' title='aws_sdk_rust::aws::s3::grant::GrantRead'>GrantRead</a>&gt;,
+    pub grant_read_acp: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantReadACP.html' title='aws_sdk_rust::aws::s3::grant::GrantReadACP'>GrantReadACP</a>&gt;,
+}</pre><h2 class='fields'>Fields</h2><span id='structfield.grant_full_control' class='structfield'>
+                           <span id='grant_full_control.v' class='invisible'>
+                           <code>grant_full_control: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantFullControl.html' title='aws_sdk_rust::aws::s3::grant::GrantFullControl'>GrantFullControl</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Allows grantee the read, write, read ACP, and write ACP permissions on the
+bucket.</p>
+</div><span id='structfield.grant_write_acp' class='structfield'>
+                           <span id='grant_write_acp.v' class='invisible'>
+                           <code>grant_write_acp: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantWriteACP.html' title='aws_sdk_rust::aws::s3::grant::GrantWriteACP'>GrantWriteACP</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Allows grantee to write the ACL for the applicable bucket.</p>
+</div><span id='structfield.content_md5' class='structfield'>
+                           <span id='content_md5.v' class='invisible'>
+                           <code>content_md5: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.ContentMD5.html' title='aws_sdk_rust::aws::s3::header::ContentMD5'>ContentMD5</a>&gt;</code>
+                           </span></span><span class='stab '></span><span id='structfield.bucket' class='structfield'>
+                           <span id='bucket.v' class='invisible'>
+                           <code>bucket: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.BucketName.html' title='aws_sdk_rust::aws::s3::writeparse::BucketName'>BucketName</a></code>
+                           </span></span><span class='stab '></span><span id='structfield.acl' class='structfield'>
+                           <span id='acl.v' class='invisible'>
+                           <code>acl: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='enum' href='../../../../aws_sdk_rust/aws/s3/acl/enum.CannedAcl.html' title='aws_sdk_rust::aws::s3::acl::CannedAcl'>CannedAcl</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The canned ACL to apply to the bucket.</p>
+</div><span id='structfield.access_control_policy' class='structfield'>
+                           <span id='access_control_policy.v' class='invisible'>
+                           <code>access_control_policy: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/acl/struct.AccessControlPolicy.html' title='aws_sdk_rust::aws::s3::acl::AccessControlPolicy'>AccessControlPolicy</a>&gt;</code>
+                           </span></span><span class='stab '></span><span id='structfield.grant_write' class='structfield'>
+                           <span id='grant_write.v' class='invisible'>
+                           <code>grant_write: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantWrite.html' title='aws_sdk_rust::aws::s3::grant::GrantWrite'>GrantWrite</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Allows grantee to create, overwrite, and delete any object in the bucket.</p>
+</div><span id='structfield.grant_read' class='structfield'>
+                           <span id='grant_read.v' class='invisible'>
+                           <code>grant_read: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantRead.html' title='aws_sdk_rust::aws::s3::grant::GrantRead'>GrantRead</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Allows grantee to list the objects in the bucket.</p>
+</div><span id='structfield.grant_read_acp' class='structfield'>
+                           <span id='grant_read_acp.v' class='invisible'>
+                           <code>grant_read_acp: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/s3/grant/type.GrantReadACP.html' title='aws_sdk_rust::aws::s3::grant::GrantReadACP'>GrantReadACP</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Allows grantee to read the bucket ACL.</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/acl/struct.PutBucketAclRequest.html' title='aws_sdk_rust::aws::s3::acl::PutBucketAclRequest'>PutBucketAclRequest</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-10141' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/acl.rs.html#111' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class='method'><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../../aws_sdk_rust/aws/s3/acl/struct.PutBucketAclRequest.html' title='aws_sdk_rust::aws::s3::acl::PutBucketAclRequest'>PutBucketAclRequest</a></code></span></h4>
+<div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/acl/struct.PutBucketAclRequest.html' title='aws_sdk_rust::aws::s3::acl::PutBucketAclRequest'>PutBucketAclRequest</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-10143' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/acl.rs.html#111' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../../";
+        window.currentCrate = "aws_sdk_rust";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../../jquery.js"></script>
+    <script src="../../../../main.js"></script>
+    
+    <script defer src="../../../../search-index.js"></script>
+</body>
+</html>
