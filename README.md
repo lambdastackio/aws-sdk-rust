@@ -117,6 +117,6 @@ s3
 ### XML
 AWS S3 uses XML for transmitting and receiving (headers too). At this time there are no good implementations of
 XML Serialization (serde works for Deserialization) so each XML construct for sending and receiving from S3
-had to be defined with a parser/writer (project rusoto did the heavy lifting in this area).
+had to be defined with a parser/writer (project rusoto did a lot of the heavy lifting in this area).
 
 Other AWS Services primarily use JSON and De/Serialization is possible for those service.
