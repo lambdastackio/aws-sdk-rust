@@ -1,23 +1,21 @@
-/*
- Copyright 2016 LambdaStack All rights reserved.
+//
+// Copyright 2016 LambdaStack All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+// Portions borrowed from the rusoto project. See README.md
 
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
-
-/*
- Portions borrowed from the rusoto project. See README.md
-*/
-
+#![allow(unused_variables)]
 use std::str::FromStr;
 use std::str;
 
@@ -1111,7 +1109,8 @@ pub struct MultipartUpload {
 }
 
 impl TagParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<Tag, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Tag::default();
         loop {
@@ -1141,7 +1140,8 @@ impl TagWriter {
 }
 
 impl TagSetParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TagSet, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<TagSet, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Tag" {
             obj.push(try!(TagParser::parse_xml("Tag", stack)));
@@ -1162,7 +1162,8 @@ impl TagSetWriter {
 }
 
 impl PartNumberParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PartNumber, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<PartNumber, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1177,7 +1178,8 @@ impl PartNumberWriter {
 }
 
 impl PartParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Part, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<Part, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Part::default();
         loop {
@@ -1209,15 +1211,18 @@ impl PartWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &Part) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
-        LastModifiedWriter::write_params(params, &(prefix.to_string() + "LastModified"), &obj.last_modified);
-        PartNumberWriter::write_params(params, &(prefix.to_string() + "PartNumber"), &obj.part_number);
+        LastModifiedWriter::write_params(
+                params, &(prefix.to_string() + "LastModified"), &obj.last_modified);
+        PartNumberWriter::write_params(
+                params, &(prefix.to_string() + "PartNumber"), &obj.part_number);
         ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
         SizeWriter::write_params(params, &(prefix.to_string() + "Size"), &obj.size);
     }
 }
 
 impl MultipartUploadParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUpload, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<MultipartUpload, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = MultipartUpload::default();
         loop {
@@ -1259,15 +1264,18 @@ impl MultipartUploadWriter {
         if prefix != "" { prefix.push_str("."); }
         InitiatorWriter::write_params(params, &(prefix.to_string() + "Initiator"), &obj.initiator);
         InitiatedWriter::write_params(params, &(prefix.to_string() + "Initiated"), &obj.initiated);
-        MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "UploadId"), &obj.upload_id);
-        StorageClassWriter::write_params(params, &(prefix.to_string() + "StorageClass"), &obj.storage_class);
+        MultipartUploadIdWriter::write_params(
+                params, &(prefix.to_string() + "UploadId"), &obj.upload_id);
+        StorageClassWriter::write_params(
+                params, &(prefix.to_string() + "StorageClass"), &obj.storage_class);
         ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
         OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
     }
 }
 
 impl UploadIdMarkerParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadIdMarker, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<UploadIdMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = UploadIdMarker::default();
 
@@ -1288,7 +1296,8 @@ impl UploadIdMarkerWriter {
 }
 
 impl NextUploadIdMarkerParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextUploadIdMarker, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<NextUploadIdMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = NextUploadIdMarker::default();
@@ -1310,7 +1319,8 @@ impl NextUploadIdMarkerWriter {
 }
 
 impl MultipartUploadListParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadList, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<MultipartUploadList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "MultipartUpload" {
             obj.push(try!(MultipartUploadParser::parse_xml("MultipartUpload", stack)));
@@ -1331,21 +1341,25 @@ impl MultipartUploadListWriter {
 }
 
 impl ListMultipartUploadsOutputParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsOutput, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<ListMultipartUploadsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListMultipartUploadsOutput::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "UploadIdMarker" {
-                obj.upload_id_marker = try!(UploadIdMarkerParser::parse_xml("UploadIdMarker", stack));
+                obj.upload_id_marker = try!(UploadIdMarkerParser::parse_xml(
+                                            "UploadIdMarker", stack));
                 continue;
             }
             if current_name == "CommonPrefix" {
-                obj.common_prefixes = try!(CommonPrefixListParser::parse_xml("CommonPrefix", stack));
+                obj.common_prefixes = try!(CommonPrefixListParser::parse_xml(
+                                            "CommonPrefix", stack));
                 continue;
             }
             if current_name == "NextKeyMarker" {
-                obj.next_key_marker = try!(NextKeyMarkerParser::parse_xml("NextKeyMarker", stack));
+                obj.next_key_marker = try!(NextKeyMarkerParser::parse_xml(
+                                            "NextKeyMarker", stack));
                 continue;
             }
             if current_name == "Bucket" {
@@ -1357,7 +1371,8 @@ impl ListMultipartUploadsOutputParser {
                 continue;
             }
             if current_name == "NextUploadIdMarker" {
-                obj.next_upload_id_marker = try!(NextUploadIdMarkerParser::parse_xml("NextUploadIdMarker", stack));
+                obj.next_upload_id_marker = try!(NextUploadIdMarkerParser::parse_xml(
+                                            "NextUploadIdMarker", stack));
                 continue;
             }
             if current_name == "Prefix" {
@@ -1365,7 +1380,8 @@ impl ListMultipartUploadsOutputParser {
                 continue;
             }
             if current_name == "MultipartUpload" {
-                obj.uploads = try!(MultipartUploadListParser::parse_xml("MultipartUpload", stack));
+                obj.uploads = try!(MultipartUploadListParser::parse_xml(
+                                            "MultipartUpload", stack));
                 continue;
             }
             if current_name == "KeyMarker" {
@@ -1399,29 +1415,43 @@ impl ListMultipartUploadsOutputWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &ListMultipartUploadsOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
-        UploadIdMarkerWriter::write_params(params, &(prefix.to_string() + "UploadIdMarker"), &obj.upload_id_marker);
-        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
-        NextKeyMarkerWriter::write_params(params, &(prefix.to_string() + "NextKeyMarker"), &obj.next_key_marker);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
-        NextUploadIdMarkerWriter::write_params(params, &(prefix.to_string() + "NextUploadIdMarker"), &obj.next_upload_id_marker);
-        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
-        MultipartUploadListWriter::write_params(params, &(prefix.to_string() + "MultipartUpload"), &obj.uploads);
-        KeyMarkerWriter::write_params(params, &(prefix.to_string() + "KeyMarker"), &obj.key_marker);
-        MaxUploadsWriter::write_params(params, &(prefix.to_string() + "MaxUploads"), &obj.max_uploads);
-        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
+        UploadIdMarkerWriter::write_params(
+                params, &(prefix.to_string() + "UploadIdMarker"), &obj.upload_id_marker);
+        CommonPrefixListWriter::write_params(
+                params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
+        NextKeyMarkerWriter::write_params(
+                params, &(prefix.to_string() + "NextKeyMarker"), &obj.next_key_marker);
+        BucketNameWriter::write_params(
+                params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+        DelimiterWriter::write_params(
+                params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
+        NextUploadIdMarkerWriter::write_params(
+                params, &(prefix.to_string() + "NextUploadIdMarker"), &obj.next_upload_id_marker);
+        PrefixWriter::write_params(
+                params, &(prefix.to_string() + "Prefix"), &obj.prefix);
+        MultipartUploadListWriter::write_params(
+                params, &(prefix.to_string() + "MultipartUpload"), &obj.uploads);
+        KeyMarkerWriter::write_params(
+                params, &(prefix.to_string() + "KeyMarker"), &obj.key_marker);
+        MaxUploadsWriter::write_params(
+                params, &(prefix.to_string() + "MaxUploads"), &obj.max_uploads);
+        EncodingTypeWriter::write_params(
+                params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
+        IsTruncatedWriter::write_params(
+                params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
     }
 }
 
 impl CompleteMultipartUploadOutputParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompleteMultipartUploadOutput, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<CompleteMultipartUploadOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CompleteMultipartUploadOutput::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "x-amz-request-charged" {
-                obj.request_charged = try!(RequestChargedParser::parse_xml("x-amz-request-charged", stack));
+                obj.request_charged = try!(RequestChargedParser::parse_xml(
+                                    "x-amz-request-charged", stack));
                 continue;
             }
             if current_name == "Bucket" {
@@ -1429,7 +1459,8 @@ impl CompleteMultipartUploadOutputParser {
                 continue;
             }
             if current_name == "x-amz-version-id" {
-                obj.version_id = try!(ObjectVersionIdParser::parse_xml("x-amz-version-id", stack));
+                obj.version_id = try!(ObjectVersionIdParser::parse_xml(
+                                    "x-amz-version-id", stack));
                 continue;
             }
             if current_name == "ETag" {
@@ -1445,11 +1476,13 @@ impl CompleteMultipartUploadOutputParser {
                 continue;
             }
             if current_name == "x-amz-server-side-encryption" {
-                obj.server_side_encryption = try!(ServerSideEncryptionParser::parse_xml("x-amz-server-side-encryption", stack));
+                obj.server_side_encryption = try!(ServerSideEncryptionParser::parse_xml(
+                                    "x-amz-server-side-encryption", stack));
                 continue;
             }
             if current_name == "x-amz-server-side-encryption-aws-kms-key-id" {
-                obj.ssekms_key_id = try!(SSEKMSKeyIdParser::parse_xml("x-amz-server-side-encryption-aws-kms-key-id", stack));
+                obj.ssekms_key_id = try!(SSEKMSKeyIdParser::parse_xml(
+                                    "x-amz-server-side-encryption-aws-kms-key-id", stack));
                 continue;
             }
             if current_name == "x-amz-expiration" {
@@ -1467,42 +1500,67 @@ impl CompleteMultipartUploadOutputWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &CompleteMultipartUploadOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        LocationWriter::write_params(params, &(prefix.to_string() + "Location"), &obj.location);
-        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
+        RequestChargedWriter::write_params(
+                params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
+        BucketNameWriter::write_params(
+                params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+        ObjectVersionIdWriter::write_params(
+                params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
+        ETagWriter::write_params(
+                params, &(prefix.to_string() + "ETag"), &obj.e_tag);
+        LocationWriter::write_params(
+                params, &(prefix.to_string() + "Location"), &obj.location);
+        ObjectKeyWriter::write_params(
+                params, &(prefix.to_string() + "Key"), &obj.key);
+        ServerSideEncryptionWriter::write_params(
+                params,
+                &(prefix.to_string() + "x-amz-server-side-encryption"),
+                &obj.server_side_encryption);
+        SSEKMSKeyIdWriter::write_params(
+                params,
+                &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"),
+                &obj.ssekms_key_id);
+        ExpirationWriter::write_params(
+                params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
     }
 }
 
 impl GetObjectRequestParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectRequest, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+    -> Result<GetObjectRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetObjectRequest::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "response-content-encoding" {
-                obj.response_content_encoding = Some(try!(ResponseContentEncodingParser::parse_xml("response-content-encoding", stack)));
+                obj.response_content_encoding = Some(
+                                    try!(ResponseContentEncodingParser::parse_xml(
+                                            "response-content-encoding", stack)));
                 continue;
             }
             if current_name == "response-content-language" {
-                obj.response_content_language = Some(try!(ResponseContentLanguageParser::parse_xml("response-content-language", stack)));
+                obj.response_content_language = Some(
+                                    try!(ResponseContentLanguageParser::parse_xml(
+                                            "response-content-language", stack)));
                 continue;
             }
             if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-                obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
+                obj.sse_customer_algorithm = Some(
+                                    try!(SSECustomerAlgorithmParser::parse_xml(
+                                            "x-amz-server-side-encryption-customer-algorithm",
+                                            stack)));
                 continue;
             }
             if current_name == "response-content-type" {
-                obj.response_content_type = Some(try!(ResponseContentTypeParser::parse_xml("response-content-type", stack)));
+                obj.response_content_type = Some(
+                                    try!(ResponseContentTypeParser::parse_xml(
+                                            "response-content-type", stack)));
                 continue;
             }
             if current_name == "If-Unmodified-Since" {
-                obj.if_unmodified_since = Some(try!(IfUnmodifiedSinceParser::parse_xml("If-Unmodified-Since", stack)));
+                obj.if_unmodified_since = Some(
+                                    try!(IfUnmodifiedSinceParser::parse_xml(
+                                            "If-Unmodified-Since", stack)));
                 continue;
             }
             if current_name == "versionId" {
@@ -1510,15 +1568,21 @@ impl GetObjectRequestParser {
                 continue;
             }
             if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
+                obj.request_payer = Some(
+                                    try!(RequestPayerParser::parse_xml(
+                                            "x-amz-request-payer", stack)));
                 continue;
             }
             if current_name == "response-cache-control" {
-                obj.response_cache_control = Some(try!(ResponseCacheControlParser::parse_xml("response-cache-control", stack)));
+                obj.response_cache_control = Some(
+                                    try!(ResponseCacheControlParser::parse_xml(
+                                            "response-cache-control", stack)));
                 continue;
             }
             if current_name == "x-amz-server-side-encryption-customer-key" {
-                obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
+                obj.sse_customer_key = Some(
+                                    try!(SSECustomerKeyParser::parse_xml(
+                                            "x-amz-server-side-encryption-customer-key", stack)));
                 continue;
             }
             if current_name == "Bucket" {
@@ -1526,11 +1590,14 @@ impl GetObjectRequestParser {
                 continue;
             }
             if current_name == "If-None-Match" {
-                obj.if_none_match = Some(try!(IfNoneMatchParser::parse_xml("If-None-Match", stack)));
+                obj.if_none_match = Some(try!(IfNoneMatchParser::parse_xml(
+                                            "If-None-Match", stack)));
                 continue;
             }
             if current_name == "response-content-disposition" {
-                obj.response_content_disposition = Some(try!(ResponseContentDispositionParser::parse_xml("response-content-disposition", stack)));
+                obj.response_content_disposition = Some(
+                                    try!(ResponseContentDispositionParser::parse_xml(
+                                            "response-content-disposition", stack)));
                 continue;
             }
             if current_name == "Range" {
@@ -1546,15 +1613,19 @@ impl GetObjectRequestParser {
                 continue;
             }
             if current_name == "response-expires" {
-                obj.response_expires = Some(try!(ResponseExpiresParser::parse_xml("response-expires", stack)));
+                obj.response_expires = Some(try!(ResponseExpiresParser::parse_xml(
+                                            "response-expires", stack)));
                 continue;
             }
             if current_name == "If-Modified-Since" {
-                obj.if_modified_since = Some(try!(IfModifiedSinceParser::parse_xml("If-Modified-Since", stack)));
+                obj.if_modified_since = Some(try!(IfModifiedSinceParser::parse_xml(
+                                            "If-Modified-Since", stack)));
                 continue;
             }
             if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-                obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
+                obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml(
+                                            "x-amz-server-side-encryption-customer-key-MD5",
+                                            stack)));
                 continue;
             }
             break;
@@ -1569,38 +1640,52 @@ impl GetObjectRequestWriter {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         if let Some(ref obj) = obj.response_content_encoding {
-            ResponseContentEncodingWriter::write_params(params, &(prefix.to_string() + "response-content-encoding"), obj);
+            ResponseContentEncodingWriter::write_params(
+                        params, &(prefix.to_string() + "response-content-encoding"), obj);
         }
         if let Some(ref obj) = obj.response_content_language {
-            ResponseContentLanguageWriter::write_params(params, &(prefix.to_string() + "response-content-language"), obj);
+            ResponseContentLanguageWriter::write_params(
+                        params, &(prefix.to_string() + "response-content-language"), obj);
         }
         if let Some(ref obj) = obj.sse_customer_algorithm {
-            SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), obj);
+            SSECustomerAlgorithmWriter::write_params(
+                        params,
+                        &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"),
+                        obj);
         }
         if let Some(ref obj) = obj.response_content_type {
-            ResponseContentTypeWriter::write_params(params, &(prefix.to_string() + "response-content-type"), obj);
+            ResponseContentTypeWriter::write_params(
+                        params, &(prefix.to_string() + "response-content-type"), obj);
         }
         if let Some(ref obj) = obj.if_unmodified_since {
-            IfUnmodifiedSinceWriter::write_params(params, &(prefix.to_string() + "If-Unmodified-Since"), obj);
+            IfUnmodifiedSinceWriter::write_params(
+                        params, &(prefix.to_string() + "If-Unmodified-Since"), obj);
         }
         if let Some(ref obj) = obj.version_id {
-            ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "versionId"), obj);
+            ObjectVersionIdWriter::write_params(
+                        params, &(prefix.to_string() + "versionId"), obj);
         }
         if let Some(ref obj) = obj.request_payer {
-            RequestPayerWriter::write_params(params, &(prefix.to_string() + "x-amz-request-payer"), obj);
+            RequestPayerWriter::write_params(
+                        params, &(prefix.to_string() + "x-amz-request-payer"), obj);
         }
         if let Some(ref obj) = obj.response_cache_control {
-            ResponseCacheControlWriter::write_params(params, &(prefix.to_string() + "response-cache-control"), obj);
+            ResponseCacheControlWriter::write_params(
+                        params, &(prefix.to_string() + "response-cache-control"), obj);
         }
         if let Some(ref obj) = obj.sse_customer_key {
-            SSECustomerKeyWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key"), obj);
+            SSECustomerKeyWriter::write_params(
+                        params,
+                        &(prefix.to_string() + "x-amz-server-side-encryption-customer-key"),
+                        obj);
         }
         BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
         if let Some(ref obj) = obj.if_none_match {
             IfNoneMatchWriter::write_params(params, &(prefix.to_string() + "If-None-Match"), obj);
         }
         if let Some(ref obj) = obj.response_content_disposition {
-            ResponseContentDispositionWriter::write_params(params, &(prefix.to_string() + "response-content-disposition"), obj);
+            ResponseContentDispositionWriter::write_params(
+                        params, &(prefix.to_string() + "response-content-disposition"), obj);
         }
         if let Some(ref obj) = obj.range {
             RangeWriter::write_params(params, &(prefix.to_string() + "Range"), obj);
@@ -1610,33 +1695,42 @@ impl GetObjectRequestWriter {
             IfMatchWriter::write_params(params, &(prefix.to_string() + "If-Match"), obj);
         }
         if let Some(ref obj) = obj.response_expires {
-            ResponseExpiresWriter::write_params(params, &(prefix.to_string() + "response-expires"), obj);
+            ResponseExpiresWriter::write_params(
+                        params, &(prefix.to_string() + "response-expires"), obj);
         }
         if let Some(ref obj) = obj.if_modified_since {
-            IfModifiedSinceWriter::write_params(params, &(prefix.to_string() + "If-Modified-Since"), obj);
+            IfModifiedSinceWriter::write_params(
+                        params, &(prefix.to_string() + "If-Modified-Since"), obj);
         }
         if let Some(ref obj) = obj.sse_customer_key_md5 {
-            SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), obj);
+            SSECustomerKeyMD5Writer::write_params(
+                        params,
+                        &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"),
+                        obj);
         }
     }
 }
 
 impl PutObjectOutputParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectOutput, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<PutObjectOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutObjectOutput::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-                obj.sse_customer_algorithm = try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack));
+                obj.sse_customer_algorithm = try!(SSECustomerAlgorithmParser::parse_xml(
+                        "x-amz-server-side-encryption-customer-algorithm", stack));
                 continue;
             }
             if current_name == "x-amz-request-charged" {
-                obj.request_charged = try!(RequestChargedParser::parse_xml("x-amz-request-charged", stack));
+                obj.request_charged = try!(RequestChargedParser::parse_xml(
+                        "x-amz-request-charged", stack));
                 continue;
             }
             if current_name == "x-amz-version-id" {
-                obj.version_id = try!(ObjectVersionIdParser::parse_xml("x-amz-version-id", stack));
+                obj.version_id = try!(ObjectVersionIdParser::parse_xml(
+                        "x-amz-version-id", stack));
                 continue;
             }
             if current_name == "ETag" {
@@ -1648,15 +1742,18 @@ impl PutObjectOutputParser {
                 continue;
             }
             if current_name == "x-amz-server-side-encryption" {
-                obj.server_side_encryption = try!(ServerSideEncryptionParser::parse_xml("x-amz-server-side-encryption", stack));
+                obj.server_side_encryption = try!(ServerSideEncryptionParser::parse_xml(
+                        "x-amz-server-side-encryption", stack));
                 continue;
             }
             if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-                obj.sse_customer_key_md5 = try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack));
+                obj.sse_customer_key_md5 = try!(SSECustomerKeyMD5Parser::parse_xml(
+                        "x-amz-server-side-encryption-customer-key-MD5", stack));
                 continue;
             }
             if current_name == "x-amz-server-side-encryption-aws-kms-key-id" {
-                obj.ssekms_key_id = try!(SSEKMSKeyIdParser::parse_xml("x-amz-server-side-encryption-aws-kms-key-id", stack));
+                obj.ssekms_key_id = try!(SSEKMSKeyIdParser::parse_xml(
+                        "x-amz-server-side-encryption-aws-kms-key-id", stack));
                 continue;
             }
             break;
@@ -1670,19 +1767,35 @@ impl PutObjectOutputWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &PutObjectOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
+        SSECustomerAlgorithmWriter::write_params(
+                params,
+                &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"),
+                &obj.sse_customer_algorithm);
+        RequestChargedWriter::write_params(
+                params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
+        ObjectVersionIdWriter::write_params(
+                params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
         ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
+        ExpirationWriter::write_params(
+                params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
+        ServerSideEncryptionWriter::write_params(
+                params,
+                &(prefix.to_string() + "x-amz-server-side-encryption"),
+                &obj.server_side_encryption);
+        SSECustomerKeyMD5Writer::write_params(
+            params,
+            &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"),
+            &obj.sse_customer_key_md5);
+        SSEKMSKeyIdWriter::write_params(
+            params,
+            &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"),
+            &obj.ssekms_key_id);
     }
 }
 
 impl MaxUploadsParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxUploads, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<MaxUploads, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1697,7 +1810,8 @@ impl MaxUploadsWriter {
 }
 
 impl ExpiresParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Expires, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<Expires, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));

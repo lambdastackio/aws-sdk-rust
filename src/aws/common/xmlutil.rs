@@ -1,22 +1,20 @@
-/*
- Copyright 2016 LambdaStack All rights reserved.
+// Copyright 2016 LambdaStack All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
-
-/*
- Portions borrowed from the rusoto project. See README.md
-*/
+// Portions borrowed from the rusoto project. See README.md
+//
 
 
 //! Tools for handling XML from AWS with helper functions for testing.
@@ -24,11 +22,12 @@
 //! Wraps an XML stack via traits.
 //! Also provides a method of supplying an XML stack from a file for testing purposes.
 
+#![allow(unused_variables)]
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use std::collections::HashMap;
-//use std::iter::IntoIterator;
-//use std::io::Read;
+// use std::iter::IntoIterator;
+// use std::io::Read;
 
 use xml::reader::*;
 use xml::reader::events::*;
@@ -36,8 +35,9 @@ use xml::reader::events::*;
 // Helper for pretty output
 pub fn indent(size: usize) -> String {
     const INDENT: &'static str = "    ";
-    (0..size).map(|_| INDENT)
-             .fold(String::with_capacity(size*INDENT.len()), |r, s| r + s)
+    (0..size)
+        .map(|_| INDENT)
+        .fold(String::with_capacity(size * INDENT.len()), |r, s| r + s)
 }
 
 // don't use this function
@@ -58,15 +58,15 @@ pub fn pretty_print_xml(xml_body: &str, skip: bool) {
             XmlEvent::StartElement { name, .. } => {
                 println!("{}+{}", indent(depth), name);
                 depth += 1;
-            }
+            },
             XmlEvent::EndElement { name } => {
                 depth -= 1;
                 println!("{}-{}", indent(depth), name);
-            }
+            },
             _ => {
                 println!("Error: {:?}", e);
                 break;
-            }
+            },
         }
     }
 }
@@ -82,7 +82,7 @@ impl XmlParseError {
 }
 
 /// syntactic sugar for the XML event stack we pass around
-pub type XmlStack<'a> = Peekable<Events<'a, &'a[u8]>>;
+pub type XmlStack<'a> = Peekable<Events<'a, &'a [u8]>>;
 
 /// Peek at next items in the XML stack
 pub trait Peek {
@@ -96,23 +96,21 @@ pub trait Next {
 
 /// Wraps the Hyper Response type
 pub struct XmlResponse<'b> {
-    xml_stack: Peekable<Events<'b, &'b [u8]>> // refactor to use XmlStack type?
+    xml_stack: Peekable<Events<'b, &'b [u8]>>, // refactor to use XmlStack type?
 }
 
-impl <'b>XmlResponse<'b> {
+impl<'b> XmlResponse<'b> {
     pub fn new(stack: Peekable<Events<'b, &'b [u8]>>) -> XmlResponse {
-        XmlResponse {
-            xml_stack: stack,
-        }
+        XmlResponse { xml_stack: stack }
     }
 }
 
-impl <'b>Peek for XmlResponse<'b> {
+impl<'b> Peek for XmlResponse<'b> {
     fn peek(&mut self) -> Option<&XmlEvent> {
         loop {
             match self.xml_stack.peek() {
-                Some(&XmlEvent::Whitespace(_)) => {  },
-                _ => break
+                Some(&XmlEvent::Whitespace(_)) => {},
+                _ => break,
             }
             self.xml_stack.next();
         }
@@ -120,22 +118,24 @@ impl <'b>Peek for XmlResponse<'b> {
     }
 }
 
-impl <'b> Next for XmlResponse<'b> {
+impl<'b> Next for XmlResponse<'b> {
     fn next(&mut self) -> Option<XmlEvent> {
         let mut maybe_event;
         loop {
             maybe_event = self.xml_stack.next();
             match maybe_event {
                 Some(XmlEvent::Whitespace(_)) => {},
-                _ => break
+                _ => break,
             }
         }
         maybe_event
     }
 }
 
-impl From<ParseIntError> for XmlParseError{
-    fn from(_e:ParseIntError) -> XmlParseError { XmlParseError::new("ParseIntError") }
+impl From<ParseIntError> for XmlParseError {
+    fn from(_e: ParseIntError) -> XmlParseError {
+        XmlParseError::new("ParseIntError")
+    }
 }
 
 
@@ -173,7 +173,7 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
 
 pub fn peek_is_end_element<T: Peek + Next>(stack: &mut T) -> Result<bool, XmlParseError> {
     let current = stack.peek();
-    if let Some(&XmlEvent::EndElement{ref name, ..}) = current {
+    if let Some(&XmlEvent::EndElement { ref name, .. }) = current {
         Ok(true)
     } else {
         Ok(false)
@@ -183,7 +183,7 @@ pub fn peek_is_end_element<T: Peek + Next>(stack: &mut T) -> Result<bool, XmlPar
 /// get the name of the current element in the stack.  throw a parse error if it's not a `StartElement`
 pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
     let current = stack.peek();
-    if let Some(&XmlEvent::StartElement{ref name, ..}) = current {
+    if let Some(&XmlEvent::StartElement { ref name, .. }) = current {
         Ok(name.local_name.to_string())
     } else {
         Ok("".to_string())
@@ -191,7 +191,9 @@ pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseErr
 }
 
 /// consume a `StartElement` with a specific name or throw an `XmlParseError`
-pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<HashMap<String, String>, XmlParseError> {
+pub fn start_element<T: Peek + Next>(element_name: &str,
+                                     stack: &mut T)
+                                     -> Result<HashMap<String, String>, XmlParseError> {
     let next = stack.next();
 
     if let Some(XmlEvent::StartElement { name, attributes, .. }) = next {
@@ -210,7 +212,7 @@ pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Resu
 }
 
 /// consume an `EndElement` with a specific name or throw an `XmlParseError`
-pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<(), XmlParseError> {
+pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T) -> Result<(), XmlParseError> {
     let next = stack.next();
     if let Some(XmlEvent::EndElement { name, .. }) = next {
         if name.local_name == element_name {
@@ -218,7 +220,7 @@ pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result
         } else {
             Err(XmlParseError::new(&format!("END Expected {} got {}", element_name, name.local_name)))
         }
-    }else {
+    } else {
         Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
     }
 }
@@ -256,7 +258,7 @@ mod tests {
         let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
         let mut body = String::new();
         let _size = file.read_to_string(&mut body);
-        let mut my_parser  = EventReader::new(body.as_bytes());
+        let mut my_parser = EventReader::new(body.as_bytes());
         let my_stack = my_parser.events().peekable();
         let mut reader = XmlResponse::new(my_stack);
 
@@ -267,8 +269,8 @@ mod tests {
                     if data == "QueueUrl" {
                         return;
                     }
-                }
-                Err(_) => panic!("Couldn't peek at name")
+                },
+                Err(_) => panic!("Couldn't peek at name"),
             }
         }
     }
@@ -278,7 +280,7 @@ mod tests {
         let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
         let mut body = String::new();
         let _size = file.read_to_string(&mut body);
-        let mut my_parser  = EventReader::new(body.as_bytes());
+        let mut my_parser = EventReader::new(body.as_bytes());
         let my_stack = my_parser.events().peekable();
         let mut reader = XmlResponse::new(my_stack);
 
@@ -288,7 +290,7 @@ mod tests {
 
         match start_element("ListQueuesResult", &mut reader) {
             Ok(_) => (),
-            Err(_) => panic!("Couldn't find start element")
+            Err(_) => panic!("Couldn't find start element"),
         }
     }
 
@@ -297,7 +299,7 @@ mod tests {
         let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
         let mut body = String::new();
         let _size = file.read_to_string(&mut body);
-        let mut my_parser  = EventReader::new(body.as_bytes());
+        let mut my_parser = EventReader::new(body.as_bytes());
         let my_stack = my_parser.events().peekable();
         let mut reader = XmlResponse::new(my_stack);
 
@@ -309,7 +311,8 @@ mod tests {
 
         // now we're set up to use string:
         let my_chars = string_field("QueueUrl", &mut reader).unwrap();
-        assert_eq!(my_chars, "https://sqs.us-east-1.amazonaws.com/347452556413/testqueue")
+        assert_eq!(my_chars,
+                   "https://sqs.us-east-1.amazonaws.com/347452556413/testqueue")
     }
 
     #[test]
@@ -317,7 +320,7 @@ mod tests {
         let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
         let mut body = String::new();
         let _size = file.read_to_string(&mut body);
-        let mut my_parser  = EventReader::new(body.as_bytes());
+        let mut my_parser = EventReader::new(body.as_bytes());
         let my_stack = my_parser.events().peekable();
         let mut reader = XmlResponse::new(my_stack);
 
@@ -326,7 +329,7 @@ mod tests {
         reader.next();
 
 
-        // TODO: this is fragile and not good: do some looping to find end element?
+        // NOTE: this is fragile and not good: do some looping to find end element?
         // But need to do it without being dependent on peek_at_name.
         reader.next();
         reader.next();
@@ -335,7 +338,7 @@ mod tests {
 
         match end_element("ListQueuesResult", &mut reader) {
             Ok(_) => (),
-            Err(_) => panic!("Couldn't find end element")
+            Err(_) => panic!("Couldn't find end element"),
         }
     }
 

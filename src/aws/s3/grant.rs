@@ -1,19 +1,19 @@
-/*
- Copyright 2016 LambdaStack All rights reserved.
+// Copyright 2016 LambdaStack All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
-
+#![allow(unused_variables)]
 use aws::common::params::{Params, ServiceParams};
 use aws::common::xmlutil::*;
 use aws::common::common::*;
@@ -119,7 +119,8 @@ pub struct Grantee {
 // Impls below...
 
 impl GrantsParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grants, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<Grants, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Grant" {
             obj.push(try!(GrantParser::parse_xml("Grant", stack)));
@@ -140,7 +141,8 @@ impl GrantsWriter {
 }
 
 impl GrantReadACPParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantReadACP, XmlParseError> {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
+        -> Result<GrantReadACP, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -178,9 +180,13 @@ impl GrantParser {
 impl GrantWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &Grant) {
         let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
+        if prefix != "" {
+            prefix.push_str(".");
+        }
         GranteeWriter::write_params(params, &(prefix.to_string() + "Grantee"), &obj.grantee);
-        PermissionWriter::write_params(params, &(prefix.to_string() + "Permission"), &obj.permission);
+        PermissionWriter::write_params(params,
+                                       &(prefix.to_string() + "Permission"),
+                                       &obj.permission);
     }
 }
 
@@ -220,7 +226,9 @@ impl GranteeParser {
 impl GranteeWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &Grantee) {
         let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
+        if prefix != "" {
+            prefix.push_str(".");
+        }
         if let Some(ref obj) = obj.email_address {
             EmailAddressWriter::write_params(params, &(prefix.to_string() + "EmailAddress"), obj);
         }
@@ -322,8 +330,12 @@ impl TargetGrantParser {
 impl TargetGrantWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &TargetGrant) {
         let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
+        if prefix != "" {
+            prefix.push_str(".");
+        }
         GranteeWriter::write_params(params, &(prefix.to_string() + "Grantee"), &obj.grantee);
-        BucketLogsPermissionWriter::write_params(params, &(prefix.to_string() + "Permission"), &obj.permission);
+        BucketLogsPermissionWriter::write_params(params,
+                                                 &(prefix.to_string() + "Permission"),
+                                                 &obj.permission);
     }
 }
