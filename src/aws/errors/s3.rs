@@ -31,7 +31,8 @@ use aws::common::common::*;
 use aws::s3::writeparse::*;
 //use aws::s3::object::*;
 
-// S3 Specific Errors
+/// S3Error is a larger container error struct that contains a more general error about the task
+/// that was requested + `AWSError` which contains the details from AWS S3.
 #[derive(Debug)]
 pub struct S3Error {
     pub message: String,
@@ -46,7 +47,7 @@ pub struct S3ClientError {
     pub key: ObjectKey,
 }
 
-/// Parse `S`3ClientError from XML
+/// Parse `S3ClientError` from XML
 pub struct S3ClientErrorParser;
 
 /// Write `S3ClientError` contents to a `SignedRequest`
@@ -56,10 +57,12 @@ pub struct S3ClientErrorWriter;
 // Impls below...
 
 impl S3Error {
+    /// implements the basic S3Error without a valid `AWSError` (default).
     pub fn new<S>(message: S) -> S3Error where S: Into<String> {
         S3Error { message: message.into(), aws: AWSError::default() }
     }
 
+    /// implements the S3Error with a specific `AWSError` with details about the AWS error.
     pub fn with_aws<S>(message: S, aws: AWSError) -> S3Error where S: Into<String> {
         S3Error { message: message.into(), aws: aws }
     }

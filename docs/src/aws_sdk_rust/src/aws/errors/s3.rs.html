@@ -185,6 +185,9 @@
 <span id="141">141</span>
 <span id="142">142</span>
 <span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
 </pre><pre class='rust '>
 <span class='comment'>/*
  Copyright 2016 LambdaStack All rights reserved.
@@ -219,7 +222,8 @@
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>writeparse</span>::<span class='op'>*</span>;
 <span class='comment'>//use aws::s3::object::*;</span>
 
-<span class='comment'>// S3 Specific Errors</span>
+<span class='doccomment'>/// S3Error is a larger container error struct that contains a more general error about the task</span>
+<span class='doccomment'>/// that was requested + `AWSError` which contains the details from AWS S3.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>S3Error</span> {
     <span class='kw'>pub</span> <span class='ident'>message</span>: <span class='ident'>String</span>,
@@ -234,7 +238,7 @@
     <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
 }
 
-<span class='doccomment'>/// Parse `S`3ClientError from XML</span>
+<span class='doccomment'>/// Parse `S3ClientError` from XML</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>S3ClientErrorParser</span>;
 
 <span class='doccomment'>/// Write `S3ClientError` contents to a `SignedRequest`</span>
@@ -244,10 +248,12 @@
 <span class='comment'>// Impls below...</span>
 
 <span class='kw'>impl</span> <span class='ident'>S3Error</span> {
+    <span class='doccomment'>/// implements the basic S3Error without a valid `AWSError` (default).</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span>(<span class='ident'>message</span>: <span class='ident'>S</span>) <span class='op'>-&gt;</span> <span class='ident'>S3Error</span> <span class='kw'>where</span> <span class='ident'>S</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> {
         <span class='ident'>S3Error</span> { <span class='ident'>message</span>: <span class='ident'>message</span>.<span class='ident'>into</span>(), <span class='ident'>aws</span>: <span class='ident'>AWSError</span>::<span class='ident'>default</span>() }
     }
 
+    <span class='doccomment'>/// implements the S3Error with a specific `AWSError` with details about the AWS error.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>with_aws</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span>(<span class='ident'>message</span>: <span class='ident'>S</span>, <span class='ident'>aws</span>: <span class='ident'>AWSError</span>) <span class='op'>-&gt;</span> <span class='ident'>S3Error</span> <span class='kw'>where</span> <span class='ident'>S</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> {
         <span class='ident'>S3Error</span> { <span class='ident'>message</span>: <span class='ident'>message</span>.<span class='ident'>into</span>(), <span class='ident'>aws</span>: <span class='ident'>aws</span> }
     }

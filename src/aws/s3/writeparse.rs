@@ -15,6 +15,11 @@
 
 // Portions borrowed from the rusoto project. See README.md
 
+//! Library Documentation
+//!
+//! This file is a WIP file. It contains a lot of technical debt that is in the process of being
+//! cleaned up and organized. It will most likely go away in the near future.
+
 #![allow(unused_variables)]
 #![allow(unused_mut)]
 use std::collections::HashMap;

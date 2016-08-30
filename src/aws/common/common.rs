@@ -14,6 +14,12 @@
  limitations under the License.
 */
 
+//! Library Documentation
+//!
+//! Used for documenting the library for internal use. Not intended for client documentation.
+//! `common` contains the type, struct, enum and impls that are common accross most requests
+//! such as buckets, objects etc.
+
 use std::str::FromStr;
 use std::str;
 

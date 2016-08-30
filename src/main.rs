@@ -72,6 +72,7 @@ fn main() {
                             Region::UsEast1,
                             Signature::V4,
                             None,
+                            None,
                             None);
     let client = S3Client::new(provider, endpoint);
 

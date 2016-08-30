@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-1310' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/errors/s3.rs.html#21-143' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-1310' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/errors/s3.rs.html#21-146' title='goto source code'>[src]</a></span></h1>
 <h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
@@ -61,7 +61,7 @@
                            <td><a class='struct' href='struct.S3ClientErrorParser.html'
                                   title='aws_sdk_rust::aws::errors::s3::S3ClientErrorParser'>S3ClientErrorParser</a></td>
                            <td class='docblock short'>
-                                <p>Parse <code>S</code>3ClientError from XML</p>
+                                <p>Parse <code>S3ClientError</code> from XML</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -75,7 +75,8 @@
                            <td><a class='struct' href='struct.S3Error.html'
                                   title='aws_sdk_rust::aws::errors::s3::S3Error'>S3Error</a></td>
                            <td class='docblock short'>
-                                
+                                <p>S3Error is a larger container error struct that contains a more general error about the task
+that was requested + <code>AWSError</code> which contains the details from AWS S3.</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>

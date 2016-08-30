@@ -61,25 +61,49 @@
 <span id="17">17</span>
 <span id="18">18</span>
 <span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
 </pre><pre class='rust '>
-<span class='comment'>/*
- Copyright 2016 LambdaStack All rights reserved.
+<span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
+<span class='comment'>//</span>
+<span class='comment'>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class='comment'>// you may not use this file except in compliance with the License.</span>
+<span class='comment'>// You may obtain a copy of the License at</span>
+<span class='comment'>//</span>
+<span class='comment'>// http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class='comment'>//</span>
+<span class='comment'>// Unless required by applicable law or agreed to in writing, software</span>
+<span class='comment'>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class='comment'>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class='comment'>// See the License for the specific language governing permissions and</span>
+<span class='comment'>// limitations under the License.</span>
+<span class='comment'>//</span>
 
- Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+<span class='doccomment'>//! Each of the modules listed below contain `Client` and `Library` documentation. At the top of</span>
+<span class='doccomment'>//! each file the documentation identifies if the given source file is mainly used for `Client`</span>
+<span class='doccomment'>//! or by the `Library`. Of course, we welcome *ALL* pull requests so digging into the `Library`</span>
+<span class='doccomment'>//! documentation is encouraged to get an idea how `aws-sdk-rust` works.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! However, if you&#39;re only interested in how to use it from your app then skip the docs that</span>
+<span class='doccomment'>//! start with `Library` and focus on those that start with `Client`.</span>
 
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/</span>
-
+<span class='doccomment'>/// `common` contains the type, struct, enum and impls that are common accross most requests</span>
+<span class='doccomment'>/// such as buckets, objects etc.</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>common</span>;
+<span class='doccomment'>/// `errors` contains the type, struct, enum and impls of different Error Types.</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>errors</span>;
+<span class='doccomment'>/// `s3` contains the type, struct, enum and impls of all S3 only related items. Also, it contains</span>
+<span class='doccomment'>/// `S3Client` which is the interface used by applications.</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>s3</span>;
 </pre>
 </section>

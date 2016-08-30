@@ -1,7 +1,10 @@
 # AWS SDK for Rust
 [Documentation](https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws/index.html)
 
-## BETA!
+## BETA! - Breaking Changes
+The primary testing going on right now is for V2 signatures for support of older S3 compatible systems and third
+party applications that use an S3 interface. V4 signatures may fail at the moment but this will change real soon.
+
 AWS SDK with initial emphasis on S3. Supports both V2 and V4 authentication signatures. Allows for custom app config, environment variables, standard /.aws/credentials and future Iam credentials. No environmental assumptions or opinions are made on how your access to AWS should be handled.
 
 ## S3
@@ -89,7 +92,7 @@ fn main() {
     let provider = DefaultCredentialsProvider::new(None).unwrap();
 
     // V4 is the default signature for AWS. However, other systems also use V2.
-    let endpoint = Endpoint::new(Region::UsEast1, Signature::V4, None, None);
+    let endpoint = Endpoint::new(Region::UsEast1, Signature::V4, None, None, None);
     let client = S3Client::new(provider, endpoint);
 
     match client.list_buckets() {

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["HttpDispatchError",""],["HttpResponse",""]],"trait":[["DispatchSignedRequest",""]]});
+initSidebarItems({"struct":[["HttpDispatchError","HTTP Error returned from the DispatchSignedRequest Trait. It also implements the Error Trait."],["HttpResponse","Wraps the Hyper Response that comes back from AWS S3."]],"trait":[["DispatchSignedRequest","Trait that is added to the Hyper Client type. This is where ALL HTTP calls get sent from."]]});

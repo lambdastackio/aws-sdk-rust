@@ -16,6 +16,8 @@
 // Portions borrowed from the rusoto project. See README.md
 //
 
+//! Library Documentation
+//!
 //! AWS API request signatures.
 //!
 //! Follows [AWS Signature 4](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
@@ -96,19 +98,23 @@ impl<'a> SignedRequest<'a> {
         }
     }
 
+    //?
     pub fn set_content_type(&mut self, content_type: String) {
         self.content_type = Some(content_type);
     }
 
+    /// Allows for overriding inital `Signature` used when struct was created.
     pub fn set_signature(&mut self, signature: Signature) {
         self.signature = signature;
     }
 
+    /// Allows for overriding inital bucket name used when struct was created.
     pub fn set_bucket(&mut self, bucket: &str) {
         self.bucket = bucket.to_string();
     }
 
-    // NOTE: Use this for adding an actual endpoint such as s3.us-east-1.amazon.com or one of your choice.
+    /// Use this for adding an actual endpoint such as s3.us-east-1.amazon.com or one of your choice.
+    /// hostname in this context means the FQDN less the bucket name if using Virtual Buckets.
     pub fn set_hostname(&mut self, hostname: Option<String>) {
         self.hostname = hostname;
     }
@@ -118,42 +124,71 @@ impl<'a> SignedRequest<'a> {
         self.hostname = Some(build_hostname(&endpoint_prefix, self.region));
     }
 
+    /// Allows you to set the UTF8 payload in bytes.
     pub fn set_payload(&mut self, payload: Option<&'a [u8]>) {
         self.payload = payload;
     }
 
+    /// Sets a new set of `Params`.
+    pub fn set_params(&mut self, params: Params) {
+        self.params = params;
+    }
+
+    /// Sets the `ssl` flag used for formatting the default `Endpoint`.
+    /// Mainly used with proxies and inside firewalls where certificates may not be used
+    /// (non AWS environments).
+    /// Default is `true`.
+    pub fn set_ssl(&mut self, ssl: bool) {
+        self.ssl = ssl;
+    }
+
+    /// Returns the `ssl` bool flag. Mainly used for inside firewalls where proxies are used.
+    /// Default is `true`.
+    pub fn ssl(&self) -> bool {
+        self.ssl
+    }
+
+    /// Returns the `bucket` name.
     pub fn bucket(&self) -> &str {
         &self.bucket
     }
 
+    /// Returns the HTTP Verb: GET, POST, DELETE, HEAD.
     pub fn method(&self) -> &str {
         &self.method
     }
 
+    /// Returns the `Signature` enum value: V2 or V4.
     pub fn signature(&self) -> &Signature {
         &self.signature
     }
 
+    /// Returns the `path (uri)` used for calculating signature.
     pub fn path(&self) -> &str {
         &self.path
     }
 
+    /// Returns the Canonical URI used by the signature process.
     pub fn canonical_uri(&self) -> &str {
         &self.canonical_uri
     }
 
+    /// Returns the Canonical Query used by the signature process.
     pub fn canonical_query_string(&self) -> &str {
         &self.canonical_query_string
     }
 
+    /// Returns the UTF8 byte slice of the payload.
     pub fn payload(&self) -> Option<&'a [u8]> {
         self.payload
     }
 
+    /// Returns the Vec of `headers`.
     pub fn headers(&'a self) -> &'a BTreeMap<String, Vec<Vec<u8>>> {
         &self.headers
     }
 
+    /// Returns `hostname` value or builds a new one based on the AWS S3 service and Region.
     pub fn hostname(&self) -> String {
         match self.hostname {
             Some(ref h) => h.to_string(),
@@ -161,7 +196,7 @@ impl<'a> SignedRequest<'a> {
         }
     }
 
-    // If the key exists in headers, set it to blank/unoccupied:
+    /// If the header key exists in headers, set it to blank/unoccupied:
     pub fn remove_header(&mut self, key: &str) {
         let key_lower = key.to_ascii_lowercase().to_string();
         self.headers.remove(&key_lower);
@@ -185,6 +220,7 @@ impl<'a> SignedRequest<'a> {
         }
     }
 
+    /// Removes header if exists and then adds new one.
     pub fn update_header(&mut self, key: &str, value: &str) {
         self.remove_header(key);
 
@@ -201,6 +237,7 @@ impl<'a> SignedRequest<'a> {
         }
     }
 
+    // Returns header value. Empty String is returned if header does not exist.
     pub fn get_header(&mut self, key: &str) -> String {
         let key_lower = key.to_ascii_lowercase().to_string();
 
@@ -212,26 +249,14 @@ impl<'a> SignedRequest<'a> {
         }
     }
 
+    /// Adds to the `Params` Vec.
     pub fn add_param<S>(&mut self, key: S, value: S)
         where S: Into<String>,
     {
         self.params.insert(key.into(), value.into());
     }
 
-    pub fn set_params(&mut self, params: Params) {
-        self.params = params;
-    }
-
-    /// set_ssl(ssl: bool) - Allows you to override the default ssl flag.
-    pub fn set_ssl(&mut self, ssl: bool) {
-        self.ssl = ssl;
-    }
-
-    /// ssl() - Returns the ssl bool flag
-    pub fn ssl(&self) -> bool {
-        self.ssl
-    }
-
+    /// Called by `Requests` and determines which signature function to use.
     pub fn sign(&mut self, creds: &AwsCredentials) {
         match self.signature {
             Signature::V2 => self.sign_v2(&creds),
@@ -426,6 +451,9 @@ impl<'a> SignedRequest<'a> {
     }
 }
 
+// Private functions used to support the Signature Process...
+
+// V4 Signature related - Begin
 fn signature(string_to_sign: &str, signing_key: Vec<u8>) -> String {
     hmac(SHA256, &signing_key, string_to_sign.as_bytes()).to_hex().to_string()
 }
@@ -445,44 +473,6 @@ pub fn string_to_sign_v4(date: Tm, hashed_canonical_request: &str, scope: &str) 
             date.strftime("%Y%m%dT%H%M%SZ").unwrap(),
             scope,
             hashed_canonical_request)
-}
-
-fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
-    let mut signed = String::new();
-
-    for (key, _) in headers.iter() {
-        if !signed.is_empty() {
-            signed.push(';')
-        }
-
-        if skipped_headers(key) {
-            continue;
-        }
-        signed.push_str(&key.to_ascii_lowercase());
-    }
-    signed
-}
-
-fn canonical_headers_v2(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
-    let mut canonical = String::new();
-
-    // NOTE: May need to add to vec, sort and then do the following for x-amz-
-
-    for item in headers.iter() {
-        if skipped_headers(item.0) {
-            continue;
-        } else {
-            match item.0.to_ascii_lowercase().find("x-amz-") {
-                None => {},
-                _ => canonical.push_str(format!("{}:{}\n",
-                                                item.0.to_ascii_lowercase(),
-                                                canonical_values(item.1))
-                    .as_ref()),
-            };
-        }
-    }
-
-    canonical
 }
 
 fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
@@ -516,10 +506,6 @@ fn canonical_values(values: &[Vec<u8>]) -> String {
     st
 }
 
-fn skipped_headers(header: &str) -> bool {
-    ["authorization", "content-length", "user-agent"].contains(&header)
-}
-
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
@@ -534,22 +520,27 @@ fn canonical_resources(path: &str) -> String {
         _ => encode_uri(path),
     }
 }
+// V4 Signature related - End
 
-fn canonical_resources_v2(bucket: &str, path: &str) -> String {
-    match bucket {
-        "" => {
-            match path {
-                "" => "/".to_string(),
-                _ => encode_uri(&format!("{}", path)),  // This assumes / as leading char
-            }
-        },
-        _ => {
-            match path {
-                "" => format!("/{}/", bucket),
-                _ => encode_uri(&format!("/{}{}", bucket, path)),  // This assumes path with leading / char
-            }
-        },
+// Common to V2 and V4 - Begin
+fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
+    let mut signed = String::new();
+
+    for (key, _) in headers.iter() {
+        if !signed.is_empty() {
+            signed.push(';')
+        }
+
+        if skipped_headers(key) {
+            continue;
+        }
+        signed.push_str(&key.to_ascii_lowercase());
     }
+    signed
+}
+
+fn skipped_headers(header: &str) -> bool {
+    ["authorization", "content-length", "user-agent"].contains(&header)
 }
 
 fn build_canonical_query_string(params: &Params) -> String {
@@ -615,6 +606,49 @@ fn build_hostname(service: &str, region: Region) -> String {
         },
     }
 }
+// Common to V2 and V4 - End
+
+// V2 Signature related - Begin
+fn canonical_headers_v2(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
+    let mut canonical = String::new();
+
+    // NOTE: May need to add to vec, sort and then do the following for x-amz-
+
+    for item in headers.iter() {
+        if skipped_headers(item.0) {
+            continue;
+        } else {
+            match item.0.to_ascii_lowercase().find("x-amz-") {
+                None => {},
+                _ => canonical.push_str(format!("{}:{}\n",
+                                                item.0.to_ascii_lowercase(),
+                                                canonical_values(item.1))
+                    .as_ref()),
+            };
+        }
+    }
+
+    canonical
+}
+
+fn canonical_resources_v2(bucket: &str, path: &str) -> String {
+    match bucket {
+        "" => {
+            match path {
+                "" => "/".to_string(),
+                _ => encode_uri(&format!("{}", path)),  // This assumes / as leading char
+            }
+        },
+        _ => {
+            match path {
+                "" => format!("/{}/", bucket),
+                _ => encode_uri(&format!("/{}{}", bucket, path)),  // This assumes path with leading / char
+            }
+        },
+    }
+}
+// V2 Signature related - End
+
 
 
 #[cfg(test)]

@@ -47,8 +47,11 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-1201' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/request.rs.html#21-142' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>AWS API requests.</p>
+               </span><a id='src-1201' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/request.rs.html#17-162' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p><code>request</code> contains the type, struct, enum and impls that are HTTP Request related.
+Library Documentation</p>
+
+<p>AWS API requests.</p>
 
 <p>Wraps the Hyper library to send PUT, POST, DELETE and GET requests.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
@@ -57,14 +60,14 @@
                            <td><a class='struct' href='struct.HttpDispatchError.html'
                                   title='aws_sdk_rust::aws::common::request::HttpDispatchError'>HttpDispatchError</a></td>
                            <td class='docblock short'>
-                                
+                                <p>HTTP Error returned from the DispatchSignedRequest Trait. It also implements the Error Trait.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.HttpResponse.html'
                                   title='aws_sdk_rust::aws::common::request::HttpResponse'>HttpResponse</a></td>
                            <td class='docblock short'>
-                                
+                                <p>Wraps the Hyper Response that comes back from AWS S3.</p>
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
@@ -72,7 +75,7 @@
                            <td><a class='trait' href='trait.DispatchSignedRequest.html'
                                   title='aws_sdk_rust::aws::common::request::DispatchSignedRequest'>DispatchSignedRequest</a></td>
                            <td class='docblock short'>
-                                
+                                <p>Trait that is added to the Hyper Client type. This is where ALL HTTP calls get sent from.</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>

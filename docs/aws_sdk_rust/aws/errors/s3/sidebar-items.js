@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["S3ClientError",""],["S3ClientErrorParser","Parse `S`3ClientError from XML"],["S3ClientErrorWriter","Write `S3ClientError` contents to a `SignedRequest`"],["S3Error",""]]});
+initSidebarItems({"struct":[["S3ClientError",""],["S3ClientErrorParser","Parse `S3ClientError` from XML"],["S3ClientErrorWriter","Write `S3ClientError` contents to a `SignedRequest`"],["S3Error","S3Error is a larger container error struct that contains a more general error about the task that was requested + `AWSError` which contains the details from AWS S3."]]});

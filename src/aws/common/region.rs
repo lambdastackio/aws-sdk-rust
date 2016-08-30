@@ -1,22 +1,20 @@
-/*
- Copyright 2016 LambdaStack All rights reserved.
+// Copyright 2016 LambdaStack All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
-
-/*
- Portions borrowed from the rusoto project. See README.md
-*/
+// Portions borrowed from the rusoto project. See README.md
+//
 
 //! AWS Regions and helper functions.
 //!
@@ -90,16 +88,14 @@ impl FromStr for Region {
             "us-west-1" => Ok(Region::UsWest1),
             "us-west-2" => Ok(Region::UsWest2),
             "cn-north-1" => Ok(Region::CnNorth1),
-            s => Err(ParseRegionError::new(s))
+            s => Err(ParseRegionError::new(s)),
         }
     }
 }
 
 impl ParseRegionError {
     pub fn new(input: &str) -> Self {
-        ParseRegionError {
-            message: format!("Not a valid AWS region: {}", input)
-        }
+        ParseRegionError { message: format!("Not a valid AWS region: {}", input) }
     }
 }
 
@@ -121,12 +117,12 @@ mod tests {
 
     #[test]
     fn from_str() {
-        assert_eq!(
-            "foo".parse::<Region>().err().expect(
-                "Parsing foo as a Region was not an error"
-            ).to_string(),
-            "Not a valid AWS region: foo".to_owned()
-        );
+        assert_eq!("foo"
+                       .parse::<Region>()
+                       .err()
+                       .expect("Parsing foo as a Region was not an error")
+                       .to_string(),
+                   "Not a valid AWS region: foo".to_owned());
         assert_eq!("ap-northeast-1".parse(), Ok(Region::ApNortheast1));
         assert_eq!("ap-northeast-2".parse(), Ok(Region::ApNortheast2));
         assert_eq!("ap-south-1".parse(), Ok(Region::ApSouth1));
@@ -143,11 +139,15 @@ mod tests {
 
     #[test]
     fn region_display() {
-        assert_eq!(Region::ApNortheast1.to_string(), "ap-northeast-1".to_owned());
-        assert_eq!(Region::ApNortheast2.to_string(), "ap-northeast-2".to_owned());
+        assert_eq!(Region::ApNortheast1.to_string(),
+                   "ap-northeast-1".to_owned());
+        assert_eq!(Region::ApNortheast2.to_string(),
+                   "ap-northeast-2".to_owned());
         assert_eq!(Region::ApSouth1.to_string(), "ap-south-1".to_owned());
-        assert_eq!(Region::ApSoutheast1.to_string(), "ap-southeast-1".to_owned());
-        assert_eq!(Region::ApSoutheast2.to_string(), "ap-southeast-2".to_owned());
+        assert_eq!(Region::ApSoutheast1.to_string(),
+                   "ap-southeast-1".to_owned());
+        assert_eq!(Region::ApSoutheast2.to_string(),
+                   "ap-southeast-2".to_owned());
         assert_eq!(Region::EuCentral1.to_string(), "eu-central-1".to_owned());
         assert_eq!(Region::EuWest1.to_string(), "eu-west-1".to_owned());
         assert_eq!(Region::SaEast1.to_string(), "sa-east-1".to_owned());

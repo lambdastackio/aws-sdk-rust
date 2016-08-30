@@ -13,6 +13,11 @@
 // limitations under the License.
 //
 
+//! Client Documentation
+//!
+//! The crate Url is required and used to build and extract portions of the Url as needed by
+//! the library. See the README.md and/or src/main.rs for an example of how to use the library.
+
 use url::Url;
 use aws::common::region::Region;
 
@@ -21,31 +26,51 @@ use aws::common::region::Region;
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Endpoint {
+    /// Specify the specific Region you're targeting the request towards. The default is:
+    /// Region::UsEast1. This value should be Region::UsEast1 for third party services since some
+    /// do not use Region information for their Endpoint.
     pub region: Region,
+    /// Signature is an enum of V2 or V4. Specify Signature::V2 or Signature::V4. See notes below.
     pub signature: Signature,
+    /// Uses Url crate. AWS has a fixed set of Endpoints. However, third party services also
+    /// need to be covered so adding an option for the Endpoint solves that requirement.
+    /// If using AWS then it will default to the given Endpoint for the specified Region.
     pub endpoint: Option<Url>,
+    /// Important: Proxies are used by most Enterprises. You can specify your proxy with the
+    /// port in the following format https://<whatever url>:<whatever port>. Also, it honors
+    /// the http_proxy, https_proxy and no_proxy environment variables if present. However,
+    /// manually setting the value takes precedent.
     pub proxy: Option<Url>,
+    /// `User-Agent`. It lives in `Endpoint` since you may want a different `User-Agent` for
+    /// `Endpoint`. This value is an Option<String> which can be None.
+    pub user_agent: Option<String>,
 }
 
+/// Required to specify which type of API Signature to use. AWS defaults to using V4 by default.
+/// However, third party applications often use V2 (AWS will still honor V2).
 #[derive(Debug, Clone, Copy)]
 pub enum Signature {
     V2,
     V4,
 }
 
-
 impl Endpoint {
-    /// Endpoint::new accepts Region, an optional Url and an optional proxy url:port.
-    pub fn new(region: Region, signature: Signature, endpoint: Option<Url>, proxy: Option<Url>)
-        -> Self {
+    /// Endpoint::new accepts Region, Signature, an optional Url and an optional proxy Url:port.
+    pub fn new(region: Region,
+               signature: Signature,
+               endpoint: Option<Url>,
+               proxy: Option<Url>,
+               user_agent: Option<String>) -> Self {
         Endpoint {
             region: region,
             signature: signature,
             endpoint: default_endpoint(region, endpoint),
             proxy: proxy,
+            user_agent: user_agent,
         }
     }
 
+    /// Extracts out the host portion of the URL as defined by the crate Url.
     pub fn hostname(&self) -> Option<String> {
         match self.endpoint {
             None => None,

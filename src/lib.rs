@@ -13,6 +13,7 @@
 // limitations under the License.
 //
 
+// NOTE: This attribute only needs to be set once.
 #![doc(html_logo_url = "https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
        html_favicon_url = "https://www.rust-lang.org/favicon.ico",
        html_root_url = "https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws/index.html")]
@@ -33,6 +34,9 @@ extern crate httparse;
 #[macro_use]
 extern crate hyper;
 
+// Only aws crate is documented, not the dependents.
 pub mod aws;
+
+// Hide the http mod since it may change or go away.
 #[doc(hidden)]
 pub mod http;

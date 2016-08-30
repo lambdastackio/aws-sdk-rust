@@ -9,7 +9,7 @@ repository = "https://github.com/lambdastackio/aws-sdk-rust"
 homepage = "https://github.com/lambdastackio/aws-sdk-rust"
 documentation = "https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws/index.html"
 description = """
-BETA! - AWS SDK for Rust (only S3 currently). Allows for proxies. For a full AWS SDK look at rusoto. WIP and under heavy development with possible breaking changes - warning.
+BETA! - Possible breaking changes. V2 signatures are being tested now and V4 signatures will be made whole soon! AWS SDK for Rust (only S3 currently). Allows for proxies. For a full AWS SDK look at rusoto. 
 """
 
 [dependencies]
@@ -26,6 +26,7 @@ time = "0.1.35"
 url = "1.2.0"
 xml-rs = "0.1.26"
 
+# This section is here because there is a main.rs that used as an example.
 [[bin]]
 doc = false
 name = "main"

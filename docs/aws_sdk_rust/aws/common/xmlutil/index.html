@@ -47,8 +47,11 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-719' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/xmlutil.rs.html#20-362' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>Tools for handling XML from AWS with helper functions for testing.</p>
+               </span><a id='src-719' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/xmlutil.rs.html#19-361' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p><code>xmlutil</code> contains the type, struct, enum and impls that are common XML parsing and writing.
+Library Documentation</p>
+
+<p>Tools for handling XML from AWS with helper functions for testing.</p>
 
 <p>Wraps an XML stack via traits.
 Also provides a method of supplying an XML stack from a file for testing purposes.</p>
@@ -65,7 +68,7 @@ Also provides a method of supplying an XML stack from a file for testing purpose
                            <td><a class='struct' href='struct.XmlResponse.html'
                                   title='aws_sdk_rust::aws::common::xmlutil::XmlResponse'>XmlResponse</a></td>
                            <td class='docblock short'>
-                                <p>Wraps the Hyper Response type</p>
+                                <p>Wraps the Hyper Response type for AWS S3. AWS S3 uses XML instead of JSON.</p>
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
@@ -130,7 +133,7 @@ Also provides a method of supplying an XML stack from a file for testing purpose
                            <td><a class='fn' href='fn.peek_is_end_element.html'
                                   title='aws_sdk_rust::aws::common::xmlutil::peek_is_end_element'>peek_is_end_element</a></td>
                            <td class='docblock short'>
-                                
+                                <p>takes a peek to see if the next element is the end_element</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>

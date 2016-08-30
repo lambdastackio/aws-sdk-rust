@@ -16,7 +16,8 @@
 // Portions borrowed from the rusoto project. See README.md
 //
 
-
+//! Library Documentation
+//!
 //! Tools for handling XML from AWS with helper functions for testing.
 //!
 //! Wraps an XML stack via traits.
@@ -26,8 +27,6 @@
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use std::collections::HashMap;
-// use std::iter::IntoIterator;
-// use std::io::Read;
 
 use xml::reader::*;
 use xml::reader::events::*;
@@ -94,7 +93,7 @@ pub trait Next {
     fn next(&mut self) -> Option<XmlEvent>;
 }
 
-/// Wraps the Hyper Response type
+/// Wraps the Hyper Response type for AWS S3. AWS S3 uses XML instead of JSON.
 pub struct XmlResponse<'b> {
     xml_stack: Peekable<Events<'b, &'b [u8]>>, // refactor to use XmlStack type?
 }
@@ -138,7 +137,6 @@ impl From<ParseIntError> for XmlParseError {
     }
 }
 
-
 /// parse Some(String) if the next tag has the right name, otherwise None
 pub fn optional_string_field<T: Peek + Next>(field_name: &str, stack: &mut T) -> Result<Option<String>, XmlParseError> {
     if try!(peek_at_name(stack)) == field_name {
@@ -171,6 +169,7 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
     }
 }
 
+/// takes a peek to see if the next element is the end_element
 pub fn peek_is_end_element<T: Peek + Next>(stack: &mut T) -> Result<bool, XmlParseError> {
     let current = stack.peek();
     if let Some(&XmlEvent::EndElement { ref name, .. }) = current {

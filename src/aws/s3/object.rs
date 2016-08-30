@@ -15,6 +15,10 @@
 
 // Portions borrowed from the rusoto project. See README.md
 
+//! Library Documentation
+//!
+//! This file contains everything related to `Objects`. 
+
 #![allow(unused_variables)]
 use std::str::FromStr;
 use std::str;

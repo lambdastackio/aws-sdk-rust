@@ -116,6 +116,31 @@
 <span id="72">72</span>
 <span id="73">73</span>
 <span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -132,6 +157,11 @@
 <span class='comment'>// limitations under the License.</span>
 <span class='comment'>//</span>
 
+<span class='doccomment'>//! Client Documentation</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! The crate Url is required and used to build and extract portions of the Url as needed by</span>
+<span class='doccomment'>//! the library. See the README.md and/or src/main.rs for an example of how to use the library.</span>
+
 <span class='kw'>use</span> <span class='ident'>url</span>::<span class='ident'>Url</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>region</span>::<span class='ident'>Region</span>;
 
@@ -140,31 +170,51 @@
 <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Clone</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Endpoint</span> {
+    <span class='doccomment'>/// Specify the specific Region you&#39;re targeting the request towards. The default is:</span>
+    <span class='doccomment'>/// Region::UsEast1. This value should be Region::UsEast1 for third party services since some</span>
+    <span class='doccomment'>/// do not use Region information for their Endpoint.</span>
     <span class='kw'>pub</span> <span class='ident'>region</span>: <span class='ident'>Region</span>,
+    <span class='doccomment'>/// Signature is an enum of V2 or V4. Specify Signature::V2 or Signature::V4. See notes below.</span>
     <span class='kw'>pub</span> <span class='ident'>signature</span>: <span class='ident'>Signature</span>,
+    <span class='doccomment'>/// Uses Url crate. AWS has a fixed set of Endpoints. However, third party services also</span>
+    <span class='doccomment'>/// need to be covered so adding an option for the Endpoint solves that requirement.</span>
+    <span class='doccomment'>/// If using AWS then it will default to the given Endpoint for the specified Region.</span>
     <span class='kw'>pub</span> <span class='ident'>endpoint</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Important: Proxies are used by most Enterprises. You can specify your proxy with the</span>
+    <span class='doccomment'>/// port in the following format https://&lt;whatever url&gt;:&lt;whatever port&gt;. Also, it honors</span>
+    <span class='doccomment'>/// the http_proxy, https_proxy and no_proxy environment variables if present. However,</span>
+    <span class='doccomment'>/// manually setting the value takes precedent.</span>
     <span class='kw'>pub</span> <span class='ident'>proxy</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// `User-Agent`. It lives in `Endpoint` since you may want a different `User-Agent` for</span>
+    <span class='doccomment'>/// `Endpoint`. This value is an Option&lt;String&gt; which can be None.</span>
+    <span class='kw'>pub</span> <span class='ident'>user_agent</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
 }
 
+<span class='doccomment'>/// Required to specify which type of API Signature to use. AWS defaults to using V4 by default.</span>
+<span class='doccomment'>/// However, third party applications often use V2 (AWS will still honor V2).</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Clone</span>, <span class='ident'>Copy</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Signature</span> {
     <span class='ident'>V2</span>,
     <span class='ident'>V4</span>,
 }
 
-
 <span class='kw'>impl</span> <span class='ident'>Endpoint</span> {
-    <span class='doccomment'>/// Endpoint::new accepts Region, an optional Url and an optional proxy url:port.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>region</span>: <span class='ident'>Region</span>, <span class='ident'>signature</span>: <span class='ident'>Signature</span>, <span class='ident'>endpoint</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>, <span class='ident'>proxy</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>)
-        <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+    <span class='doccomment'>/// Endpoint::new accepts Region, Signature, an optional Url and an optional proxy Url:port.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>region</span>: <span class='ident'>Region</span>,
+               <span class='ident'>signature</span>: <span class='ident'>Signature</span>,
+               <span class='ident'>endpoint</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>,
+               <span class='ident'>proxy</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>,
+               <span class='ident'>user_agent</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
         <span class='ident'>Endpoint</span> {
             <span class='ident'>region</span>: <span class='ident'>region</span>,
             <span class='ident'>signature</span>: <span class='ident'>signature</span>,
             <span class='ident'>endpoint</span>: <span class='ident'>default_endpoint</span>(<span class='ident'>region</span>, <span class='ident'>endpoint</span>),
             <span class='ident'>proxy</span>: <span class='ident'>proxy</span>,
+            <span class='ident'>user_agent</span>: <span class='ident'>user_agent</span>,
         }
     }
 
+    <span class='doccomment'>/// Extracts out the host portion of the URL as defined by the crate Url.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hostname</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> {
         <span class='kw'>match</span> <span class='self'>self</span>.<span class='ident'>endpoint</span> {
             <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>None</span>,

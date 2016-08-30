@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["common",""],["errors",""],["s3",""]]});
+initSidebarItems({"mod":[["common","`common` contains the type, struct, enum and impls that are common accross most requests such as buckets, objects etc. Contains both `Library` and `Client` documentation."],["errors","`errors` contains the type, struct, enum and impls of different Error Types."],["s3","`s3` contains the type, struct, enum and impls of all S3 only related items. Also, it contains `S3Client` which is the interface used by applications."]]});
