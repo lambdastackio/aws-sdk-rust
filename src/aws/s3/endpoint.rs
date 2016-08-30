@@ -22,19 +22,25 @@ use aws::common::region::Region;
 #[derive(Debug, Clone)]
 pub struct Endpoint {
     pub region: Region,
-    pub signature: String,
+    pub signature: Signature,
     pub endpoint: Option<Url>,
     pub proxy: Option<Url>,
 }
 
+#[derive(Debug, Clone, Copy)]
+pub enum Signature {
+    V2,
+    V4,
+}
+
+
 impl Endpoint {
     /// Endpoint::new accepts Region, an optional Url and an optional proxy url:port.
-    pub fn new<S>(region: Region, signature: S, endpoint: Option<Url>, proxy: Option<Url>) -> Self
-        where S: Into<String>,
-    {
+    pub fn new(region: Region, signature: Signature, endpoint: Option<Url>, proxy: Option<Url>)
+        -> Self {
         Endpoint {
             region: region,
-            signature: signature.into(),
+            signature: signature,
             endpoint: default_endpoint(region, endpoint),
             proxy: proxy,
         }

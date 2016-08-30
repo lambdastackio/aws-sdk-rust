@@ -44,6 +44,8 @@ pub type Resource = String;
 
 pub type Value = String;
 
+pub type SkipElement = String;
+
 /// Parse `Body` from XML
 pub struct BodyParser;
 
@@ -122,6 +124,10 @@ pub struct ValueParser;
 /// Write `Value` contents to a `SignedRequest`
 pub struct ValueWriter;
 
+/// Parse `SkipElement` from XML
+pub struct SkipElementParser;
+
+/// Owner
 #[derive(Debug, Default)]
 pub struct Owner {
     pub display_name: DisplayName,
@@ -339,5 +345,15 @@ impl ValueParser {
 impl ValueWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &Value) {
         params.put(name, obj);
+    }
+}
+
+// NOTE: SkipElement does not walk a tree, it only pulls the value.
+impl SkipElementParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SkipElement, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(format!("<{}>{}</{}>", tag_name, obj, tag_name))
     }
 }

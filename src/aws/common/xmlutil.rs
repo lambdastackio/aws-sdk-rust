@@ -225,6 +225,23 @@ pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T) -> Result<
     }
 }
 
+/// consume an `EndElement` with a specific name or throw an `XmlParseError`
+pub fn end_element_skip<T: Peek + Next>(element_name: &str, stack: &mut T) -> Result<(), XmlParseError> {
+    let next = stack.next();
+    if let Some(XmlEvent::EndElement { name, .. }) = next {
+        if name.local_name == element_name {
+            Ok(())
+        } else {
+            Err(XmlParseError::new(&format!("END Expected {} got {}", element_name, name.local_name)))
+        }
+    } else {
+        //Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
+        // Calling this function means you know it may not be the end (dynamic errors) but you
+        // have capture all you want so end it anyway.
+        Ok(())
+    }
+}
+
 /// skip a tag and all its children
 pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
 

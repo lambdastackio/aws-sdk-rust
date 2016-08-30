@@ -34,7 +34,7 @@ use aws_sdk_rust::aws::s3::object::*;
 use aws_sdk_rust::aws::s3::acl::*;
 
 use aws_sdk_rust::aws::common::region::Region;
-use aws_sdk_rust::aws::s3::endpoint::Endpoint;
+use aws_sdk_rust::aws::s3::endpoint::{Endpoint, Signature};
 use aws_sdk_rust::aws::s3::s3client::S3Client;
 
 fn main() {
@@ -69,7 +69,7 @@ fn main() {
     // V4 is the default signature for AWS. However, other systems also use V2.
     let endpoint = Endpoint::new(
                             Region::UsEast1,
-                            "V2",
+                            Signature::V4,
                             None,
                             None);
     let client = S3Client::new(provider, endpoint);
@@ -82,8 +82,8 @@ fn main() {
     bucket.bucket = bucket_name.to_string();
 
     match client.create_bucket(&bucket) {
-        Ok(bucket) => println!("{:?}", bucket),
-        Err(e) => println!("{:?}", e)
+        Ok(bucket) => println!("{:#?}", bucket),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -91,8 +91,8 @@ fn main() {
     bucket_notify.bucket = bucket_name.to_string();
 
     match client.get_bucket_notification_configuration(&bucket_notify) {
-        Ok(bucket) => println!("{:?}", bucket),
-        Err(e) => println!("{:?}", e)
+        Ok(bucket) => println!("{:#?}", bucket),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -100,8 +100,8 @@ fn main() {
     bucket_logging.bucket = bucket_name.to_string();
 
     match client.get_bucket_logging(&bucket_logging) {
-        Ok(bucket) => println!("{:?}", bucket),
-        Err(e) => println!("{:?}", e)
+        Ok(bucket) => println!("{:#?}", bucket),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -110,8 +110,8 @@ fn main() {
     put_bucket_acl.acl = Some(CannedAcl::PublicRead);
 
     match client.put_bucket_acl(&put_bucket_acl) {
-        Ok(bucket) => println!("{:?}", bucket),
-        Err(e) => println!("{:?}", e)
+        Ok(bucket) => println!("{:#?}", bucket),
+        Err(e) => println!("{:#?}", e)
     }
 */
 
@@ -119,8 +119,8 @@ fn main() {
     get_bucket_acl.bucket = bucket_name.to_string();
 
     match client.get_bucket_acl(&get_bucket_acl) {
-        Ok(bucket) => println!("{:?}", bucket),
-        Err(e) => println!("{:?}", e)
+        Ok(bucket) => println!("{:#?}", bucket),
+        Err(e) => println!("{:#?}", e)
     }
 
 /*
@@ -130,8 +130,8 @@ fn main() {
     put_object.body = Some(b"this is a test.");
 
     match client.put_object(&put_object) {
-        Ok(output) => println!("{:?}", output),
-        Err(e) => println!("{:?}", e)
+        Ok(output) => println!("{:#?}", output),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -140,16 +140,16 @@ fn main() {
     get_object.key = "mytest.txt".to_string();
 
     match client.get_object(&get_object) {
-        Ok(output) => println!("\n\n{:?}\n\n", str::from_utf8(&output.body).unwrap()),
-        Err(e) => println!("{:?}", e)
+        Ok(output) => println!("\n\n{:#?}\n\n", str::from_utf8(&output.body).unwrap()),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
     let bucket_head = HeadBucketRequest { bucket: bucket_name.to_string() };
 
     match client.head_bucket(&bucket_head) {
-        Ok(head) => println!("{:?}", head),
-        Err(e) => println!("{:?}", e)
+        Ok(head) => println!("{:#?}", head),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -161,8 +161,8 @@ fn main() {
     };
 
     match client.put_bucket_versioning(&bucket_versioning) {
-        Ok(version) => println!("{:?}", version),
-        Err(e) => println!("{:?}", e)
+        Ok(version) => println!("{:#?}", version),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -171,8 +171,8 @@ fn main() {
     };
 
     match client.get_bucket_versioning(&bucket_versioning) {
-        Ok(version) => println!("{:?}", version),
-        Err(e) => println!("{:?}", e)
+        Ok(version) => println!("{:#?}", version),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -181,8 +181,8 @@ fn main() {
     del_object.key = "mytest.txt".to_string();
 
     match client.delete_object(&del_object) {
-        Ok(output) => println!("{:?}", output),
-        Err(e) => println!("{:?}", e)
+        Ok(output) => println!("{:#?}", output),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -190,8 +190,8 @@ fn main() {
     bucket_versioning.bucket = bucket_name.to_string();
 
     match client.list_object_versions(&bucket_versioning) {
-        Ok(version) => println!("{:?}", version),
-        Err(e) => println!("{:?}", e)
+        Ok(version) => println!("{:#?}", version),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -199,8 +199,8 @@ fn main() {
     list_objects.bucket = bucket_name.to_string();
 
     match client.list_objects(&list_objects) {
-        Ok(version) => println!("{:?}", version),
-        Err(e) => println!("{:?}", e)
+        Ok(version) => println!("{:#?}", version),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
@@ -209,17 +209,17 @@ fn main() {
     };
 
     match client.delete_bucket(&bucket) {
-        Ok(bucket) => println!("{:?}", bucket),
-        Err(e) => println!("{:?}", e)
+        Ok(bucket) => println!("{:#?}", bucket),
+        Err(e) => println!("{:#?}", e)
     }
 */
 /*
     match client.list_buckets() {
       Ok(output) => {
-        println!("{:?}", output);
+        println!("{:#?}", output);
       }
       Err(error) => {
-        println!("Error: {:?}", error);
+        println!("Error: {:#?}", error);
       }
     }
 */

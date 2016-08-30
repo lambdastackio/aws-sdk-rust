@@ -44,6 +44,7 @@ use url::percent_encoding::{DEFAULT_ENCODE_SET, QUERY_ENCODE_SET, utf8_percent_e
 use aws::common::credentials::AwsCredentials;
 use aws::common::params::Params;
 use aws::common::region::Region;
+use aws::s3::endpoint::Signature;
 
 // const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
@@ -64,7 +65,7 @@ pub struct SignedRequest<'a> {
     content_type: Option<String>,
     canonical_query_string: String,
     canonical_uri: String,
-    version: String,
+    signature: Signature,
     ssl: bool,
 }
 
@@ -75,7 +76,7 @@ impl<'a> SignedRequest<'a> {
                region: Region,
                bucket: &str,
                path: &str,
-               version: &str)
+               signature: &Signature)
                -> SignedRequest<'a> {
         SignedRequest {
             method: method.to_string(),
@@ -90,7 +91,7 @@ impl<'a> SignedRequest<'a> {
             content_type: None,
             canonical_query_string: String::new(),
             canonical_uri: String::new(),
-            version: version.to_string(),
+            signature: signature.clone(),
             ssl: true,
         }
     }
@@ -99,8 +100,8 @@ impl<'a> SignedRequest<'a> {
         self.content_type = Some(content_type);
     }
 
-    pub fn set_version(&mut self, version: String) {
-        self.version = version;
+    pub fn set_signature(&mut self, signature: Signature) {
+        self.signature = signature;
     }
 
     pub fn set_bucket(&mut self, bucket: &str) {
@@ -129,8 +130,8 @@ impl<'a> SignedRequest<'a> {
         &self.method
     }
 
-    pub fn version(&self) -> &str {
-        &self.version
+    pub fn signature(&self) -> &Signature {
+        &self.signature
     }
 
     pub fn path(&self) -> &str {
@@ -232,15 +233,13 @@ impl<'a> SignedRequest<'a> {
     }
 
     pub fn sign(&mut self, creds: &AwsCredentials) {
-        if self.version == "V2" {
-            self.sign_v2(&creds);
-        } else {
-            self.sign_v4(&creds);
+        match self.signature {
+            Signature::V2 => self.sign_v2(&creds),
+            Signature::V4 => self.sign_v4(&creds),
         }
     }
 
     fn sign_v2(&mut self, creds: &AwsCredentials) {
-        debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
             None => build_hostname(&self.service, self.region),
@@ -381,7 +380,7 @@ impl<'a> SignedRequest<'a> {
                 self.add_header("content-length", &format!("{}", payload.len()));
             },
         }
-
+/*
         println!("----sign_v4----------");
         println!("{:?}", self.canonical_query_string);
         println!("{:?}", self.canonical_uri);
@@ -392,7 +391,7 @@ impl<'a> SignedRequest<'a> {
         println!("{:?}", self.params);
         println!("{:?}", canonical_request);
         println!("=====================");
-
+*/
         self.remove_header("content-type");
         let ct = match self.content_type {
             Some(ref h) => h.to_string(),

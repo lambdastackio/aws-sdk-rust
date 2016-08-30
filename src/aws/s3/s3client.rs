@@ -129,8 +129,6 @@ impl<P, D> S3Client<P, D>
             credentials_provider: credentials_provider,
             region: endpoint.region.clone(),
             endpoint: endpoint,
-            // endpoint: default_endpoint(region),
-            // version: version.into(),
             dispatcher: request_dispatcher,
         }
     }
@@ -149,7 +147,7 @@ impl<P, D> S3Client<P, D>
                                              self.region,
                                              &input.bucket,
                                              "/",
-                                             &self.endpoint.signature);
+                                             &&self.endpoint.signature);
 
         // If location is not 'us-east-1' create bucket location config.
         if needs_create_bucket_config(self.region) {
@@ -700,6 +698,7 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// Deletes bucket replication.
     pub fn delete_bucket_replication(&self, input: &DeleteBucketReplicationRequest) -> Result<(), S3Error> {
         let mut request = SignedRequest::new("DELETE",
                                              "s3",
@@ -770,6 +769,7 @@ impl<P, D> S3Client<P, D>
             },
         }
     }
+
     /// Gets the access control policy for the bucket.
     pub fn get_bucket_acl(&self, input: &GetBucketAclRequest) -> Result<AccessControlPolicy, S3Error> {
         let mut request = SignedRequest::new("GET",
@@ -790,9 +790,6 @@ impl<P, D> S3Client<P, D>
                                       &mut request,
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
-
-        println!("{:?}", result.body);
-
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag

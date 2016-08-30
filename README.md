@@ -87,15 +87,15 @@ fn main() {
     let provider = DefaultCredentialsProvider::new(None).unwrap();
 
     // V4 is the default signature for AWS. However, other systems also use V2.
-    let endpoint = Endpoint::new(Region::UsEast1, "V4", None, None);
+    let endpoint = Endpoint::new(Region::UsEast1, Signature::V4, None, None);
     let client = S3Client::new(provider, endpoint);
 
     match client.list_buckets() {
       Ok(output) => {
-        println!("{:?}", output);
+        println!("{:#?}", output);
       }
       Err(error) => {
-        println!("Error: {:?}", error);
+        println!("Error: {:#?}", error);
       }
     }
 }
@@ -107,8 +107,11 @@ If you need access to other AWS systems instead of S3 then take a look at rusoto
 ## Library Development
 ### Paths
 Structure is broken down into the following paths:
+
 common
+
 errors
+
 s3
 
 ### XML
