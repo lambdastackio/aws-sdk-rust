@@ -15,4 +15,6 @@
 # limitations under the License.
 
 cargo doc --no-deps
+rm -rf docs/
+mkdir docs
 cp -r target/doc/* docs/

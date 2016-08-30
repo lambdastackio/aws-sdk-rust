@@ -7,7 +7,7 @@ readme = "README.md"
 keywords = ["aws", "s3"]
 repository = "https://github.com/lambdastackio/aws-sdk-rust"
 homepage = "https://github.com/lambdastackio/aws-sdk-rust"
-documentation = "https://github.com/lambdastackio/aws-sdk-rust"
+documentation = "https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws/index.html"
 description = """
 BETA! - AWS SDK for Rust (only S3 currently). Allows for proxies. For a full AWS SDK look at rusoto. WIP and under heavy development with possible breaking changes - warning.
 """
@@ -25,3 +25,8 @@ serde_json = "0.8.0"
 time = "0.1.35"
 url = "1.2.0"
 xml-rs = "0.1.26"
+
+[[bin]]
+doc = false
+name = "main"
+path = "src/main.rs"

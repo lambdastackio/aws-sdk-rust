@@ -18,6 +18,7 @@
 
 // Allow unused_imports file wide because it allows you to comment out parts of the code without
 // seeing warnings.
+
 #![allow(unused_imports)]
 extern crate aws_sdk_rust;
 extern crate url;
