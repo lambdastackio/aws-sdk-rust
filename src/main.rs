@@ -70,7 +70,7 @@ fn main() {
     // V4 is the default signature for AWS. However, other systems also use V2.
     let endpoint = Endpoint::new(
                             Region::UsEast1,
-                            Signature::V4,
+                            Signature::V2,
                             None,
                             None,
                             None);

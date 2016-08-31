@@ -38,6 +38,36 @@ use serde_json::{Value, from_str};
 
 use aws::errors::creds::CredentialsError;
 
+/// Threadsafe AutoRefreshingProvider that locks cached credentials with a Mutex
+pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
+
+/// The credentials provider you probably want to use if you do require your AWS services sync.
+/// Wraps a ChainProvider in an AutoRefreshingProvider that uses a Mutex to lock credentials in a
+/// threadsafe manner.
+///
+/// The underlying ChainProvider checks multiple sources for credentials, and the
+/// AutoRefreshingProvider refreshes the credentials automatically when they expire.  The Mutex
+/// allows this caching to happen in a Sync manner, incurring the overhead of a Mutex when
+/// credentials expire and need to be refreshed.
+///
+/// For a !Sync implementation of the same, see DefaultCredentialsProvider
+pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
+
+/// The credentials provider you probably want to use if you don't require Sync for your
+/// AWS services. Wraps a ChainProvider in an AutoRefreshingProvider that uses a RefCell to cache
+/// credentials.
+///
+/// The underlying ChainProvider checks multiple sources for credentials, and the
+/// AutoRefreshingProvider refreshes the credentials automatically when they expire. The RefCell
+/// allows this caching to happen without the overhead of a Mutex, but is !Sync.
+///
+/// For a Sync implementation of the same, see DefaultCredentialsProviderSync
+pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
+
+/// !Sync AutoRefreshingProvider that caches credentials in a RefCell
+pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
+
+
 /// Primarily intended for client applications but also used for internal library documentation.
 ///
 /// AwsCredentials - Base struct for AWS
@@ -56,9 +86,81 @@ pub struct AwsCredentials {
     expires_at: DateTime<UTC>
 }
 
+/// Provides AWS credentials from environment variables. If you decide to use environment
+/// variables then the first two listed below are *required*. The third is used for temporary
+/// AWS access and not normally used by third party applications.
+///
+/// 1. AWS_ACCESS_KEY_ID - (required - if using environment variables)
+/// 2. AWS_SECRET_ACCESS_KEY - (required - if using environment variables)
+/// 3. AWS_SESSION_TOKEN - (optional - if using environment variables)
+///
+#[derive(Clone, Debug)]
+pub struct EnvironmentProvider;
+
+/// Provides AWS credentials via Parameters. This allows you to use your own config settings
+/// and pull the credentials from there and set them here. This is also part of the chained
+/// provider where all of the credential providers can be tried in a given order of priority.
+#[derive(Clone, Debug)]
+pub struct ParametersProvider {
+    credentials: Option<AwsCredentials>
+}
+
+/// Provides AWS credentials from a profile in a credentials file.
+///
+/// The credentials file is located in the home directory of the given user by default.
+/// You can change the `default` profile by calling `set_profile`.
+///
+#[derive(Clone, Debug)]
+pub struct ProfileProvider {
+    credentials: Option<AwsCredentials>,
+    location: PathBuf,
+    profile: String,
+}
+
+/// Provides AWS credentials from a resource's IAM role. Note: This is not fully tested.
+#[derive(Clone, Debug)]
+pub struct IamProvider;
+
+/// Wrapper for AwsCredentialsProvider that caches the credentials returned by the
+/// wrapped provider.  Each time the credentials are accessed, they are checked to see if
+/// they have expired, in which case they are retrieved from the wrapped provider again.
+pub struct BaseAutoRefreshingProvider<P, T> {
+	pub credentials_provider: P,
+	cached_credentials: T
+}
+
+/// Provides AWS credentials from multiple possible sources using a priority order.
+///
+/// The following sources are checked in order for credentials when calling `credentials`:
+///
+/// 1. Parameters option. This is set in your code however you wish to set it. For example,
+///    you could read from your own config file and set them or however.
+/// 2. Environment variables: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+/// 3. AWS credentials file. Usually located at `~/.aws/credentials`.
+/// 4. IAM instance profile. Will only work if running on an EC2 instance with an instance
+///    profile/role.
+///
+/// If the sources are exhausted without finding credentials, an error is returned.
+/// NB: If the chain makes it to the IAM provider then TCP timeout may cause a wait.
+#[derive(Debug, Clone)]
+pub struct ChainProvider {
+    parameters_provider: Option<ParametersProvider>,
+    environment_provider: Option<EnvironmentProvider>,
+    profile_provider: Option<ProfileProvider>,
+}
+
+/// A trait for types that produce `AwsCredentials` This trait is implemented on most S3 calls.
+pub trait AwsCredentialsProvider {
+    /// Produce a new `AwsCredentials`.
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError>;
+}
+
+// Impls below...
+
 impl AwsCredentials {
     /// First method to be called. Creates the AWS credentials.
-    pub fn new<K, S>(access_key_id:K,
+    pub fn new<K, S>(
+        access_key_id:K,
         secret_access_key:S,
         token:Option<String>,
         expires_at:DateTime<UTC>)
@@ -97,14 +199,11 @@ impl AwsCredentials {
     }
 }
 
-/// A trait for types that produce `AwsCredentials` This trait is implemented on most S3 calls.
-pub trait AwsCredentialsProvider {
-    /// Produce a new `AwsCredentials`.
-    fn credentials(&self) -> Result<AwsCredentials, CredentialsError>;
+impl EnvironmentProvider {
+    pub fn new() -> Result<EnvironmentProvider, CredentialsError> {
+        Ok(EnvironmentProvider{})
+    }
 }
-
-/// Provides AWS credentials from environment variables.
-pub struct EnvironmentProvider;
 
 impl AwsCredentialsProvider for EnvironmentProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
@@ -139,14 +238,6 @@ impl AwsCredentialsProvider for EnvironmentProvider {
     }
 }
 
-/// Provides AWS credentials via Parameters. This allows you to use your own config settings
-/// and pull the credentials from there and set them here. This is also part of the chained
-/// provider where all of the credential providers can be tried in a given order of priority.
-#[derive(Clone, Debug)]
-pub struct ParametersProvider {
-    credentials: Option<AwsCredentials>
-}
-
 impl ParametersProvider {
     pub fn new() -> Result<ParametersProvider, CredentialsError> {
         Ok(ParametersProvider{
@@ -154,7 +245,7 @@ impl ParametersProvider {
         })
     }
 
-    pub fn with_params<K, S>(
+    pub fn with_parameters<K, S>(
         access_key_id:K,
         secret_access_key:S,
         token:Option<String>)
@@ -182,16 +273,6 @@ impl AwsCredentialsProvider for ParametersProvider {
 
         Ok(creds)
     }
-}
-
-/// Provides AWS credentials from a profile in a credentials file.
-///
-/// The credentials file is located in the home directory of the given user.
-#[derive(Clone, Debug)]
-pub struct ProfileProvider {
-    credentials: Option<AwsCredentials>,
-    location: PathBuf,
-    profile: String,
 }
 
 impl ProfileProvider {
@@ -223,7 +304,7 @@ impl ProfileProvider {
 
     /// Create a new `ProfileProvider` for the credentials file at the given path, using
     /// the given profile.
-    pub fn with_configuration<F, P>(location: F, profile: P) -> ProfileProvider
+    pub fn with_profile<F, P>(location: F, profile: P) -> ProfileProvider
     where F: Into<PathBuf>, P: Into<String> {
         ProfileProvider {
             credentials: None,
@@ -248,7 +329,9 @@ impl ProfileProvider {
         self.location = location.into();
     }
 
-    /// Set the profile name.
+    /// Set the profile name. [default] is the profile that is used by `default`. However,
+    /// you can `set_profile` with the name that matches a named profile in your credentials
+    /// file and those credentials will be used.
     pub fn set_profile<P>(&mut self, profile: P) where P: Into<String> {
         self.profile = profile.into();
     }
@@ -344,10 +427,6 @@ fn parse_credentials_file(location: &Path)
     Ok(profiles)
 }
 
-/// Provides AWS credentials from a resource's IAM role. Note: This is not fully tested.
-#[derive(Clone, Debug)]
-pub struct IamProvider;
-
 impl AwsCredentialsProvider for IamProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         let mut address : String =
@@ -439,17 +518,6 @@ impl AwsCredentialsProvider for IamProvider {
     }
 }
 
-/// Wrapper for AwsCredentialsProvider that caches the credentials returned by the
-/// wrapped provider.  Each time the credentials are accessed, they are checked to see if
-/// they have expired, in which case they are retrieved from the wrapped provider again.
-pub struct BaseAutoRefreshingProvider<P, T> {
-	pub credentials_provider: P,
-	cached_credentials: T
-}
-
-/// Threadsafe AutoRefreshingProvider that locks cached credentials with a Mutex
-pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
-
 impl <P: AwsCredentialsProvider> AutoRefreshingProviderSync<P> {
     pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, CredentialsError> {
 		let creds = try!(provider.credentials());
@@ -471,9 +539,6 @@ impl <P: AwsCredentialsProvider> AwsCredentialsProvider for
 	}
 }
 
-/// !Sync AutoRefreshingProvider that caches credentials in a RefCell
-pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
-
 impl <P: AwsCredentialsProvider> AutoRefreshingProvider<P> {
 	pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
 		let creds = try!(provider.credentials());
@@ -494,35 +559,12 @@ impl <P: AwsCredentialsProvider> AwsCredentialsProvider for BaseAutoRefreshingPr
 	}
 }
 
-/// The credentials provider you probably want to use if you don't require Sync for your
-/// AWS services. Wraps a ChainProvider in an AutoRefreshingProvider that uses a RefCell to cache
-/// credentials.
-///
-/// The underlying ChainProvider checks multiple sources for credentials, and the
-/// AutoRefreshingProvider refreshes the credentials automatically when they expire. The RefCell
-/// allows this caching to happen without the overhead of a Mutex, but is !Sync.
-///
-/// For a Sync implementation of the same, see DefaultCredentialsProviderSync
-pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
-
 impl DefaultCredentialsProvider {
     pub fn new(parameters_provider: Option<ParametersProvider>)
         -> Result<DefaultCredentialsProvider, CredentialsError> {
         Ok(try!(AutoRefreshingProvider::with_refcell(ChainProvider::new(parameters_provider))))
     }
 }
-
-/// The credentials provider you probably want to use if you do require your AWS services sync.
-/// Wraps a ChainProvider in an AutoRefreshingProvider that uses a Mutex to lock credentials in a
-/// threadsafe manner.
-///
-/// The underlying ChainProvider checks multiple sources for credentials, and the
-/// AutoRefreshingProvider refreshes the credentials automatically when they expire.  The Mutex
-/// allows this caching to happen in a Sync manner, incurring the overhead of a Mutex when
-/// credentials expire and need to be refreshed.
-///
-/// For a !Sync implementation of the same, see DefaultCredentialsProvider
-pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
 
 impl DefaultCredentialsProviderSync {
     pub fn new(parameters_provider: Option<ParametersProvider>)
@@ -531,43 +573,32 @@ impl DefaultCredentialsProviderSync {
     }
 }
 
-/// Provides AWS credentials from multiple possible sources using a priority order.
-///
-/// The following sources are checked in order for credentials when calling `credentials`:
-///
-/// 1. Environment variables: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
-/// 2. Parameters option. This is set in your code however you wish to set it. For example,
-///    you could read from your own config file and set them or however.
-/// 3. AWS credentials file. Usually located at `~/.aws/credentials`.
-/// 4. IAM instance profile. Will only work if running on an EC2 instance with an instance
-///    profile/role.
-///
-/// If the sources are exhausted without finding credentials, an error is returned.
-/// NB: If the chain makes it to the IAM provider then TCP timeout may cause a wait.
-#[derive(Debug, Clone)]
-pub struct ChainProvider {
-    parameters_provider: Option<ParametersProvider>,
-    profile_provider: Option<ProfileProvider>,
-}
-
 impl AwsCredentialsProvider for ChainProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-    	EnvironmentProvider.credentials()
-            .or_else(|_| {
-                match self.parameters_provider {
-                    Some(ref provider) => provider.credentials(),
-                    None => Err(CredentialsError::new(""))
+    	match self.parameters_provider {
+            Some(ref provider) => provider.credentials(),
+            None => {
+                match self.environment_provider {
+                    Some(ref provider) => {
+                        match provider.credentials() {
+                            Ok(creds) => Ok(creds),
+                            Err(_) => {
+                                match self.profile_provider {
+                                    Some(ref provider) => provider.credentials(),
+                            	    None => IamProvider.credentials()
+                                }
+                            }
+                        }
+                    }
+                    None => {
+                        match self.profile_provider {
+                            Some(ref provider) => provider.credentials(),
+                    	    None => IamProvider.credentials()
+                        }
+                    }
                 }
-            })
-    		.or_else(|_| {
-                match self.profile_provider {
-                    Some(ref provider) => provider.credentials(),
-                    None => Err(CredentialsError::new(""))
-                }
-            })
-    		.or_else(|_| IamProvider.credentials())
-    		.or_else(|_| Err(CredentialsError::new(
-                "Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
+            }
+        }
     }
 }
 
@@ -576,16 +607,29 @@ impl ChainProvider {
     pub fn new(parameters_provider: Option<ParametersProvider>) -> ChainProvider {
         ChainProvider {
             parameters_provider: parameters_provider,
+            environment_provider: EnvironmentProvider::new().ok(),
             profile_provider: ProfileProvider::new().ok(),
         }
     }
 
     /// Create a new `ChainProvider` using the provided `ParametersProvider`.
-    pub fn with_param_provider(&self,
+    pub fn with_parameters_provider(&self,
         parameters_provider: ParametersProvider
         ) -> ChainProvider {
         ChainProvider {
             parameters_provider: Some(parameters_provider),
+            environment_provider: None,
+            profile_provider: None,
+        }
+    }
+
+    /// Create a new `ChainProvider` using the provided `EnvironmentProvider`.
+    pub fn with_environment_provider(&self,
+        environment_provider: EnvironmentProvider
+        ) -> ChainProvider {
+        ChainProvider {
+            parameters_provider: None,
+            environment_provider: Some(environment_provider),
             profile_provider: None,
         }
     }
@@ -596,6 +640,7 @@ impl ChainProvider {
         ) -> ChainProvider {
         ChainProvider {
             parameters_provider: None,
+            environment_provider: None,
             profile_provider: Some(profile_provider),
         }
     }
