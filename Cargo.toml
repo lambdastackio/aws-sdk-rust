@@ -1,6 +1,6 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.7"
+version = "0.1.8"
 authors = ["Chris Jones <chris.jones@lambdastack.io>"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -9,7 +9,7 @@ repository = "https://github.com/lambdastackio/aws-sdk-rust"
 homepage = "https://github.com/lambdastackio/aws-sdk-rust"
 documentation = "https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws/index.html"
 description = """
-BETA! - Possible breaking changes. V2 signatures are being tested now and V4 signatures will be made whole soon! AWS SDK for Rust (only S3 currently). Allows for proxies. For a full AWS SDK look at rusoto. 
+BETA! - Possible breaking changes. V2 signatures are being tested now and V4 signatures will be made whole soon! AWS SDK for Rust (only S3 currently). Allows for proxies. For a full AWS SDK look at rusoto.
 """
 
 [dependencies]
