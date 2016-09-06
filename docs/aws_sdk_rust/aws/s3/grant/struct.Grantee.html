@@ -47,10 +47,10 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-10421' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/grant.rs.html#106-117' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-10587' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/grant.rs.html#106-117' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Grantee {
     pub email_address: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.EmailAddress.html' title='aws_sdk_rust::aws::common::common::EmailAddress'>EmailAddress</a>&gt;,
-    pub foo_type: <a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.Type.html' title='aws_sdk_rust::aws::common::common::Type'>Type</a>,
+    pub some_type: <a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.Type.html' title='aws_sdk_rust::aws::common::common::Type'>Type</a>,
     pub display_name: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.DisplayName.html' title='aws_sdk_rust::aws::common::common::DisplayName'>DisplayName</a>&gt;,
     pub id: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.ID.html' title='aws_sdk_rust::aws::common::common::ID'>ID</a>&gt;,
     pub uri: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.URI.html' title='aws_sdk_rust::aws::common::common::URI'>URI</a>&gt;,
@@ -58,9 +58,9 @@
                            <span id='email_address.v' class='invisible'>
                            <code>email_address: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.EmailAddress.html' title='aws_sdk_rust::aws::common::common::EmailAddress'>EmailAddress</a>&gt;</code>
                            </span></span><span class='stab '></span><div class='docblock'><p>Email address of the grantee.</p>
-</div><span id='structfield.foo_type' class='structfield'>
-                           <span id='foo_type.v' class='invisible'>
-                           <code>foo_type: <a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.Type.html' title='aws_sdk_rust::aws::common::common::Type'>Type</a></code>
+</div><span id='structfield.some_type' class='structfield'>
+                           <span id='some_type.v' class='invisible'>
+                           <code>some_type: <a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.Type.html' title='aws_sdk_rust::aws::common::common::Type'>Type</a></code>
                            </span></span><span class='stab '></span><div class='docblock'><p>Type of grantee</p>
 </div><span id='structfield.display_name' class='structfield'>
                            <span id='display_name.v' class='invisible'>
@@ -74,10 +74,10 @@
                            <span id='uri.v' class='invisible'>
                            <code>uri: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.URI.html' title='aws_sdk_rust::aws::common::common::URI'>URI</a>&gt;</code>
                            </span></span><span class='stab '></span><div class='docblock'><p>URI of the grantee group.</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/grant/struct.Grantee.html' title='aws_sdk_rust::aws::s3::grant::Grantee'>Grantee</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-10409' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/grant.rs.html#105' title='goto source code'>[src]</a></span></h3>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/grant/struct.Grantee.html' title='aws_sdk_rust::aws::s3::grant::Grantee'>Grantee</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-10575' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/grant.rs.html#105' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.default' class='method'><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../../aws_sdk_rust/aws/s3/grant/struct.Grantee.html' title='aws_sdk_rust::aws::s3::grant::Grantee'>Grantee</a></code></span></h4>
 <div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/grant/struct.Grantee.html' title='aws_sdk_rust::aws::s3::grant::Grantee'>Grantee</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-10411' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/grant.rs.html#105' title='goto source code'>[src]</a></span></h3>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/grant/struct.Grantee.html' title='aws_sdk_rust::aws::s3::grant::Grantee'>Grantee</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-10577' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/grant.rs.html#105' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
 <div class='docblock'><p>Formats the value using the given formatter.</p>
 </div></div></section>

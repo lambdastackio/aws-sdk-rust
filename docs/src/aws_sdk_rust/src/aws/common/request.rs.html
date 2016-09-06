@@ -203,7 +203,6 @@
 <span id="159">159</span>
 <span id="160">160</span>
 <span id="161">161</span>
-<span id="162">162</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -299,7 +298,6 @@
             <span class='string'>&quot;GET&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Method</span>::<span class='ident'>Get</span>,
             <span class='string'>&quot;HEAD&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Method</span>::<span class='ident'>Head</span>,
             <span class='ident'>v</span> @ _ <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>HttpDispatchError</span> { <span class='ident'>message</span>: <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Unsupported HTTP verb {}&quot;</span>, <span class='ident'>v</span>) }),
-
         };
 
         <span class='comment'>// translate the headers map to a format Hyper likes</span>

@@ -402,7 +402,6 @@
 <span id="358">358</span>
 <span id="359">359</span>
 <span id="360">360</span>
-<span id="361">361</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -640,7 +639,7 @@
             <span class='prelude-val'>Err</span>(<span class='ident'>XmlParseError</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;END Expected {} got {}&quot;</span>, <span class='ident'>element_name</span>, <span class='ident'>name</span>.<span class='ident'>local_name</span>)))
         }
     } <span class='kw'>else</span> {
-        <span class='comment'>//Err(XmlParseError::new(&amp;format!(&quot;Expected EndElement {} got {:?}&quot;, element_name, next)))</span>
+        <span class='comment'>// Err(XmlParseError::new(&amp;format!(&quot;Expected EndElement {} got {:?}&quot;, element_name, next)))</span>
         <span class='comment'>// Calling this function means you know it may not be the end (dynamic errors) but you</span>
         <span class='comment'>// have capture all you want so end it anyway.</span>
         <span class='prelude-val'>Ok</span>(())
@@ -733,8 +732,7 @@
 
         <span class='comment'>// now we&#39;re set up to use string:</span>
         <span class='kw'>let</span> <span class='ident'>my_chars</span> <span class='op'>=</span> <span class='ident'>string_field</span>(<span class='string'>&quot;QueueUrl&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>reader</span>).<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>my_chars</span>,
-                   <span class='string'>&quot;https://sqs.us-east-1.amazonaws.com/347452556413/testqueue&quot;</span>)
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>my_chars</span>, <span class='string'>&quot;https://sqs.us-east-1.amazonaws.com/347452556413/testqueue&quot;</span>)
     }
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>

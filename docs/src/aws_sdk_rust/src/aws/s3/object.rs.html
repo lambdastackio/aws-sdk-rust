@@ -1850,28 +1850,6 @@
 <span id="1806">1806</span>
 <span id="1807">1807</span>
 <span id="1808">1808</span>
-<span id="1809">1809</span>
-<span id="1810">1810</span>
-<span id="1811">1811</span>
-<span id="1812">1812</span>
-<span id="1813">1813</span>
-<span id="1814">1814</span>
-<span id="1815">1815</span>
-<span id="1816">1816</span>
-<span id="1817">1817</span>
-<span id="1818">1818</span>
-<span id="1819">1819</span>
-<span id="1820">1820</span>
-<span id="1821">1821</span>
-<span id="1822">1822</span>
-<span id="1823">1823</span>
-<span id="1824">1824</span>
-<span id="1825">1825</span>
-<span id="1826">1826</span>
-<span id="1827">1827</span>
-<span id="1828">1828</span>
-<span id="1829">1829</span>
-<span id="1830">1830</span>
 </pre><pre class='rust '>
 <span class='comment'>//</span>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
@@ -1892,7 +1870,7 @@
 
 <span class='doccomment'>//! Library Documentation</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! This file contains everything related to `Objects`. </span>
+<span class='doccomment'>//! This file contains everything related to `Objects`.</span>
 
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>unused_variables</span>)]</span>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>::<span class='ident'>FromStr</span>;
@@ -2632,28 +2610,6 @@
     <span class='doccomment'>/// Unique identifier for the rule. The value cannot be longer than 255</span>
     <span class='doccomment'>/// characters.</span>
     <span class='kw'>pub</span> <span class='ident'>id</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ID</span><span class='op'>&gt;</span>,
-}
-
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutObjectAclRequest</span> {
-    <span class='doccomment'>/// Allows grantee the read, write, read ACP, and write ACP permissions on the</span>
-    <span class='doccomment'>/// bucket.</span>
-    <span class='kw'>pub</span> <span class='ident'>grant_full_control</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>GrantFullControl</span><span class='op'>&gt;</span>,
-    <span class='doccomment'>/// Allows grantee to write the ACL for the applicable bucket.</span>
-    <span class='kw'>pub</span> <span class='ident'>grant_write_acp</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>GrantWriteACP</span><span class='op'>&gt;</span>,
-    <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
-    <span class='kw'>pub</span> <span class='ident'>request_payer</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>RequestPayer</span><span class='op'>&gt;</span>,
-    <span class='kw'>pub</span> <span class='ident'>content_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ContentMD5</span><span class='op'>&gt;</span>,
-    <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
-    <span class='doccomment'>/// The canned ACL to apply to the object.</span>
-    <span class='kw'>pub</span> <span class='ident'>acl</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>CannedAcl</span><span class='op'>&gt;</span>,
-    <span class='kw'>pub</span> <span class='ident'>access_control_policy</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>AccessControlPolicy</span><span class='op'>&gt;</span>,
-    <span class='doccomment'>/// Allows grantee to create, overwrite, and delete any object in the bucket.</span>
-    <span class='kw'>pub</span> <span class='ident'>grant_write</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>GrantWrite</span><span class='op'>&gt;</span>,
-    <span class='doccomment'>/// Allows grantee to list the objects in the bucket.</span>
-    <span class='kw'>pub</span> <span class='ident'>grant_read</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>GrantRead</span><span class='op'>&gt;</span>,
-    <span class='doccomment'>/// Allows grantee to read the bucket ACL.</span>
-    <span class='kw'>pub</span> <span class='ident'>grant_read_acp</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>GrantReadACP</span><span class='op'>&gt;</span>,
 }
 
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>

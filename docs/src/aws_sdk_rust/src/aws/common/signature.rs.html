@@ -1018,19 +1018,19 @@
 
         <span class='self'>self</span>.<span class='ident'>canonical_query_string</span> <span class='op'>=</span> <span class='ident'>build_canonical_query_string</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>params</span>);
         <span class='self'>self</span>.<span class='ident'>canonical_uri</span> <span class='op'>=</span> <span class='ident'>canonical_uri</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>path</span>);
-        <span class='comment'>// let canonical_headers = canonical_headers_v2(&amp;self.headers);</span>
-        <span class='comment'>// println!(&quot;----sign_v2----------&quot;);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, self.bucket);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, hostname);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, self.canonical_query_string);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, self.canonical_uri);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, canonical_headers);</span>
-        <span class='comment'>// println!(&quot;**-------------------&quot;);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, self.headers);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, self.path);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, self.params);</span>
-        <span class='comment'>// println!(&quot;---------------------&quot;);</span>
-        <span class='comment'>//</span>
+        <span class='comment'>//let canonical_headers = canonical_headers_v2(&amp;self.headers);</span>
+        <span class='comment'>//println!(&quot;----sign_v2----------&quot;);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, self.bucket);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, hostname);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, self.canonical_query_string);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, self.canonical_uri);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, canonical_headers);</span>
+        <span class='comment'>//println!(&quot;**-------------------&quot;);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, self.headers);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, self.path);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, self.params);</span>
+        <span class='comment'>//println!(&quot;---------------------&quot;);</span>
+        
         <span class='comment'>// NOTE: If you set the &#39;date&#39; header then include it in the string_to_sign w/o the</span>
         <span class='comment'>// x-amz-date resource. If you do not use the date header but use the x-amz-date then set</span>
         <span class='comment'>// the date in string_to_sign to &quot;&quot; and include x-amz-date in the resource. It makes it</span>
@@ -1061,10 +1061,10 @@
                 <span class='comment'>// println!(&quot;{:?}&quot;, payload);</span>
             },
         }
-        <span class='comment'>// println!(&quot;{:?}&quot;, self.canonical_query_string);</span>
-        <span class='comment'>// println!(&quot;{:?}&quot;, string_to_sign);</span>
-        <span class='comment'>// println!(&quot;===================&quot;);</span>
-        <span class='comment'>//</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, self.canonical_query_string);</span>
+        <span class='comment'>//println!(&quot;{:?}&quot;, string_to_sign);</span>
+        <span class='comment'>//println!(&quot;===================&quot;);</span>
+
         <span class='kw'>let</span> <span class='ident'>signature</span> <span class='op'>=</span> {
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>hmac</span> <span class='op'>=</span> <span class='ident'>HMAC</span>::<span class='ident'>new</span>(<span class='ident'>SHA1</span>, <span class='ident'>creds</span>.<span class='ident'>aws_secret_access_key</span>().<span class='ident'>as_bytes</span>());
             <span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>hmac</span>.<span class='ident'>write_all</span>(<span class='ident'>string_to_sign</span>.<span class='ident'>as_bytes</span>());
