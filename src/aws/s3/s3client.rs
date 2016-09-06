@@ -11,10 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
 
 // Portions borrowed from the rusoto project. See README.md
-//
 
 #![allow(unused_variables, unused_mut)]
 use std::ascii::AsciiExt;
@@ -22,8 +20,6 @@ use std::collections::HashMap;
 use std::str::FromStr;
 use std::str;
 use std::env;
-// use rustc_serialize::hex::ToHex;
-// use rustc_serialize::base64::{ToBase64, STANDARD};
 
 use hyper::client::{Client, RedirectPolicy};
 use url::Url;
@@ -35,23 +31,19 @@ use aws::common::xmlutil::*;
 use aws::common::params::{Params, ServiceParams};
 use aws::common::signature::SignedRequest;
 use aws::common::request::{DispatchSignedRequest, HttpResponse};
-// use aws::common::common::*;
 use aws::errors::s3::*;
 use aws::errors::aws::*;
-// use aws::errors::http::*;
 use aws::s3::endpoint::*;
 use aws::s3::writeparse::*;
 use aws::s3::bucket::*;
 use aws::s3::object::*;
-// use aws::s3::policy::*;
 use aws::s3::acl::*;
-// use aws::s3::grant::*;
-// use aws::s3::header::*;
 
 // header! { (ProxyAuthorization, "Proxy-Authorization") => [String] }
 
 /// Returns a valid hyper client. If proxies are passed in then a proxy version of the client is returned.
 /// If None is passed then in then the default Client is returned.
+///
 pub fn http_client(proxy: Option<Url>) -> Client {
     let mut proxy_url: String = String::new();
     let mut proxy_port: u16 = 0;
@@ -110,6 +102,12 @@ pub struct S3Client<P, D>
 impl<P> S3Client<P, Client>
     where P: AwsCredentialsProvider,
 {
+    /// Entry point for S3Client. Must provide a Provider to the S3Client. Example:
+    ///
+    /// ```
+    /// let provider = DefaultCredentialsProvider::new(None).unwrap();
+    /// ```
+    ///
     pub fn new(credentials_provider: P, endpoint: Endpoint) -> Self {
         // Hyper client
         let mut client = http_client(endpoint.proxy.clone());
@@ -303,7 +301,7 @@ impl<P, D> S3Client<P, D>
                                              &self.endpoint.signature);
 
         // Not doing anything but allow unused_variables is set above to kill warning.
-        let acls = build_acls(&mut request, &input);
+        let acls = build_bucket_acls(&mut request, &input);
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -995,6 +993,41 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// Returns the access control list (ACL) of an object.
+    pub fn get_object_acl(&self, input: &GetObjectAclRequest) -> Result<AccessControlPolicy, S3Error> {
+        let mut request = SignedRequest::new("GET",
+                                             "s3",
+                                             self.region,
+                                             &input.bucket,
+                                             &format!("/{}?acl", input.key),
+                                             &self.endpoint.signature);
+
+         let hostname = self.hostname(Some(&input.bucket));
+         request.set_hostname(Some(hostname));
+
+        //let mut params = Params::new();
+        //params.put("Action", "GetObjectAcl");
+        //GetObjectAclRequestWriter::write_params(&mut params, "", input);
+        //request.set_params(params);
+
+        let result = sign_and_execute(&self.dispatcher,
+                                      &mut request,
+                                      try!(self.credentials_provider.credentials()));
+        let status = result.status;
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+        match status {
+            200 => {
+                Ok(try!(AccessControlPolicyParser::parse_xml("AccessControlPolicy", &mut stack)))
+            }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error getting object acl", aws))
+            }
+        }
+    }
+
     pub fn get_value_for_header(header_name: String, response: &HttpResponse) -> Result<String, S3Error> {
         match response.headers.get(&header_name) {
             Some(ref value) => Ok(value.to_string()),
@@ -1441,6 +1474,47 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// uses the acl subresource to set the access control list (ACL) permissions for
+    /// an object that already exists in a bucket
+    pub fn put_object_acl(&self, input: &PutObjectAclRequest) -> Result<(), S3Error> {
+        let mut request = SignedRequest::new("PUT",
+                                             "s3",
+                                             self.region,
+                                             &input.bucket,
+                                             &format!("/{}?acl", input.key),
+                                             &self.endpoint.signature);
+
+        //let mut params = Params::new();
+        //params.put("Action", "PutObjectAcl");
+        //PutObjectAclRequestWriter::write_params(&mut params, "", input);
+        //equest.set_params(params);
+
+        // Not doing anything but allow unused_variables is set above to kill warning.
+        let acls = build_object_acls(&mut request, &input);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        let result = sign_and_execute(&self.dispatcher,
+                                      &mut request,
+                                      try!(self.credentials_provider.credentials()));
+        let status = result.status;
+        match status {
+            200 => {
+                // No response on acl puts
+                Ok(())
+            }
+            _ => {
+                let mut reader = EventReader::from_str(&result.body);
+                let mut stack = XmlResponse::new(reader.events().peekable());
+                stack.next(); // xml start tag
+
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error putting object acl", aws))
+            }
+        }
+    }
+
     /// Returns metadata about all of the versions of objects in a bucket.
     pub fn list_object_versions(&self, input: &ListObjectVersionsRequest) -> Result<ListVersionsResult, S3Error> {
         let mut request = SignedRequest::new("GET",
@@ -1550,7 +1624,28 @@ fn sign_and_execute<D>(dispatcher: &D, signed_request: &mut SignedRequest, creds
     response
 }
 
-fn build_acls(request: &mut SignedRequest, input: &PutBucketAclRequest) -> Result<(), S3Error> {
+fn build_bucket_acls(request: &mut SignedRequest, input: &PutBucketAclRequest) -> Result<(), S3Error> {
+    match input.acl {
+        Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(canned_acl)),
+        None => {},
+    }
+    // match input.grant_write {
+    // Some(ref grants) => {
+    // let grant_str: String = String::new();
+    // Cycle through
+    // for grant in grants {
+    //
+    // }
+    //
+    // request.add_header("x-amz-grant-write", ""),
+    // }
+    // None => {},
+    // }
+    //
+    Ok(())
+}
+
+fn build_object_acls(request: &mut SignedRequest, input: &PutObjectAclRequest) -> Result<(), S3Error> {
     match input.acl {
         Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(canned_acl)),
         None => {},

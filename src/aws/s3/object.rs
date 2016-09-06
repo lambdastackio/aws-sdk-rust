@@ -17,7 +17,7 @@
 
 //! Library Documentation
 //!
-//! This file contains everything related to `Objects`. 
+//! This file contains everything related to `Objects`.
 
 #![allow(unused_variables)]
 use std::str::FromStr;
@@ -757,28 +757,6 @@ pub struct ReplicationRule {
     /// Unique identifier for the rule. The value cannot be longer than 255
     /// characters.
     pub id: Option<ID>,
-}
-
-#[derive(Debug, Default)]
-pub struct PutObjectAclRequest {
-    /// Allows grantee the read, write, read ACP, and write ACP permissions on the
-    /// bucket.
-    pub grant_full_control: Option<GrantFullControl>,
-    /// Allows grantee to write the ACL for the applicable bucket.
-    pub grant_write_acp: Option<GrantWriteACP>,
-    pub key: ObjectKey,
-    pub request_payer: Option<RequestPayer>,
-    pub content_md5: Option<ContentMD5>,
-    pub bucket: BucketName,
-    /// The canned ACL to apply to the object.
-    pub acl: Option<CannedAcl>,
-    pub access_control_policy: Option<AccessControlPolicy>,
-    /// Allows grantee to create, overwrite, and delete any object in the bucket.
-    pub grant_write: Option<GrantWrite>,
-    /// Allows grantee to list the objects in the bucket.
-    pub grant_read: Option<GrantRead>,
-    /// Allows grantee to read the bucket ACL.
-    pub grant_read_acp: Option<GrantReadACP>,
 }
 
 #[derive(Debug, Default)]

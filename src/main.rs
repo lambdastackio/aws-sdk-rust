@@ -116,7 +116,7 @@ fn main() {
         Err(e) => println!("{:#?}", e)
     }
 */
-
+/*
     let mut get_bucket_acl = GetBucketAclRequest::default();
     get_bucket_acl.bucket = bucket_name.to_string();
 
@@ -124,7 +124,7 @@ fn main() {
         Ok(bucket) => println!("{:#?}", bucket),
         Err(e) => println!("{:#?}", e)
     }
-
+*/
 /*
     let mut put_object = PutObjectRequest::default();
     put_object.bucket = bucket_name.to_string();
@@ -146,6 +146,27 @@ fn main() {
         Err(e) => println!("{:#?}", e)
     }
 */
+/*
+    let mut put_object_acl = PutObjectAclRequest::default();
+    put_object_acl.bucket = bucket_name.to_string();
+    put_object_acl.key = "mytest.txt".to_string();
+    put_object_acl.acl = Some(CannedAcl::Private);
+
+    match client.put_object_acl(&put_object_acl) {
+        Ok(acl) => println!("{:#?}", acl),
+        Err(e) => println!("{:#?}", e)
+    }
+*/
+
+    let mut get_object_acl = GetObjectAclRequest::default();
+    get_object_acl.bucket = bucket_name.to_string();
+    get_object_acl.key = "mytest.txt".to_string();
+
+    match client.get_object_acl(&get_object_acl) {
+        Ok(acl) => println!("{:#?}", acl),
+        Err(e) => println!("{:#?}", e)
+    }
+
 /*
     let bucket_head = HeadBucketRequest { bucket: bucket_name.to_string() };
 

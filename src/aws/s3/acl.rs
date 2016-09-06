@@ -20,8 +20,6 @@ use aws::common::common::*;
 use aws::s3::writeparse::*;
 use aws::s3::grant::*;
 use aws::s3::header::*;
-// use aws::s3::bucket::*;
-use aws::s3::object::*;
 
 pub type ObjectCannedACL = String;
 
@@ -81,6 +79,24 @@ pub struct PermissionParser;
 /// Write `Permission` contents to a `SignedRequest`
 pub struct PermissionWriter;
 
+/// Parse `GetObjectAclRequest` from XML
+pub struct GetObjectAclRequestParser;
+
+/// Write `GetBucketAclRequest` to XML
+pub struct GetObjectAclRequestWriter;
+
+/// Parse `GetObjectAclOutput` from XML
+pub struct GetObjectAclOutputParser;
+
+/// Write `GetObjectAclOutput` contents to a `SignedRequest`
+pub struct GetObjectAclOutputWriter;
+
+/// Parse `PutObjectAclOutput` from XML
+pub struct PutObjectAclOutputParser;
+
+/// Write `PutObjectAclOutput` contents to a `SignedRequest`
+pub struct PutObjectAclOutputWriter;
+
 #[derive(Debug, Default)]
 pub struct AccessControlPolicy {
     pub owner: Owner,
@@ -126,6 +142,50 @@ pub struct PutBucketAclRequest {
     pub grant_read: Option<GrantRead>,
     /// Allows grantee to read the bucket ACL.
     pub grant_read_acp: Option<GrantReadACP>,
+}
+
+#[derive(Debug, Default)]
+pub struct GetObjectAclRequest {
+    /// VersionId used to reference a specific version of the object.
+    pub version_id: Option<ObjectVersionId>,
+    pub bucket: BucketName,
+    pub request_payer: Option<RequestPayer>,
+    pub key: ObjectKey,
+}
+
+#[derive(Debug, Default)]
+pub struct PutObjectAclRequest {
+    /// Allows grantee the read, write, read ACP, and write ACP permissions on the
+    /// bucket.
+    pub grant_full_control: Option<GrantFullControl>,
+    /// Allows grantee to write the ACL for the applicable bucket.
+    pub grant_write_acp: Option<GrantWriteACP>,
+    pub key: ObjectKey,
+    pub request_payer: Option<RequestPayer>,
+    pub content_md5: Option<ContentMD5>,
+    pub bucket: BucketName,
+    /// The canned ACL to apply to the object.
+    pub acl: Option<CannedAcl>,
+    pub access_control_policy: Option<AccessControlPolicy>,
+    /// Allows grantee to create, overwrite, and delete any object in the bucket.
+    pub grant_write: Option<GrantWrite>,
+    /// Allows grantee to list the objects in the bucket.
+    pub grant_read: Option<GrantRead>,
+    /// Allows grantee to read the bucket ACL.
+    pub grant_read_acp: Option<GrantReadACP>,
+}
+
+#[derive(Debug, Default)]
+pub struct GetObjectAclOutput {
+    pub owner: Owner,
+    /// A list of grants.
+    pub grants: Grants,
+    pub request_charged: RequestCharged,
+}
+
+#[derive(Debug, Default)]
+pub struct PutObjectAclOutput {
+    pub request_charged: RequestCharged,
 }
 
 // Impls below...
@@ -379,5 +439,109 @@ pub fn canned_acl_in_aws_format(canned_acl: &CannedAcl) -> String {
         CannedAcl::AuthenticatedRead => "authenticated-read".to_string(),
         CannedAcl::BucketOwnerRead => "bucket-owner-read".to_string(),
         CannedAcl::BucketOwnerFullControl => "bucket-owner-full-control".to_string(),
+    }
+}
+
+impl GetObjectAclRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectAclRequest, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = GetObjectAclRequest::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "versionId" {
+                obj.version_id = Some(try!(ObjectVersionIdParser::parse_xml("versionId", stack)));
+                continue;
+            }
+            if current_name == "Bucket" {
+                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+                continue;
+            }
+            if current_name == "x-amz-request-payer" {
+                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
+                continue;
+            }
+            if current_name == "Key" {
+                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl GetObjectAclRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &GetObjectAclRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        if let Some(ref obj) = obj.version_id {
+            ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "versionId"), obj);
+        }
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+        if let Some(ref obj) = obj.request_payer {
+            RequestPayerWriter::write_params(params, &(prefix.to_string() + "x-amz-request-payer"), obj);
+        }
+        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
+    }
+}
+
+impl GetObjectAclOutputParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectAclOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = GetObjectAclOutput::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "Owner" {
+                obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
+                continue;
+            }
+            if current_name == "Grant" {
+                obj.grants = try!(GrantsParser::parse_xml("Grant", stack));
+                continue;
+            }
+            if current_name == "x-amz-request-charged" {
+                obj.request_charged = try!(RequestChargedParser::parse_xml("x-amz-request-charged", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl GetObjectAclOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &GetObjectAclOutput) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
+        GrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.grants);
+        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
+    }
+}
+
+impl PutObjectAclOutputParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectAclOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = PutObjectAclOutput::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "x-amz-request-charged" {
+                obj.request_charged = try!(RequestChargedParser::parse_xml("x-amz-request-charged", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl PutObjectAclOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &PutObjectAclOutput) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
     }
 }

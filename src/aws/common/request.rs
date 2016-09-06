@@ -92,7 +92,6 @@ impl DispatchSignedRequest for Client {
             "GET" => Method::Get,
             "HEAD" => Method::Head,
             v @ _ => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) }),
-
         };
 
         // translate the headers map to a format Hyper likes

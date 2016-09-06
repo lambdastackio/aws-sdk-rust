@@ -107,7 +107,7 @@ pub struct Grantee {
     /// Email address of the grantee.
     pub email_address: Option<EmailAddress>,
     /// Type of grantee
-    pub foo_type: Type,
+    pub some_type: Type,
     /// Screen name of the grantee.
     pub display_name: Option<DisplayName>,
     /// The canonical user ID of the grantee.
@@ -201,7 +201,7 @@ impl GranteeParser {
                 continue;
             }
             if current_name == "xsi:type" {
-                obj.foo_type = try!(TypeParser::parse_xml("xsi:type", stack));
+                obj.some_type = try!(TypeParser::parse_xml("xsi:type", stack));
                 continue;
             }
             if current_name == "DisplayName" {
@@ -232,7 +232,7 @@ impl GranteeWriter {
         if let Some(ref obj) = obj.email_address {
             EmailAddressWriter::write_params(params, &(prefix.to_string() + "EmailAddress"), obj);
         }
-        TypeWriter::write_params(params, &(prefix.to_string() + "xsi:type"), &obj.foo_type);
+        TypeWriter::write_params(params, &(prefix.to_string() + "xsi:type"), &obj.some_type);
         if let Some(ref obj) = obj.display_name {
             DisplayNameWriter::write_params(params, &(prefix.to_string() + "DisplayName"), obj);
         }

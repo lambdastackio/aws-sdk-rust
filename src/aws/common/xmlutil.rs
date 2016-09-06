@@ -234,7 +234,7 @@ pub fn end_element_skip<T: Peek + Next>(element_name: &str, stack: &mut T) -> Re
             Err(XmlParseError::new(&format!("END Expected {} got {}", element_name, name.local_name)))
         }
     } else {
-        //Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
+        // Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
         // Calling this function means you know it may not be the end (dynamic errors) but you
         // have capture all you want so end it anyway.
         Ok(())
@@ -327,8 +327,7 @@ mod tests {
 
         // now we're set up to use string:
         let my_chars = string_field("QueueUrl", &mut reader).unwrap();
-        assert_eq!(my_chars,
-                   "https://sqs.us-east-1.amazonaws.com/347452556413/testqueue")
+        assert_eq!(my_chars, "https://sqs.us-east-1.amazonaws.com/347452556413/testqueue")
     }
 
     #[test]

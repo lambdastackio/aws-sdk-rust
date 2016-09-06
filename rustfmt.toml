@@ -1,9 +1,17 @@
-max_width = 120
-ideal_width = 100
-report_todo = "Always"
-report_fixme = "Unnumbered"
 reorder_imports = true
 reorder_imported_names = true
-wrap_match_arms = false
-match_block_trailing_comma = true
 where_trailing_comma = true
+
+max_width = 120
+ideal_width = 120
+fn_call_width = 100
+
+fn_args_density = "Compressed"
+
+enum_trailing_comma = true
+match_block_trailing_comma = true
+struct_trailing_comma = "Always"
+wrap_comments = true
+
+report_todo = "Always"
+report_fixme = "Always"

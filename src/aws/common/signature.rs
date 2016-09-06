@@ -291,19 +291,19 @@ impl<'a> SignedRequest<'a> {
 
         self.canonical_query_string = build_canonical_query_string(&self.params);
         self.canonical_uri = canonical_uri(&self.path);
-        // let canonical_headers = canonical_headers_v2(&self.headers);
-        // println!("----sign_v2----------");
-        // println!("{:?}", self.bucket);
-        // println!("{:?}", hostname);
-        // println!("{:?}", self.canonical_query_string);
-        // println!("{:?}", self.canonical_uri);
-        // println!("{:?}", canonical_headers);
-        // println!("**-------------------");
-        // println!("{:?}", self.headers);
-        // println!("{:?}", self.path);
-        // println!("{:?}", self.params);
-        // println!("---------------------");
-        //
+        //let canonical_headers = canonical_headers_v2(&self.headers);
+        //println!("----sign_v2----------");
+        //println!("{:?}", self.bucket);
+        //println!("{:?}", hostname);
+        //println!("{:?}", self.canonical_query_string);
+        //println!("{:?}", self.canonical_uri);
+        //println!("{:?}", canonical_headers);
+        //println!("**-------------------");
+        //println!("{:?}", self.headers);
+        //println!("{:?}", self.path);
+        //println!("{:?}", self.params);
+        //println!("---------------------");
+        
         // NOTE: If you set the 'date' header then include it in the string_to_sign w/o the
         // x-amz-date resource. If you do not use the date header but use the x-amz-date then set
         // the date in string_to_sign to "" and include x-amz-date in the resource. It makes it
@@ -334,10 +334,10 @@ impl<'a> SignedRequest<'a> {
                 // println!("{:?}", payload);
             },
         }
-        // println!("{:?}", self.canonical_query_string);
-        // println!("{:?}", string_to_sign);
-        // println!("===================");
-        //
+        //println!("{:?}", self.canonical_query_string);
+        //println!("{:?}", string_to_sign);
+        //println!("===================");
+
         let signature = {
             let mut hmac = HMAC::new(SHA1, creds.aws_secret_access_key().as_bytes());
             let _ = hmac.write_all(string_to_sign.as_bytes());
