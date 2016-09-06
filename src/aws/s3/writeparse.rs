@@ -415,25 +415,6 @@ impl IfUnmodifiedSinceWriter {
     }
 }
 
-pub type IsTruncated = bool;
-/// Parse `IsTruncated` from XML
-pub struct IsTruncatedParser;
-
-impl IsTruncatedParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IsTruncated, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = IsTruncated::default();
-
-        match characters(stack) {
-            Err(why) => return Ok(obj),
-            Ok(ref chars) => obj = bool::from_str(chars).unwrap(),
-        }
-
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 
 pub type MFADelete = String;
 /// Parse `MFADelete` from XML
@@ -1726,16 +1707,6 @@ impl WebsiteConfigurationWriter {
     }
 }
 
-/// Write `IsTruncated` contents to a `SignedRequest`
-pub struct IsTruncatedWriter;
-
-impl IsTruncatedWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &IsTruncated) {
-        params.put(name, &obj.to_string());
-    }
-}
-
-
 
 pub type NextKeyMarker = String;
 /// Parse `NextKeyMarker` from XML
@@ -2503,110 +2474,6 @@ impl MetadataWriter {
     }
 }
 
-
-/// Parse `ListObjectsOutput` from XML
-pub struct ListObjectsOutputParser;
-
-impl ListObjectsOutputParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = ListObjectsOutput::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Name" {
-                obj.name = try!(BucketNameParser::parse_xml("Name", stack));
-                continue;
-            }
-            if current_name == "NextMarker" {
-                obj.next_marker = try!(NextMarkerParser::parse_xml("NextMarker", stack));
-                continue;
-            }
-            if current_name == "Delimiter" {
-                obj.delimiter = try!(DelimiterParser::parse_xml("Delimiter", stack));
-                continue;
-            }
-            if current_name == "MaxKeys" {
-                obj.max_keys = try!(MaxKeysParser::parse_xml("MaxKeys", stack));
-                continue;
-            }
-            if current_name == "Prefix" {
-                obj.prefix = try!(PrefixParser::parse_xml("Prefix", stack));
-                continue;
-            }
-            if current_name == "Marker" {
-                obj.marker = try!(MarkerParser::parse_xml("Marker", stack));
-                continue;
-            }
-            if current_name == "EncodingType" {
-                obj.encoding_type = try!(EncodingTypeParser::parse_xml("EncodingType", stack));
-                continue;
-            }
-            if current_name == "IsTruncated" {
-                obj.is_truncated = try!(IsTruncatedParser::parse_xml("IsTruncated", stack));
-                continue;
-            }
-            if current_name == "Object" {
-                obj.contents = try!(ObjectListParser::parse_xml("Object", stack));
-                continue;
-            }
-            if current_name == "CommonPrefix" {
-                obj.common_prefixes = try!(CommonPrefixListParser::parse_xml("CommonPrefix", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `ListObjectsOutput` contents to a `SignedRequest`
-pub struct ListObjectsOutputWriter;
-
-impl ListObjectsOutputWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &ListObjectsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
-        NextMarkerWriter::write_params(params, &(prefix.to_string() + "NextMarker"), &obj.next_marker);
-        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
-        MaxKeysWriter::write_params(params, &(prefix.to_string() + "MaxKeys"), &obj.max_keys);
-        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
-        MarkerWriter::write_params(params, &(prefix.to_string() + "Marker"), &obj.marker);
-        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-        ObjectListWriter::write_params(params, &(prefix.to_string() + "Object"), &obj.contents);
-        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
-    }
-}
-
-pub type ObjectList = Vec<Object>;
-/// Parse `ObjectList` from XML
-pub struct ObjectListParser;
-
-impl ObjectListParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectList, XmlParseError> {
-        let mut obj = Vec::new();
-        while try!(peek_at_name(stack)) == "Object" {
-            obj.push(try!(ObjectParser::parse_xml("Object", stack)));
-        }
-        Ok(obj)
-    }
-}
-
-/// Write `ObjectList` contents to a `SignedRequest`
-pub struct ObjectListWriter;
-
-impl ObjectListWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &ObjectList) {
-        let mut index = 1;
-        for element in obj.iter() {
-            let key = &format!("{}.{}", name, index);
-            ObjectWriter::write_params(params, key, element);
-            index += 1;
-        }
-    }
-}
 
 pub type NextMarker = String;
 /// Parse `NextMarker` from XML
@@ -6011,61 +5878,6 @@ impl DeleteWriter {
     }
 }
 
-/// Parse `Object` from XML
-pub struct ObjectParser;
-
-impl ObjectParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Object, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = Object::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "LastModified" {
-                obj.last_modified = try!(LastModifiedParser::parse_xml("LastModified", stack));
-                continue;
-            }
-            if current_name == "ETag" {
-                obj.e_tag = try!(ETagParser::parse_xml("ETag", stack));
-                continue;
-            }
-            if current_name == "StorageClass" {
-                obj.storage_class = try!(ObjectStorageClassParser::parse_xml("StorageClass", stack));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            if current_name == "Owner" {
-                obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
-                continue;
-            }
-            if current_name == "Size" {
-                obj.size = try!(SizeParser::parse_xml("Size", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `Object` contents to a `SignedRequest`
-pub struct ObjectWriter;
-
-impl ObjectWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &Object) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LastModifiedWriter::write_params(params, &(prefix.to_string() + "LastModified"), &obj.last_modified);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        ObjectStorageClassWriter::write_params(params, &(prefix.to_string() + "StorageClass"), &obj.storage_class);
-        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        SizeWriter::write_params(params, &(prefix.to_string() + "Size"), &obj.size);
-    }
-}
 
 /// Parse `NotificationConfiguration` from XML
 pub struct NotificationConfigurationParser;

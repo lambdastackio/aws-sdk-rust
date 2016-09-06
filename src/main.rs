@@ -157,7 +157,7 @@ fn main() {
         Err(e) => println!("{:#?}", e)
     }
 */
-
+/*
     let mut get_object_acl = GetObjectAclRequest::default();
     get_object_acl.bucket = bucket_name.to_string();
     get_object_acl.key = "mytest.txt".to_string();
@@ -166,7 +166,7 @@ fn main() {
         Ok(acl) => println!("{:#?}", acl),
         Err(e) => println!("{:#?}", e)
     }
-
+*/
 /*
     let bucket_head = HeadBucketRequest { bucket: bucket_name.to_string() };
 
@@ -217,15 +217,16 @@ fn main() {
         Err(e) => println!("{:#?}", e)
     }
 */
-/*
+
     let mut list_objects = ListObjectsRequest::default();
     list_objects.bucket = bucket_name.to_string();
+    //list_objects.version = Some(2);
 
     match client.list_objects(&list_objects) {
         Ok(version) => println!("{:#?}", version),
         Err(e) => println!("{:#?}", e)
     }
-*/
+
 /*
     let bucket = DeleteBucketRequest{
         bucket: bucket_name,

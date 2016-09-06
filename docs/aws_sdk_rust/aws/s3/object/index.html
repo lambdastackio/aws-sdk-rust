@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-3008' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#18-1808' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-3098' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#18-2016' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Library Documentation</p>
 
 <p>This file contains everything related to <code>Objects</code>.</p>
@@ -288,7 +288,26 @@
                            <td><a class='struct' href='struct.ListObjectsOutput.html'
                                   title='aws_sdk_rust::aws::s3::object::ListObjectsOutput'>ListObjectsOutput</a></td>
                            <td class='docblock short'>
-                                
+                                <p>ListObjectsOutput contains the list of objects and their associated metadata for a given
+bucket name. There are two versions, version 1 and version 2. AWS S3 supports both.
+The struct field names that are unique for Version 1 are marked and those that are unique
+for Version 2 are marked. Those not marked are common between versions. The default for
+AWS is version 2 but you have to specify version 2 in ListObjectsRequest or it will default
+to version 1.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListObjectsOutputParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListObjectsOutputParser'>ListObjectsOutputParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>ListObjectsOutput</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListObjectsOutputWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListObjectsOutputWriter'>ListObjectsOutputWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>ListObjectsOutput</code> contents to a <code>SignedRequest</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -380,17 +399,45 @@ in the object&#39;s lifetime.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Object.html'
-                                  title='aws_sdk_rust::aws::s3::object::Object'>Object</a></td>
+                           <td><a class='struct' href='struct.ObjectIdentifier.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectIdentifier'>ObjectIdentifier</a></td>
                            <td class='docblock short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.ObjectIdentifier.html'
-                                  title='aws_sdk_rust::aws::s3::object::ObjectIdentifier'>ObjectIdentifier</a></td>
+                           <td><a class='struct' href='struct.ObjectMetadata.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectMetadata'>ObjectMetadata</a></td>
                            <td class='docblock short'>
-                                
+                                <p><code>ObjectMetadata</code> used for <code>Contents</code> for ListObjectsOutput</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ObjectMetadataListParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectMetadataListParser'>ObjectMetadataListParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>ObjectMetadataList</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ObjectMetadataListWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectMetadataListWriter'>ObjectMetadataListWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>ObjectMetadataList</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ObjectMetadataParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectMetadataParser'>ObjectMetadataParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>ObjectMetadata</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ObjectMetadataWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectMetadataWriter'>ObjectMetadataWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>ObjectMetadata</code> contents to a <code>SignedRequest</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -595,6 +642,13 @@ events to an Amazon Simple Notification Service (Amazon SNS) topic.</p>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.NextUploadIdMarker.html'
                                   title='aws_sdk_rust::aws::s3::object::NextUploadIdMarker'>NextUploadIdMarker</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.ObjectMetadataList.html'
+                                  title='aws_sdk_rust::aws::s3::object::ObjectMetadataList'>ObjectMetadataList</a></td>
                            <td class='docblock short'>
                                 
                            </td>

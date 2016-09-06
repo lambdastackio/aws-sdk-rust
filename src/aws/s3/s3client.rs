@@ -921,11 +921,12 @@ impl<P, D> S3Client<P, D>
     /// request parameters as selection criteria to return a subset of the objects in
     /// a bucket.
     pub fn list_objects(&self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, S3Error> {
+        let format = format!("/{}", if input.version == None {""} else {"?list-type=2"});
         let mut request = SignedRequest::new("GET",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/",
+                                             &format,
                                              &self.endpoint.signature);
         // let mut params = Params::new();
         // params.put("Action", "ListObjects");
@@ -942,7 +943,6 @@ impl<P, D> S3Client<P, D>
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
-
         match status {
             200 => {
                 Ok(try!(ListObjectsOutputParser::parse_xml("ListBucketResult", &mut stack)))

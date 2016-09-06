@@ -47,6 +47,8 @@ pub type MaxUploads = i32;
 
 pub type Expires = String;
 
+pub type ObjectMetadataList = Vec<ObjectMetadata>;
+
 /// Parse `Tag` from XML
 pub struct TagParser;
 
@@ -131,8 +133,27 @@ pub struct ExpiresParser;
 /// Write `Expires` contents to a `SignedRequest`
 pub struct ExpiresWriter;
 
+/// Parse `ListObjectsOutput` from XML
+pub struct ListObjectsOutputParser;
+
+/// Write `ListObjectsOutput` contents to a `SignedRequest`
+pub struct ListObjectsOutputWriter;
+
+/// Parse `ObjectMetadataList` from XML
+pub struct ObjectMetadataListParser;
+
+/// Write `ObjectMetadataList` contents to a `SignedRequest`
+pub struct ObjectMetadataListWriter;
+
+/// Parse `ObjectMetadata` from XML
+pub struct ObjectMetadataParser;
+
+/// Write `ObjectMetadata` contents to a `SignedRequest`
+pub struct ObjectMetadataWriter;
+
+/// `ObjectMetadata` used for `Contents` for ListObjectsOutput
 #[derive(Debug, Default)]
-pub struct Object {
+pub struct ObjectMetadata {
     pub last_modified: LastModified,
     pub e_tag: ETag,
     /// The class of storage used to store the object.
@@ -760,9 +781,34 @@ pub struct ReplicationRule {
 }
 
 #[derive(Debug, Default)]
+pub struct ListObjectsRequest {
+    /// Required. Name of bucket.
+    pub bucket: BucketName,
+    /// Two versions: the older version 1 and the newer version 2. Defaults to version 1. You
+    /// must specify version 2 with a value of `Some(2)` since it's an Option<i32> field type.
+    pub version: Option<i32>,
+    /// Limits the response to keys that begin with the specified prefix.
+    pub prefix: Option<Prefix>,
+    /// Sets the maximum number of keys returned in the response. The response might
+    /// contain fewer keys but will never contain more.
+    pub max_keys: Option<MaxKeys>,
+    /// A delimiter is a character you use to group keys.
+    pub delimiter: Option<Delimiter>,
+    /// Specifies the key to start with when listing objects in a bucket.
+    pub marker: Option<Marker>,
+    pub encoding_type: Option<EncodingType>,
+}
+
+/// ListObjectsOutput contains the list of objects and their associated metadata for a given
+/// bucket name. There are two versions, version 1 and version 2. AWS S3 supports both.
+/// The struct field names that are unique for Version 1 are marked and those that are unique
+/// for Version 2 are marked. Those not marked are common between versions. The default for
+/// AWS is version 2 but you have to specify version 2 in ListObjectsRequest or it will default
+/// to version 1.
+#[derive(Debug, Default)]
 pub struct ListObjectsOutput {
     pub name: BucketName,
-    /// When response is truncated (the IsTruncated element value in the response is
+    /// Version 1. When response is truncated (the IsTruncated element value in the response is
     /// true), you can use the key name in this field as marker in the subsequent
     /// request to get next set of objects. Amazon S3 lists objects in alphabetical
     /// order Note: This element is returned only if you have delimiter request
@@ -773,14 +819,26 @@ pub struct ListObjectsOutput {
     pub delimiter: Delimiter,
     pub max_keys: MaxKeys,
     pub prefix: Prefix,
+    /// Version 1.
     pub marker: Marker,
     /// Encoding type used by Amazon S3 to encode object keys in the response.
     pub encoding_type: EncodingType,
     /// A flag that indicates whether or not Amazon S3 returned all of the results
     /// that satisfied the search criteria.
     pub is_truncated: IsTruncated,
-    pub contents: ObjectList,
+    /// List of ObjectMetadata for each object in the given bucket.
+    pub contents: ObjectMetadataList,
     pub common_prefixes: CommonPrefixList,
+    /// Version 2. Returned if included in the request
+    pub continuation_token: ContinuationToken,
+    /// Version 2. If the response is truncated, Amazon S3 returns this parameter with a continuation token
+    /// that you can specify as the continuation-token in your next request to retrieve the next
+    /// set of keys.
+    pub next_continuation_token: ContinuationToken,
+    /// Version 2. Returned number of keys in response. Always <= MaxKeys.
+    pub key_count: KeyCount,
+    /// Version 2. Is included with the response if sent with the request.
+    pub start_after: StartAfter,
 }
 
 #[derive(Debug, Default)]
@@ -798,6 +856,8 @@ pub struct ListObjectVersionsRequest {
     pub encoding_type: Option<EncodingType>,
     /// Specifies the object version you want to start listing from.
     pub version_id_marker: Option<VersionIdMarker>,
+    /// Start the list after a specifc number.
+    pub start_after: Option<StartAfter>,
 }
 
 // New way
@@ -938,21 +998,6 @@ pub struct HeadObjectOutput {
     /// requested, the response will include this header to provide round trip message
     /// integrity verification of the customer-provided encryption key.
     pub sse_customer_key_md5: SSECustomerKeyMD5,
-}
-
-#[derive(Debug, Default)]
-pub struct ListObjectsRequest {
-    pub bucket: BucketName,
-    /// Limits the response to keys that begin with the specified prefix.
-    pub prefix: Option<Prefix>,
-    /// Sets the maximum number of keys returned in the response. The response might
-    /// contain fewer keys but will never contain more.
-    pub max_keys: Option<MaxKeys>,
-    /// A delimiter is a character you use to group keys.
-    pub delimiter: Option<Delimiter>,
-    /// Specifies the key to start with when listing objects in a bucket.
-    pub marker: Option<Marker>,
-    pub encoding_type: Option<EncodingType>,
 }
 
 #[derive(Debug, Default)]
@@ -1804,5 +1849,168 @@ impl ExpiresParser {
 impl ExpiresWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &Expires) {
         params.put(name, obj);
+    }
+}
+
+impl ListObjectsOutputParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectsOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = ListObjectsOutput::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "Name" {
+                obj.name = try!(BucketNameParser::parse_xml("Name", stack));
+                continue;
+            }
+            // Version 1
+            if current_name == "NextMarker" {
+                obj.next_marker = try!(NextMarkerParser::parse_xml("NextMarker", stack));
+                continue;
+            }
+            if current_name == "Delimiter" {
+                obj.delimiter = try!(DelimiterParser::parse_xml("Delimiter", stack));
+                continue;
+            }
+            if current_name == "MaxKeys" {
+                obj.max_keys = try!(MaxKeysParser::parse_xml("MaxKeys", stack));
+                continue;
+            }
+            if current_name == "Prefix" {
+                obj.prefix = try!(PrefixParser::parse_xml("Prefix", stack));
+                continue;
+            }
+            // Version 1
+            if current_name == "Marker" {
+                obj.marker = try!(MarkerParser::parse_xml("Marker", stack));
+                continue;
+            }
+            if current_name == "EncodingType" {
+                obj.encoding_type = try!(EncodingTypeParser::parse_xml("EncodingType", stack));
+                continue;
+            }
+            if current_name == "IsTruncated" {
+                obj.is_truncated = try!(IsTruncatedParser::parse_xml("IsTruncated", stack));
+                continue;
+            }
+            if current_name == "Contents" {
+                obj.contents = try!(ObjectMetadataListParser::parse_xml("Contents", stack));
+                continue;
+            }
+            if current_name == "CommonPrefix" {
+                obj.common_prefixes = try!(CommonPrefixListParser::parse_xml("CommonPrefix", stack));
+                continue;
+            }
+            // Version 2
+            if current_name == "KeyCount" {
+                obj.key_count = try!(KeyCountParser::parse_xml("KeyCount", stack));
+                continue;
+            }
+            // Version 2
+            if current_name == "ContinuationToken" {
+                obj.continuation_token = try!(ContinuationTokenParser::parse_xml("ContinuationToken", stack));
+                continue;
+            }
+            // Version 2
+            if current_name == "NextContinuationToken" {
+                obj.next_continuation_token = try!(ContinuationTokenParser::parse_xml("NextContinuationToken", stack));
+                continue;
+            }
+            // Version 2
+            if current_name == "StartAfter" {
+                obj.start_after = try!(StartAfterParser::parse_xml("StartAfter", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl ListObjectsOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &ListObjectsOutput) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
+        NextMarkerWriter::write_params(params, &(prefix.to_string() + "NextMarker"), &obj.next_marker);
+        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
+        MaxKeysWriter::write_params(params, &(prefix.to_string() + "MaxKeys"), &obj.max_keys);
+        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
+        MarkerWriter::write_params(params, &(prefix.to_string() + "Marker"), &obj.marker);
+        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
+        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
+        ObjectMetadataListWriter::write_params(params, &(prefix.to_string() + "Contents"), &obj.contents);
+        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
+    }
+}
+
+impl ObjectMetadataListParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectMetadataList, XmlParseError> {
+        let mut obj = Vec::new();
+        while try!(peek_at_name(stack)) == tag_name {
+            obj.push(try!(ObjectMetadataParser::parse_xml(tag_name, stack)));
+        }
+        Ok(obj)
+    }
+}
+
+impl ObjectMetadataListWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &ObjectMetadataList) {
+        let mut index = 1;
+        for element in obj.iter() {
+            let key = &format!("{}.{}", name, index);
+            ObjectMetadataWriter::write_params(params, key, element);
+            index += 1;
+        }
+    }
+}
+
+impl ObjectMetadataParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectMetadata, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = ObjectMetadata::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "LastModified" {
+                obj.last_modified = try!(LastModifiedParser::parse_xml("LastModified", stack));
+                continue;
+            }
+            if current_name == "ETag" {
+                obj.e_tag = try!(ETagParser::parse_xml("ETag", stack));
+                continue;
+            }
+            if current_name == "StorageClass" {
+                obj.storage_class = try!(ObjectStorageClassParser::parse_xml("StorageClass", stack));
+                continue;
+            }
+            if current_name == "Key" {
+                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
+                continue;
+            }
+            if current_name == "Owner" {
+                obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
+                continue;
+            }
+            if current_name == "Size" {
+                obj.size = try!(SizeParser::parse_xml("Size", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl ObjectMetadataWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &ObjectMetadata) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        LastModifiedWriter::write_params(params, &(prefix.to_string() + "LastModified"), &obj.last_modified);
+        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
+        ObjectStorageClassWriter::write_params(params, &(prefix.to_string() + "StorageClass"), &obj.storage_class);
+        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
+        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
+        SizeWriter::write_params(params, &(prefix.to_string() + "Size"), &obj.size);
     }
 }

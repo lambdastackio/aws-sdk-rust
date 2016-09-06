@@ -30,6 +30,8 @@ pub type Body = Vec<u8>;
 
 pub type MaxKeys = i32;
 
+pub type KeyCount = i32;
+
 pub type URI = String;
 
 pub type ID = String;
@@ -52,6 +54,12 @@ pub type Value = String;
 
 pub type SkipElement = String;
 
+pub type IsTruncated = bool;
+
+pub type StartAfter = String;
+
+pub type ContinuationToken = String;
+
 /// Parse `Body` from XML
 pub struct BodyParser;
 
@@ -63,6 +71,12 @@ pub struct MaxKeysParser;
 
 /// Write `MaxKeys` contents to a `SignedRequest`
 pub struct MaxKeysWriter;
+
+/// Parse `KeyCount` from XML
+pub struct KeyCountParser;
+
+/// Write `KeyCount` contents to a `SignedRequest`
+pub struct KeyCountWriter;
 
 /// Parse `URI` from XML
 pub struct URIParser;
@@ -133,6 +147,24 @@ pub struct ValueWriter;
 /// Parse `SkipElement` from XML
 pub struct SkipElementParser;
 
+/// Parse `IsTruncated` from XML
+pub struct IsTruncatedParser;
+
+/// Write `IsTruncated` contents to a `SignedRequest`
+pub struct IsTruncatedWriter;
+
+/// Parse `ContinuationToken` from XML
+pub struct ContinuationTokenParser;
+
+/// Write `ContinuationToken` contents to a `SignedRequest`
+pub struct ContinuationTokenWriter;
+
+/// Parse `StartAfter` from XML
+pub struct StartAfterParser;
+
+/// Write `StartAfter` contents to a `SignedRequest`
+pub struct StartAfterWriter;
+
 /// Owner
 #[derive(Debug, Default)]
 pub struct Owner {
@@ -168,6 +200,21 @@ impl MaxKeysParser {
 
 impl MaxKeysWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &MaxKeys) {
+        params.put(name, &obj.to_string());
+    }
+}
+
+impl KeyCountParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<KeyCount, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl KeyCountWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &KeyCount) {
         params.put(name, &obj.to_string());
     }
 }
@@ -361,5 +408,57 @@ impl SkipElementParser {
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(format!("<{}>{}</{}>", tag_name, obj, tag_name))
+    }
+}
+
+impl IsTruncatedParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IsTruncated, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = IsTruncated::default();
+
+        match characters(stack) {
+            Err(_) => return Ok(obj),
+            Ok(ref chars) => obj = bool::from_str(chars).unwrap(),
+        }
+
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl IsTruncatedWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &IsTruncated) {
+        params.put(name, &obj.to_string());
+    }
+}
+
+impl ContinuationTokenParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContinuationToken, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl ContinuationTokenWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &ContinuationToken) {
+        params.put(name, obj);
+    }
+}
+
+impl StartAfterParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<StartAfter, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl StartAfterWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &StartAfter) {
+        params.put(name, obj);
     }
 }

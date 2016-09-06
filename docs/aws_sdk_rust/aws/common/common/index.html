@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-18' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/common.rs.html#17-365' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-18' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/common.rs.html#17-464' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p><code>common</code> contains the type, struct, enum and impls that are common accross most requests
 such as buckets, objects etc.
 Library Documentation</p>
@@ -83,6 +83,20 @@ such as buckets, objects etc.</p>
                                   title='aws_sdk_rust::aws::common::common::CodeWriter'>CodeWriter</a></td>
                            <td class='docblock short'>
                                 <p>Write <code>Code</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ContinuationTokenParser.html'
+                                  title='aws_sdk_rust::aws::common::common::ContinuationTokenParser'>ContinuationTokenParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>ContinuationToken</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ContinuationTokenWriter.html'
+                                  title='aws_sdk_rust::aws::common::common::ContinuationTokenWriter'>ContinuationTokenWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>ContinuationToken</code> contents to a <code>SignedRequest</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -139,6 +153,34 @@ such as buckets, objects etc.</p>
                                   title='aws_sdk_rust::aws::common::common::IDWriter'>IDWriter</a></td>
                            <td class='docblock short'>
                                 <p>Write <code>ID</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.IsTruncatedParser.html'
+                                  title='aws_sdk_rust::aws::common::common::IsTruncatedParser'>IsTruncatedParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>IsTruncated</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.IsTruncatedWriter.html'
+                                  title='aws_sdk_rust::aws::common::common::IsTruncatedWriter'>IsTruncatedWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>IsTruncated</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.KeyCountParser.html'
+                                  title='aws_sdk_rust::aws::common::common::KeyCountParser'>KeyCountParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>KeyCount</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.KeyCountWriter.html'
+                                  title='aws_sdk_rust::aws::common::common::KeyCountWriter'>KeyCountWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>KeyCount</code> contents to a <code>SignedRequest</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -212,6 +254,20 @@ such as buckets, objects etc.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class='struct' href='struct.StartAfterParser.html'
+                                  title='aws_sdk_rust::aws::common::common::StartAfterParser'>StartAfterParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>StartAfter</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.StartAfterWriter.html'
+                                  title='aws_sdk_rust::aws::common::common::StartAfterWriter'>StartAfterWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>StartAfter</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='struct' href='struct.TypeParser.html'
                                   title='aws_sdk_rust::aws::common::common::TypeParser'>TypeParser</a></td>
                            <td class='docblock short'>
@@ -269,6 +325,13 @@ such as buckets, objects etc.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class='type' href='type.ContinuationToken.html'
+                                  title='aws_sdk_rust::aws::common::common::ContinuationToken'>ContinuationToken</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='type' href='type.DisplayName.html'
                                   title='aws_sdk_rust::aws::common::common::DisplayName'>DisplayName</a></td>
                            <td class='docblock short'>
@@ -297,6 +360,20 @@ such as buckets, objects etc.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class='type' href='type.IsTruncated.html'
+                                  title='aws_sdk_rust::aws::common::common::IsTruncated'>IsTruncated</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KeyCount.html'
+                                  title='aws_sdk_rust::aws::common::common::KeyCount'>KeyCount</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='type' href='type.MaxKeys.html'
                                   title='aws_sdk_rust::aws::common::common::MaxKeys'>MaxKeys</a></td>
                            <td class='docblock short'>
@@ -320,6 +397,13 @@ such as buckets, objects etc.</p>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.SkipElement.html'
                                   title='aws_sdk_rust::aws::common::common::SkipElement'>SkipElement</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.StartAfter.html'
+                                  title='aws_sdk_rust::aws::common::common::StartAfter'>StartAfter</a></td>
                            <td class='docblock short'>
                                 
                            </td>
