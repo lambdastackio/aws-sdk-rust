@@ -166,6 +166,7 @@
 <span id="122">122</span>
 <span id="123">123</span>
 <span id="124">124</span>
+<span id="125">125</span>
 </pre><pre class='rust '>
 <span class='comment'>/*
  Copyright 2016 LambdaStack All rights reserved.
@@ -197,7 +198,8 @@
 <span class='doccomment'>/// AWS returns a core error XML structure plus additional elements based on the type of request.</span>
 <span class='doccomment'>/// The ```expanded_message``` captures those additional elements if you need them.</span>
 <span class='doccomment'>///</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>Clone</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default, Clone)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>Clone</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>AWSError</span> {
     <span class='doccomment'>/// code is an alphanumeric value that in some cases can be a number or a short</span>
     <span class='doccomment'>/// description of the issue with no spaces.</span>

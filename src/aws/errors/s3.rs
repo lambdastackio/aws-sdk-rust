@@ -33,13 +33,15 @@ use aws::s3::writeparse::*;
 
 /// S3Error is a larger container error struct that contains a more general error about the task
 /// that was requested + `AWSError` which contains the details from AWS S3.
-#[derive(Debug)]
+//#[derive(Debug)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct S3Error {
     pub message: String,
     pub aws: AWSError
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct S3ClientError {
     pub version_id: ObjectVersionId,
     pub code: Code,

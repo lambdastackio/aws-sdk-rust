@@ -28,7 +28,8 @@ use aws::s3::writeparse::*;
 /// AWS returns a core error XML structure plus additional elements based on the type of request.
 /// The ```expanded_message``` captures those additional elements if you need them.
 ///
-#[derive(Debug, Default, Clone)]
+//#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
 pub struct AWSError {
     /// code is an alphanumeric value that in some cases can be a number or a short
     /// description of the issue with no spaces.

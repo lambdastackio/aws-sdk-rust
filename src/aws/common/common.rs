@@ -166,7 +166,7 @@ pub struct StartAfterParser;
 pub struct StartAfterWriter;
 
 /// Owner
-#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Owner {
     pub display_name: DisplayName,
     pub id: ID,

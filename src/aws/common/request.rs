@@ -39,6 +39,7 @@ use aws::common::signature::SignedRequest;
 ///
 /// All HTTP calls are sent from here.
 ///
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct HttpResponse {
     /// HTTP status code
     pub status: u16,
@@ -49,7 +50,7 @@ pub struct HttpResponse {
 }
 
 /// HTTP Error returned from the DispatchSignedRequest Trait. It also implements the Error Trait.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Default, PartialEq, RustcDecodable, RustcEncodable)]
 pub struct HttpDispatchError {
     message: String,
 }

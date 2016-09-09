@@ -1211,7 +1211,8 @@ impl PutBucketNotificationRequestWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct NotificationConfigurationDeprecated {
     pub cloud_function_configuration: CloudFunctionConfiguration,
     pub queue_configuration: QueueConfigurationDeprecated,
@@ -2317,7 +2318,7 @@ impl RoleWriter {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CommonPrefix {
     pub prefix: Prefix,
 }
@@ -3703,7 +3704,8 @@ impl ObjectStorageClassWriter {
 }
 
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct RequestPaymentConfiguration {
     /// Specifies who pays for the download and request fees.
     pub payer: Payer,
@@ -3767,7 +3769,8 @@ impl RequestPayerWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketWebsiteRequest {
     pub bucket: BucketName,
 }
@@ -3831,7 +3834,8 @@ impl RulesWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Rule {
     /// If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is
     /// not currently being applied.
@@ -3940,6 +3944,7 @@ impl GetBucketVersioningRequestParser {
 
 /// Write `GetBucketVersioningRequest` contents to a `SignedRequest`
 pub struct GetBucketVersioningRequestWriter;
+
 impl GetBucketVersioningRequestWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &GetBucketVersioningRequest) {
         let mut prefix = name.to_string();
@@ -4006,7 +4011,8 @@ impl BucketVersioningStatusWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct LifecycleExpiration {
     /// Indicates at what date the object is to be moved or deleted. Should be in GMT
     /// ISO 8601 Format.
@@ -4112,7 +4118,8 @@ impl NoncurrentVersionExpirationWriter {
 /// (or versioning is suspended), you can set this action to request that Amazon
 /// S3 transition noncurrent object versions to the GLACIER storage class at a
 /// specific period in the object's lifetime.
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct NoncurrentVersionTransition {
     /// Specifies the number of days an object is noncurrent before Amazon S3 can
     /// perform the associated action. For information about the noncurrent days
@@ -4360,7 +4367,8 @@ impl IfModifiedSinceWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Condition {
     /// The HTTP error code when the redirect is applied. In the event of an error, if
     /// the error code equals this value, then the specified redirect is applied.
@@ -4414,7 +4422,8 @@ impl ConditionWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Transition {
     /// Indicates at what date the object is to be moved or deleted. Should be in GMT
     /// ISO 8601 Format.
@@ -4585,7 +4594,8 @@ impl PutBucketRequestPaymentRequestWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListBucketsOutput {
     pub owner: Owner,
     pub buckets: Buckets,
@@ -4621,6 +4631,7 @@ impl ListBucketsOutputParser {
 
 /// Write `ListBucketsOutput` contents to a `SignedRequest`
 pub struct ListBucketsOutputWriter;
+
 impl ListBucketsOutputWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &ListBucketsOutput) {
         let mut prefix = name.to_string();
@@ -4630,7 +4641,8 @@ impl ListBucketsOutputWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CreateBucketOutput {
     pub location: Location,
 }
@@ -4753,7 +4765,8 @@ impl BucketsWriter {
     }
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CreateBucketConfiguration {
     /// Specifies the region where the bucket will be created. If you don't specify a
     /// region, the bucket will be created in US Standard.
@@ -6091,7 +6104,8 @@ impl S3ClientMessageWriter {
 
 
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ObjectVersion {
     /// Date and time the object was last modified.
     pub last_modified: LastModified,

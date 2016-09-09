@@ -54,6 +54,7 @@ use aws::s3::endpoint::Signature;
 /// the Amazon Signature Version 4 signing process
 /// version - represents the Signature version. The default is 4 but it can also be set to 2 for older environments.
 #[derive(Debug)]
+//#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct SignedRequest<'a> {
     method: String,
     service: String,
@@ -303,7 +304,7 @@ impl<'a> SignedRequest<'a> {
         //println!("{:?}", self.path);
         //println!("{:?}", self.params);
         //println!("---------------------");
-        
+
         // NOTE: If you set the 'date' header then include it in the string_to_sign w/o the
         // x-amz-date resource. If you do not use the date header but use the x-amz-date then set
         // the date in string_to_sign to "" and include x-amz-date in the resource. It makes it

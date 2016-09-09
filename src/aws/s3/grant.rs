@@ -88,21 +88,24 @@ pub struct TargetGrantParser;
 /// Write `TargetGrant` contents to a `SignedRequest`
 pub struct TargetGrantWriter;
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct TargetGrant {
     pub grantee: Grantee,
     /// Logging permissions assigned to the Grantee for the bucket.
     pub permission: BucketLogsPermission,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Grant {
     pub grantee: Grantee,
     /// Specifies the permission given to the grantee.
     pub permission: Permission,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Grantee {
     /// Email address of the grantee.
     pub email_address: Option<EmailAddress>,

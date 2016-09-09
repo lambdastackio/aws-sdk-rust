@@ -2058,6 +2058,64 @@
 <span id="2014">2014</span>
 <span id="2015">2015</span>
 <span id="2016">2016</span>
+<span id="2017">2017</span>
+<span id="2018">2018</span>
+<span id="2019">2019</span>
+<span id="2020">2020</span>
+<span id="2021">2021</span>
+<span id="2022">2022</span>
+<span id="2023">2023</span>
+<span id="2024">2024</span>
+<span id="2025">2025</span>
+<span id="2026">2026</span>
+<span id="2027">2027</span>
+<span id="2028">2028</span>
+<span id="2029">2029</span>
+<span id="2030">2030</span>
+<span id="2031">2031</span>
+<span id="2032">2032</span>
+<span id="2033">2033</span>
+<span id="2034">2034</span>
+<span id="2035">2035</span>
+<span id="2036">2036</span>
+<span id="2037">2037</span>
+<span id="2038">2038</span>
+<span id="2039">2039</span>
+<span id="2040">2040</span>
+<span id="2041">2041</span>
+<span id="2042">2042</span>
+<span id="2043">2043</span>
+<span id="2044">2044</span>
+<span id="2045">2045</span>
+<span id="2046">2046</span>
+<span id="2047">2047</span>
+<span id="2048">2048</span>
+<span id="2049">2049</span>
+<span id="2050">2050</span>
+<span id="2051">2051</span>
+<span id="2052">2052</span>
+<span id="2053">2053</span>
+<span id="2054">2054</span>
+<span id="2055">2055</span>
+<span id="2056">2056</span>
+<span id="2057">2057</span>
+<span id="2058">2058</span>
+<span id="2059">2059</span>
+<span id="2060">2060</span>
+<span id="2061">2061</span>
+<span id="2062">2062</span>
+<span id="2063">2063</span>
+<span id="2064">2064</span>
+<span id="2065">2065</span>
+<span id="2066">2066</span>
+<span id="2067">2067</span>
+<span id="2068">2068</span>
+<span id="2069">2069</span>
+<span id="2070">2070</span>
+<span id="2071">2071</span>
+<span id="2072">2072</span>
+<span id="2073">2073</span>
+<span id="2074">2074</span>
 </pre><pre class='rust '>
 <span class='comment'>//</span>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
@@ -2213,7 +2271,7 @@
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ObjectMetadataWriter</span>;
 
 <span class='doccomment'>/// `ObjectMetadata` used for `Contents` for ListObjectsOutput</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ObjectMetadata</span> {
     <span class='kw'>pub</span> <span class='ident'>last_modified</span>: <span class='ident'>LastModified</span>,
     <span class='kw'>pub</span> <span class='ident'>e_tag</span>: <span class='ident'>ETag</span>,
@@ -2224,7 +2282,8 @@
     <span class='kw'>pub</span> <span class='ident'>size</span>: <span class='ident'>Size</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Delete</span> {
     <span class='kw'>pub</span> <span class='ident'>objects</span>: <span class='ident'>ObjectIdentifierList</span>,
     <span class='doccomment'>/// Element to enable quiet mode for the request. When you add this element, you</span>
@@ -2232,7 +2291,8 @@
     <span class='kw'>pub</span> <span class='ident'>quiet</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Quiet</span><span class='op'>&gt;</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetObjectOutput</span> {
     <span class='doccomment'>/// Last modified date of the object</span>
     <span class='kw'>pub</span> <span class='ident'>last_modified</span>: <span class='ident'>LastModified</span>,
@@ -2303,12 +2363,14 @@
     <span class='kw'>pub</span> <span class='ident'>sse_customer_key_md5</span>: <span class='ident'>SSECustomerKeyMD5</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>RestoreObjectOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>request_charged</span>: <span class='ident'>RequestCharged</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>RestoreObjectRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>version_id</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ObjectVersionId</span><span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>restore_request</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>RestoreRequest</span><span class='op'>&gt;</span>,
@@ -2317,13 +2379,15 @@
     <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>RestoreRequest</span> {
     <span class='doccomment'>/// Lifetime of the active copy in days</span>
     <span class='kw'>pub</span> <span class='ident'>days</span>: <span class='ident'>Days</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteObjectRequest</span> {
     <span class='doccomment'>/// The concatenation of the authentication device&#39;s serial number, a space, and</span>
     <span class='doccomment'>/// the value that is displayed on your authentication device.</span>
@@ -2335,7 +2399,8 @@
     <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteObjectOutput</span> {
     <span class='doccomment'>/// Returns the version ID of the delete marker created as a result of the DELETE</span>
     <span class='doccomment'>/// operation.</span>
@@ -2346,14 +2411,16 @@
     <span class='kw'>pub</span> <span class='ident'>delete_marker</span>: <span class='ident'>DeleteMarker</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteObjectsOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>deleted</span>: <span class='ident'>DeletedObjects</span>,
     <span class='kw'>pub</span> <span class='ident'>errors</span>: <span class='ident'>Errors</span>,
     <span class='kw'>pub</span> <span class='ident'>request_charged</span>: <span class='ident'>RequestCharged</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeletedObject</span> {
     <span class='kw'>pub</span> <span class='ident'>version_id</span>: <span class='ident'>ObjectVersionId</span>,
     <span class='kw'>pub</span> <span class='ident'>delete_marker_version_id</span>: <span class='ident'>DeleteMarkerVersionId</span>,
@@ -2361,7 +2428,8 @@
     <span class='kw'>pub</span> <span class='ident'>delete_marker</span>: <span class='ident'>DeleteMarker</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutObjectOutput</span> {
     <span class='doccomment'>/// If server-side encryption with a customer-provided encryption key was</span>
     <span class='doccomment'>/// requested, the response will include this header confirming the encryption</span>
@@ -2389,7 +2457,8 @@
 
 <span class='doccomment'>/// Container for specifying the configuration when you want Amazon S3 to publish</span>
 <span class='doccomment'>/// events to an Amazon Simple Notification Service (Amazon SNS) topic.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>TopicConfiguration</span> {
     <span class='kw'>pub</span> <span class='ident'>id</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>NotificationId</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects</span>
@@ -2400,7 +2469,8 @@
 
 <span class='doccomment'>/// Container for specifying an configuration when you want Amazon S3 to publish</span>
 <span class='doccomment'>/// events to an Amazon Simple Queue Service (Amazon SQS) queue.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>QueueConfiguration</span> {
     <span class='kw'>pub</span> <span class='ident'>id</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>NotificationId</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects</span>
@@ -2409,7 +2479,8 @@
     <span class='kw'>pub</span> <span class='ident'>events</span>: <span class='ident'>EventList</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ObjectIdentifier</span> {
     <span class='doccomment'>/// VersionId for the specific version of the object to delete.</span>
     <span class='kw'>pub</span> <span class='ident'>version_id</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ObjectVersionId</span><span class='op'>&gt;</span>,
@@ -2417,7 +2488,8 @@
     <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CreateMultipartUploadRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>request_payer</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>RequestPayer</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// Specifies what content encodings have been applied to the object and thus what</span>
@@ -2478,7 +2550,13 @@
     <span class='kw'>pub</span> <span class='ident'>sse_customer_key_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>SSECustomerKeyMD5</span><span class='op'>&gt;</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='comment'>// NOTE: &amp;&#39;a [u8] may require a custom RustcDecodable</span>
+
+<span class='doccomment'>/// NB: CompleteMultipartUploadRequest is *not* JSON decodable without implementing a custom to_json trait</span>
+<span class='doccomment'>/// because of Option&lt;&amp;&#39;a [u8]&gt;.</span>
+<span class='doccomment'>///</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CompleteMultipartUploadRequest</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='kw'>pub</span> <span class='ident'>multipart_upload</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>u8</span>]<span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>upload_id</span>: <span class='ident'>MultipartUploadId</span>,
@@ -2487,7 +2565,13 @@
     <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='comment'>// NOTE: &amp;&#39;a [u8] may require a custom RustcDecodable</span>
+
+<span class='doccomment'>/// NB: UploadPartRequest is *not* JSON decodable without implementing a custom to_json trait</span>
+<span class='doccomment'>/// because of Option&lt;&amp;&#39;a [u8]&gt;.</span>
+<span class='doccomment'>///</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>UploadPartRequest</span> <span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='kw'>pub</span> <span class='ident'>body</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>u8</span>]<span class='op'>&gt;</span>,
     <span class='doccomment'>/// Specifies the algorithm to use to when encrypting the object (e.g., AES256).</span>
@@ -2517,7 +2601,8 @@
     <span class='kw'>pub</span> <span class='ident'>part_number</span>: <span class='ident'>PartNumber</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Part</span> {
     <span class='doccomment'>/// Date and time at which the part was uploaded.</span>
     <span class='kw'>pub</span> <span class='ident'>last_modified</span>: <span class='ident'>LastModified</span>,
@@ -2530,7 +2615,13 @@
     <span class='kw'>pub</span> <span class='ident'>size</span>: <span class='ident'>Size</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='comment'>// NOTE: &amp;&#39;a [u8] may require a custom RustcDecodable</span>
+
+<span class='doccomment'>/// NB: PutObjectRequest is *not* JSON decodable without implementing a custom to_json trait</span>
+<span class='doccomment'>/// because of Option&lt;&amp;&#39;a [u8]&gt;.</span>
+<span class='doccomment'>///</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutObjectRequest</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='kw'>pub</span> <span class='ident'>request_payer</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>RequestPayer</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// Specifies what content encodings have been applied to the object and thus what</span>
@@ -2597,7 +2688,8 @@
     <span class='kw'>pub</span> <span class='ident'>sse_customer_key_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>SSECustomerKeyMD5</span><span class='op'>&gt;</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetObjectRequest</span> {
     <span class='doccomment'>/// Sets the Content-Encoding header of the response.</span>
     <span class='kw'>pub</span> <span class='ident'>response_content_encoding</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ResponseContentEncoding</span><span class='op'>&gt;</span>,
@@ -2646,7 +2738,8 @@
     <span class='kw'>pub</span> <span class='ident'>sse_customer_key_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>SSECustomerKeyMD5</span><span class='op'>&gt;</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Initiator</span> {
     <span class='doccomment'>/// Name of the Principal.</span>
     <span class='kw'>pub</span> <span class='ident'>display_name</span>: <span class='ident'>DisplayName</span>,
@@ -2655,14 +2748,16 @@
     <span class='kw'>pub</span> <span class='ident'>id</span>: <span class='ident'>ID</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetObjectTorrentRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
     <span class='kw'>pub</span> <span class='ident'>request_payer</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>RequestPayer</span><span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Redirect</span> {
     <span class='doccomment'>/// The specific object key to use in the redirect request. For example, redirect</span>
     <span class='doccomment'>/// request to error.html. Not required if one of the sibling is present. Can be</span>
@@ -2685,13 +2780,15 @@
     <span class='kw'>pub</span> <span class='ident'>http_redirect_code</span>: <span class='ident'>HttpRedirectCode</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ErrorDocument</span> {
     <span class='doccomment'>/// The object key name to use when a 4XX class error occurs.</span>
     <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>IndexDocument</span> {
     <span class='doccomment'>/// A suffix that is appended to a request that is for a directory on the website</span>
     <span class='doccomment'>/// endpoint (e.g. if the suffix is index.html and you make a request to</span>
@@ -2701,7 +2798,8 @@
     <span class='kw'>pub</span> <span class='ident'>suffix</span>: <span class='ident'>Suffix</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>RedirectAllRequestsTo</span> {
     <span class='doccomment'>/// Name of the host where requests will be redirected.</span>
     <span class='kw'>pub</span> <span class='ident'>host_name</span>: <span class='ident'>HostName</span>,
@@ -2711,7 +2809,8 @@
 }
 
 <span class='doccomment'>/// Container for specifying the AWS Lambda notification configuration.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LambdaFunctionConfiguration</span> {
     <span class='doccomment'>/// Lambda cloud function ARN that Amazon S3 can invoke when it detects events of</span>
     <span class='doccomment'>/// the specified type.</span>
@@ -2720,7 +2819,8 @@
     <span class='kw'>pub</span> <span class='ident'>events</span>: <span class='ident'>EventList</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Tag</span> {
     <span class='doccomment'>/// Value of the tag.</span>
     <span class='kw'>pub</span> <span class='ident'>value</span>: <span class='ident'>Value</span>,
@@ -2728,13 +2828,15 @@
     <span class='kw'>pub</span> <span class='ident'>key</span>: <span class='ident'>ObjectKey</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CopyObjectResult</span> {
     <span class='kw'>pub</span> <span class='ident'>last_modified</span>: <span class='ident'>LastModified</span>,
     <span class='kw'>pub</span> <span class='ident'>e_tag</span>: <span class='ident'>ETag</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ListMultipartUploadsOutput</span> {
     <span class='doccomment'>/// Upload ID after which listing began.</span>
     <span class='kw'>pub</span> <span class='ident'>upload_id_marker</span>: <span class='ident'>UploadIdMarker</span>,
@@ -2766,7 +2868,8 @@
     <span class='kw'>pub</span> <span class='ident'>is_truncated</span>: <span class='ident'>IsTruncated</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CreateMultipartUploadOutput</span> {
     <span class='doccomment'>/// If server-side encryption with a customer-provided encryption key was</span>
     <span class='doccomment'>/// requested, the response will include this header confirming the encryption</span>
@@ -2791,7 +2894,8 @@
     <span class='kw'>pub</span> <span class='ident'>ssekms_key_id</span>: <span class='ident'>SSEKMSKeyId</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CompleteMultipartUploadOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>request_charged</span>: <span class='ident'>RequestCharged</span>,
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
@@ -2817,7 +2921,8 @@
 <span class='doccomment'>/// configuration action on a bucket that has versioning enabled (or suspended) to</span>
 <span class='doccomment'>/// request that Amazon S3 delete noncurrent object versions at a specific period</span>
 <span class='doccomment'>/// in the object&#39;s lifetime.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>NoncurrentVersionExpiration</span> {
     <span class='doccomment'>/// Specifies the number of days an object is noncurrent before Amazon S3 can</span>
     <span class='doccomment'>/// perform the associated action. For information about the noncurrent days</span>
@@ -2827,7 +2932,8 @@
     <span class='kw'>pub</span> <span class='ident'>noncurrent_days</span>: <span class='ident'>Days</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ReplicationRule</span> {
     <span class='doccomment'>/// The rule is ignored if status is not Enabled.</span>
     <span class='kw'>pub</span> <span class='ident'>status</span>: <span class='ident'>ReplicationRuleStatus</span>,
@@ -2841,7 +2947,8 @@
     <span class='kw'>pub</span> <span class='ident'>id</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ID</span><span class='op'>&gt;</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ListObjectsRequest</span> {
     <span class='doccomment'>/// Required. Name of bucket.</span>
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
@@ -2866,7 +2973,8 @@
 <span class='doccomment'>/// for Version 2 are marked. Those not marked are common between versions. The default for</span>
 <span class='doccomment'>/// AWS is version 2 but you have to specify version 2 in ListObjectsRequest or it will default</span>
 <span class='doccomment'>/// to version 1.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default, RustcDecodable, RustcEncodable)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ListObjectsOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>name</span>: <span class='ident'>BucketName</span>,
     <span class='doccomment'>/// Version 1. When response is truncated (the IsTruncated element value in the response is</span>
@@ -2902,7 +3010,8 @@
     <span class='kw'>pub</span> <span class='ident'>start_after</span>: <span class='ident'>StartAfter</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ListObjectVersionsRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
     <span class='doccomment'>/// Limits the response to keys that begin with the specified prefix.</span>
@@ -2922,7 +3031,8 @@
 }
 
 <span class='comment'>// New way</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ListVersionsResult</span> {
     <span class='kw'>pub</span> <span class='ident'>name</span>: <span class='ident'>BucketName</span>,
     <span class='kw'>pub</span> <span class='ident'>prefix</span>: <span class='ident'>Prefix</span>,
@@ -2980,7 +3090,8 @@
 }
 <span class='comment'>//OLD Way - end</span>
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteMarkerEntry</span> {
     <span class='kw'>pub</span> <span class='ident'>owner</span>: <span class='ident'>Owner</span>,
     <span class='doccomment'>/// Specifies whether the object is (true) or is not (false) the latest version of</span>
@@ -2994,7 +3105,8 @@
     <span class='kw'>pub</span> <span class='ident'>last_modified</span>: <span class='ident'>LastModified</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>HeadObjectOutput</span> {
     <span class='doccomment'>/// Last modified date of the object</span>
     <span class='kw'>pub</span> <span class='ident'>last_modified</span>: <span class='ident'>LastModified</span>,
@@ -3061,7 +3173,8 @@
     <span class='kw'>pub</span> <span class='ident'>sse_customer_key_md5</span>: <span class='ident'>SSECustomerKeyMD5</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CopyObjectOutput</span> {
     <span class='doccomment'>/// If server-side encryption with a customer-provided encryption key was</span>
     <span class='doccomment'>/// requested, the response will include this header confirming the encryption</span>
@@ -3084,7 +3197,8 @@
     <span class='kw'>pub</span> <span class='ident'>ssekms_key_id</span>: <span class='ident'>SSEKMSKeyId</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CopyObjectRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>request_payer</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>RequestPayer</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// Copies the object if it has been modified since the specified time.</span>
@@ -3171,7 +3285,8 @@
     <span class='kw'>pub</span> <span class='ident'>sse_customer_key_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>SSECustomerKeyMD5</span><span class='op'>&gt;</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteObjectsRequest</span> {
     <span class='doccomment'>/// The concatenation of the authentication device&#39;s serial number, a space, and</span>
     <span class='doccomment'>/// the value that is displayed on your authentication device.</span>
@@ -3181,7 +3296,8 @@
     <span class='kw'>pub</span> <span class='ident'>delete</span>: <span class='ident'>Delete</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>MultipartUpload</span> {
     <span class='doccomment'>/// Identifies who initiated the multipart upload.</span>
     <span class='kw'>pub</span> <span class='ident'>initiator</span>: <span class='ident'>Initiator</span>,

@@ -23,6 +23,10 @@ use aws::common::region::Region;
 
 /// Endpoint allows you to set a custom endpoint and/or a proxy for a given region and associate this
 /// as an endpoint of where S3Client will look for the data.
+///
+/// NB: Endpoint is *not* JSON encodable/decodable without implementing a custom to_json trait
+/// because of third party Url struct.
+///
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Endpoint {
@@ -48,7 +52,8 @@ pub struct Endpoint {
 
 /// Required to specify which type of API Signature to use. AWS defaults to using V4 by default.
 /// However, third party applications often use V2 (AWS will still honor V2).
-#[derive(Debug, Clone, Copy)]
+//#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub enum Signature {
     V2,
     V4,

@@ -383,6 +383,9 @@
 <span id="339">339</span>
 <span id="340">340</span>
 <span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -474,21 +477,24 @@
 <span class='doccomment'>/// Write `TargetGrant` contents to a `SignedRequest`</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>TargetGrantWriter</span>;
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>TargetGrant</span> {
     <span class='kw'>pub</span> <span class='ident'>grantee</span>: <span class='ident'>Grantee</span>,
     <span class='doccomment'>/// Logging permissions assigned to the Grantee for the bucket.</span>
     <span class='kw'>pub</span> <span class='ident'>permission</span>: <span class='ident'>BucketLogsPermission</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Grant</span> {
     <span class='kw'>pub</span> <span class='ident'>grantee</span>: <span class='ident'>Grantee</span>,
     <span class='doccomment'>/// Specifies the permission given to the grantee.</span>
     <span class='kw'>pub</span> <span class='ident'>permission</span>: <span class='ident'>Permission</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Grantee</span> {
     <span class='doccomment'>/// Email address of the grantee.</span>
     <span class='kw'>pub</span> <span class='ident'>email_address</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>EmailAddress</span><span class='op'>&gt;</span>,

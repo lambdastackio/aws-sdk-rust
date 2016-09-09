@@ -23,7 +23,9 @@ extern crate log;
 extern crate chrono;
 extern crate openssl;
 extern crate regex;
+// Used for base64, hex and json
 extern crate rustc_serialize;
+// Credentials use serde...
 extern crate serde;
 extern crate serde_json;
 extern crate time;

@@ -20,6 +20,36 @@
 //!
 //! However, if you're only interested in how to use it from your app then skip the docs that
 //! start with `Library` and focus on those that start with `Client`.
+//!
+//! NB: ####Endpoint is the only non-unit structure that is not JSON encodable/decodable due to
+//! third party Url struct. A custom to_json trait would need to be implemented. Not real impactful
+//! since this struct is mainly used for initial endpoint connections.
+//!
+//! NB: ####CompleteMultipartUploadRequest is *not* JSON decodable without implementing a custom to_json trait
+//! because of Option<&'a [u8]>. You can still encode to JSON.
+//!
+//! NB: ####PutObjectRequest is *not* JSON decodable without implementing a custom to_json trait
+//! because of Option<&'a [u8]>. You can still encode to JSON.
+//!
+//! NB: ####UploadPartRequest is *not* JSON decodable without implementing a custom to_json trait
+//! because of Option<&'a [u8]>. You can still encode to JSON.
+//!
+//! Example JSON output: (see /src/main.rs for full examples)
+//!    use rustc_serialize::json;
+//!
+//!    let mut list_objects = ListObjectsRequest::default();
+//!    list_objects.bucket = bucket_name.to_string();
+//!
+//!    match client.list_objects(&list_objects) {
+//!        Ok(objects) => {
+//!            // Example of Serializing Rust struct
+//!            println!("{:#?}", objects);
+//!            // Example of converting to JSON. Can also call json::encode(&objects).unwrap();
+//!            println!("{}", json::as_pretty_json(&objects));
+//!        },
+//!        Err(e) => println!("{:#?}", e)
+//!    }
+//!
 
 /// `common` contains the type, struct, enum and impls that are common accross most requests
 /// such as buckets, objects etc.

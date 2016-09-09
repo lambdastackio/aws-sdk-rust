@@ -152,7 +152,7 @@ pub struct ObjectMetadataParser;
 pub struct ObjectMetadataWriter;
 
 /// `ObjectMetadata` used for `Contents` for ListObjectsOutput
-#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ObjectMetadata {
     pub last_modified: LastModified,
     pub e_tag: ETag,
@@ -163,7 +163,8 @@ pub struct ObjectMetadata {
     pub size: Size,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Delete {
     pub objects: ObjectIdentifierList,
     /// Element to enable quiet mode for the request. When you add this element, you
@@ -171,7 +172,8 @@ pub struct Delete {
     pub quiet: Option<Quiet>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetObjectOutput {
     /// Last modified date of the object
     pub last_modified: LastModified,
@@ -242,12 +244,14 @@ pub struct GetObjectOutput {
     pub sse_customer_key_md5: SSECustomerKeyMD5,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct RestoreObjectOutput {
     pub request_charged: RequestCharged,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct RestoreObjectRequest {
     pub version_id: Option<ObjectVersionId>,
     pub restore_request: Option<RestoreRequest>,
@@ -256,13 +260,15 @@ pub struct RestoreObjectRequest {
     pub key: ObjectKey,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct RestoreRequest {
     /// Lifetime of the active copy in days
     pub days: Days,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteObjectRequest {
     /// The concatenation of the authentication device's serial number, a space, and
     /// the value that is displayed on your authentication device.
@@ -274,7 +280,8 @@ pub struct DeleteObjectRequest {
     pub key: ObjectKey,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteObjectOutput {
     /// Returns the version ID of the delete marker created as a result of the DELETE
     /// operation.
@@ -285,14 +292,16 @@ pub struct DeleteObjectOutput {
     pub delete_marker: DeleteMarker,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteObjectsOutput {
     pub deleted: DeletedObjects,
     pub errors: Errors,
     pub request_charged: RequestCharged,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeletedObject {
     pub version_id: ObjectVersionId,
     pub delete_marker_version_id: DeleteMarkerVersionId,
@@ -300,7 +309,8 @@ pub struct DeletedObject {
     pub delete_marker: DeleteMarker,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutObjectOutput {
     /// If server-side encryption with a customer-provided encryption key was
     /// requested, the response will include this header confirming the encryption
@@ -328,7 +338,8 @@ pub struct PutObjectOutput {
 
 /// Container for specifying the configuration when you want Amazon S3 to publish
 /// events to an Amazon Simple Notification Service (Amazon SNS) topic.
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct TopicConfiguration {
     pub id: Option<NotificationId>,
     /// Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects
@@ -339,7 +350,8 @@ pub struct TopicConfiguration {
 
 /// Container for specifying an configuration when you want Amazon S3 to publish
 /// events to an Amazon Simple Queue Service (Amazon SQS) queue.
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct QueueConfiguration {
     pub id: Option<NotificationId>,
     /// Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects
@@ -348,7 +360,8 @@ pub struct QueueConfiguration {
     pub events: EventList,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ObjectIdentifier {
     /// VersionId for the specific version of the object to delete.
     pub version_id: Option<ObjectVersionId>,
@@ -356,7 +369,8 @@ pub struct ObjectIdentifier {
     pub key: ObjectKey,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CreateMultipartUploadRequest {
     pub request_payer: Option<RequestPayer>,
     /// Specifies what content encodings have been applied to the object and thus what
@@ -417,7 +431,13 @@ pub struct CreateMultipartUploadRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+// NOTE: &'a [u8] may require a custom RustcDecodable
+
+/// NB: CompleteMultipartUploadRequest is *not* JSON decodable without implementing a custom to_json trait
+/// because of Option<&'a [u8]>.
+///
+#[derive(Debug, Default, RustcEncodable)]
 pub struct CompleteMultipartUploadRequest <'a> {
     pub multipart_upload: Option<&'a [u8]>,
     pub upload_id: MultipartUploadId,
@@ -426,7 +446,13 @@ pub struct CompleteMultipartUploadRequest <'a> {
     pub key: ObjectKey,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+// NOTE: &'a [u8] may require a custom RustcDecodable
+
+/// NB: UploadPartRequest is *not* JSON decodable without implementing a custom to_json trait
+/// because of Option<&'a [u8]>.
+///
+#[derive(Debug, Default, RustcEncodable)]
 pub struct UploadPartRequest <'a> {
     pub body: Option<&'a [u8]>,
     /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
@@ -456,7 +482,8 @@ pub struct UploadPartRequest <'a> {
     pub part_number: PartNumber,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Part {
     /// Date and time at which the part was uploaded.
     pub last_modified: LastModified,
@@ -469,7 +496,13 @@ pub struct Part {
     pub size: Size,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+// NOTE: &'a [u8] may require a custom RustcDecodable
+
+/// NB: PutObjectRequest is *not* JSON decodable without implementing a custom to_json trait
+/// because of Option<&'a [u8]>.
+///
+#[derive(Debug, Default, RustcEncodable)]
 pub struct PutObjectRequest<'a> {
     pub request_payer: Option<RequestPayer>,
     /// Specifies what content encodings have been applied to the object and thus what
@@ -536,7 +569,8 @@ pub struct PutObjectRequest<'a> {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetObjectRequest {
     /// Sets the Content-Encoding header of the response.
     pub response_content_encoding: Option<ResponseContentEncoding>,
@@ -585,7 +619,8 @@ pub struct GetObjectRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Initiator {
     /// Name of the Principal.
     pub display_name: DisplayName,
@@ -594,14 +629,16 @@ pub struct Initiator {
     pub id: ID,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetObjectTorrentRequest {
     pub bucket: BucketName,
     pub request_payer: Option<RequestPayer>,
     pub key: ObjectKey,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Redirect {
     /// The specific object key to use in the redirect request. For example, redirect
     /// request to error.html. Not required if one of the sibling is present. Can be
@@ -624,13 +661,15 @@ pub struct Redirect {
     pub http_redirect_code: HttpRedirectCode,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ErrorDocument {
     /// The object key name to use when a 4XX class error occurs.
     pub key: ObjectKey,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct IndexDocument {
     /// A suffix that is appended to a request that is for a directory on the website
     /// endpoint (e.g. if the suffix is index.html and you make a request to
@@ -640,7 +679,8 @@ pub struct IndexDocument {
     pub suffix: Suffix,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct RedirectAllRequestsTo {
     /// Name of the host where requests will be redirected.
     pub host_name: HostName,
@@ -650,7 +690,8 @@ pub struct RedirectAllRequestsTo {
 }
 
 /// Container for specifying the AWS Lambda notification configuration.
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct LambdaFunctionConfiguration {
     /// Lambda cloud function ARN that Amazon S3 can invoke when it detects events of
     /// the specified type.
@@ -659,7 +700,8 @@ pub struct LambdaFunctionConfiguration {
     pub events: EventList,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Tag {
     /// Value of the tag.
     pub value: Value,
@@ -667,13 +709,15 @@ pub struct Tag {
     pub key: ObjectKey,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CopyObjectResult {
     pub last_modified: LastModified,
     pub e_tag: ETag,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListMultipartUploadsOutput {
     /// Upload ID after which listing began.
     pub upload_id_marker: UploadIdMarker,
@@ -705,7 +749,8 @@ pub struct ListMultipartUploadsOutput {
     pub is_truncated: IsTruncated,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CreateMultipartUploadOutput {
     /// If server-side encryption with a customer-provided encryption key was
     /// requested, the response will include this header confirming the encryption
@@ -730,7 +775,8 @@ pub struct CreateMultipartUploadOutput {
     pub ssekms_key_id: SSEKMSKeyId,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CompleteMultipartUploadOutput {
     pub request_charged: RequestCharged,
     pub bucket: BucketName,
@@ -756,7 +802,8 @@ pub struct CompleteMultipartUploadOutput {
 /// configuration action on a bucket that has versioning enabled (or suspended) to
 /// request that Amazon S3 delete noncurrent object versions at a specific period
 /// in the object's lifetime.
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct NoncurrentVersionExpiration {
     /// Specifies the number of days an object is noncurrent before Amazon S3 can
     /// perform the associated action. For information about the noncurrent days
@@ -766,7 +813,8 @@ pub struct NoncurrentVersionExpiration {
     pub noncurrent_days: Days,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ReplicationRule {
     /// The rule is ignored if status is not Enabled.
     pub status: ReplicationRuleStatus,
@@ -780,7 +828,8 @@ pub struct ReplicationRule {
     pub id: Option<ID>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListObjectsRequest {
     /// Required. Name of bucket.
     pub bucket: BucketName,
@@ -805,7 +854,8 @@ pub struct ListObjectsRequest {
 /// for Version 2 are marked. Those not marked are common between versions. The default for
 /// AWS is version 2 but you have to specify version 2 in ListObjectsRequest or it will default
 /// to version 1.
-#[derive(Debug, Default)]
+//#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListObjectsOutput {
     pub name: BucketName,
     /// Version 1. When response is truncated (the IsTruncated element value in the response is
@@ -841,7 +891,8 @@ pub struct ListObjectsOutput {
     pub start_after: StartAfter,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListObjectVersionsRequest {
     pub bucket: BucketName,
     /// Limits the response to keys that begin with the specified prefix.
@@ -861,7 +912,8 @@ pub struct ListObjectVersionsRequest {
 }
 
 // New way
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListVersionsResult {
     pub name: BucketName,
     pub prefix: Prefix,
@@ -919,7 +971,8 @@ pub struct ListObjectVersionsOutput {
 }
 //OLD Way - end
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteMarkerEntry {
     pub owner: Owner,
     /// Specifies whether the object is (true) or is not (false) the latest version of
@@ -933,7 +986,8 @@ pub struct DeleteMarkerEntry {
     pub last_modified: LastModified,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct HeadObjectOutput {
     /// Last modified date of the object
     pub last_modified: LastModified,
@@ -1000,7 +1054,8 @@ pub struct HeadObjectOutput {
     pub sse_customer_key_md5: SSECustomerKeyMD5,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CopyObjectOutput {
     /// If server-side encryption with a customer-provided encryption key was
     /// requested, the response will include this header confirming the encryption
@@ -1023,7 +1078,8 @@ pub struct CopyObjectOutput {
     pub ssekms_key_id: SSEKMSKeyId,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CopyObjectRequest {
     pub request_payer: Option<RequestPayer>,
     /// Copies the object if it has been modified since the specified time.
@@ -1110,7 +1166,8 @@ pub struct CopyObjectRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteObjectsRequest {
     /// The concatenation of the authentication device's serial number, a space, and
     /// the value that is displayed on your authentication device.
@@ -1120,7 +1177,8 @@ pub struct DeleteObjectsRequest {
     pub delete: Delete,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct MultipartUpload {
     /// Identifies who initiated the multipart upload.
     pub initiator: Initiator,

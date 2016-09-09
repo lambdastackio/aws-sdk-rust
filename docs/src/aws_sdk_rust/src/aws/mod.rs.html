@@ -73,6 +73,36 @@
 <span id="29">29</span>
 <span id="30">30</span>
 <span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -96,6 +126,36 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! However, if you&#39;re only interested in how to use it from your app then skip the docs that</span>
 <span class='doccomment'>//! start with `Library` and focus on those that start with `Client`.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! NB: ####Endpoint is the only non-unit structure that is not JSON encodable/decodable due to</span>
+<span class='doccomment'>//! third party Url struct. A custom to_json trait would need to be implemented. Not real impactful</span>
+<span class='doccomment'>//! since this struct is mainly used for initial endpoint connections.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! NB: ####CompleteMultipartUploadRequest is *not* JSON decodable without implementing a custom to_json trait</span>
+<span class='doccomment'>//! because of Option&lt;&amp;&#39;a [u8]&gt;. You can still encode to JSON.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! NB: ####PutObjectRequest is *not* JSON decodable without implementing a custom to_json trait</span>
+<span class='doccomment'>//! because of Option&lt;&amp;&#39;a [u8]&gt;. You can still encode to JSON.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! NB: ####UploadPartRequest is *not* JSON decodable without implementing a custom to_json trait</span>
+<span class='doccomment'>//! because of Option&lt;&amp;&#39;a [u8]&gt;. You can still encode to JSON.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! Example JSON output: (see /src/main.rs for full examples)</span>
+<span class='doccomment'>//!    use rustc_serialize::json;</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!    let mut list_objects = ListObjectsRequest::default();</span>
+<span class='doccomment'>//!    list_objects.bucket = bucket_name.to_string();</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!    match client.list_objects(&amp;list_objects) {</span>
+<span class='doccomment'>//!        Ok(objects) =&gt; {</span>
+<span class='doccomment'>//!            // Example of Serializing Rust struct</span>
+<span class='doccomment'>//!            println!(&quot;{:#?}&quot;, objects);</span>
+<span class='doccomment'>//!            // Example of converting to JSON. Can also call json::encode(&amp;objects).unwrap();</span>
+<span class='doccomment'>//!            println!(&quot;{}&quot;, json::as_pretty_json(&amp;objects));</span>
+<span class='doccomment'>//!        },</span>
+<span class='doccomment'>//!        Err(e) =&gt; println!(&quot;{:#?}&quot;, e)</span>
+<span class='doccomment'>//!    }</span>
+<span class='doccomment'>//!</span>
 
 <span class='doccomment'>/// `common` contains the type, struct, enum and impls that are common accross most requests</span>
 <span class='doccomment'>/// such as buckets, objects etc.</span>

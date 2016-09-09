@@ -26,7 +26,8 @@ use aws::s3::acl::*;
 use aws::s3::header::*;
 use aws::s3::grant::*;
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct TopicConfigurationDeprecated {
     /// Amazon SNS topic to which Amazon S3 will publish a message to report the
     /// specified events for the bucket.
@@ -37,7 +38,8 @@ pub struct TopicConfigurationDeprecated {
     pub events: EventList,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct QueueConfigurationDeprecated {
     pub queue: QueueArn,
     pub events: EventList,
@@ -45,7 +47,8 @@ pub struct QueueConfigurationDeprecated {
     pub event: Event,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CloudFunctionConfiguration {
     pub invocation_role: CloudFunctionInvocationRole,
     pub cloud_function: CloudFunction,
@@ -54,48 +57,56 @@ pub struct CloudFunctionConfiguration {
     pub event: Event,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketReplicationRequest {
     pub replication_configuration: ReplicationConfiguration,
     pub content_md5: Option<ContentMD5>,
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketNotificationRequest {
     pub notification_configuration: NotificationConfigurationDeprecated,
     pub content_md5: Option<ContentMD5>,
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketLoggingRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketLifecycleRequest {
     pub lifecycle_configuration: Option<LifecycleConfiguration>,
     pub content_md5: Option<ContentMD5>,
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketCorsRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketCorsOutput {
     pub cors_rules: CORSRules,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketVersioningRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketVersioningOutput {
     /// The versioning state of the bucket.
     pub status: BucketVersioningStatus,
@@ -106,7 +117,8 @@ pub struct GetBucketVersioningOutput {
     pub mfa_delete: MFADeleteStatus,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketVersioningRequest {
     /// The concatenation of the authentication device's serial number, a space, and
     /// the value that is displayed on your authentication device.
@@ -116,7 +128,8 @@ pub struct PutBucketVersioningRequest {
     pub versioning_configuration: VersioningConfiguration,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CORSRule {
     /// Specifies which headers are allowed in a pre-flight OPTIONS request.
     pub allowed_headers: AllowedHeaders,
@@ -134,7 +147,8 @@ pub struct CORSRule {
     pub allowed_origins: AllowedOrigins,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct VersioningConfiguration {
     /// The versioning state of the bucket.
     pub status: BucketVersioningStatus,
@@ -145,43 +159,50 @@ pub struct VersioningConfiguration {
     pub mfa_delete: MFADelete,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteBucketCorsRequest {
     pub bucket: BucketName,
 }
 
 /// Container for specifying the notification configuration of the bucket. If this
 /// element is empty, notifications are turned off on the bucket.
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct NotificationConfiguration {
     pub queue_configurations: QueueConfigurationList,
     pub lambda_function_configurations: LambdaFunctionConfigurationList,
     pub topic_configurations: TopicConfigurationList,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketNotificationConfigurationRequest {
     /// Name of the buket to get the notification configuration for.
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteBucketWebsiteRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteBucketTaggingRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct LifecycleConfiguration {
     pub rules: Rules,
 }
 
 /// Put bucket policy request
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketPolicyRequest {
     /// The bucket policy as a JSON document.
     pub policy: Policy,
@@ -189,7 +210,8 @@ pub struct PutBucketPolicyRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct RoutingRule {
     /// Container for redirect information. You can redirect requests to another host,
     /// to another page, or with another protocol. In the event of an error, you can
@@ -202,7 +224,8 @@ pub struct RoutingRule {
     pub condition: Option<Condition>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CreateBucketRequest {
     /// Allows grantee the read, write, read ACP, and write ACP permissions on the
     /// bucket.
@@ -221,7 +244,8 @@ pub struct CreateBucketRequest {
     pub grant_read_acp: Option<GrantReadACP>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketLoggingRequest {
     pub bucket_logging_status: BucketLoggingStatus,
     pub content_md5: Option<ContentMD5>,
@@ -230,7 +254,8 @@ pub struct PutBucketLoggingRequest {
 
 /// Container for replication rules. You can add as many as 1,000 rules. Total
 /// replication configuration size can be up to 2 MB.
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ReplicationConfiguration {
     /// Container for information about a particular replication rule. Replication
     /// configuration must have at least one rule and can contain up to 1,000 rules.
@@ -240,7 +265,8 @@ pub struct ReplicationConfiguration {
     pub role: Role,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct LoggingEnabled {
     /// This element lets you specify a prefix for the keys that the log files will be
     /// stored under.
@@ -255,7 +281,8 @@ pub struct LoggingEnabled {
     pub target_grants: TargetGrants,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct WebsiteConfiguration {
     pub redirect_all_requests_to: RedirectAllRequestsTo,
     pub index_document: IndexDocument,
@@ -263,26 +290,30 @@ pub struct WebsiteConfiguration {
     pub routing_rules: RoutingRules,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct BucketLoggingStatus {
     pub logging_enabled: LoggingEnabled,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Destination {
     /// Amazon resource name (ARN) of the bucket where you want Amazon S3 to store
     /// replicas of the object identified by the rule.
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketRequestPaymentRequest {
     pub request_payment_configuration: RequestPaymentConfiguration,
     pub content_md5: Option<ContentMD5>,
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct Bucket {
     /// Date the bucket was created.
     pub creation_date: CreationDate,
@@ -290,37 +321,44 @@ pub struct Bucket {
     pub name: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct HeadBucketRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteBucketRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteBucketPolicyRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteBucketReplicationRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketLoggingOutput {
     pub logging_enabled: LoggingEnabled,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: ReplicationConfiguration,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketWebsiteRequest {
     pub content_md5: Option<ContentMD5>,
     pub bucket: BucketName,

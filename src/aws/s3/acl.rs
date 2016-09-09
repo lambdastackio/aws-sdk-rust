@@ -26,7 +26,8 @@ pub type ObjectCannedACL = String;
 pub type Permission = String;
 
 /// Canned ACL for S3
-#[derive(Debug)]
+//#[derive(Debug)]
+#[derive(Debug, RustcDecodable, RustcEncodable)]
 pub enum CannedAcl {
     Private,
     PublicRead,
@@ -97,13 +98,15 @@ pub struct PutObjectAclOutputParser;
 /// Write `PutObjectAclOutput` contents to a `SignedRequest`
 pub struct PutObjectAclOutputWriter;
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct AccessControlPolicy {
     pub owner: Owner,
     pub acl: AccessControlList,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct AccessControlList {
     pub grants: Grants,
 }
@@ -119,12 +122,14 @@ pub struct AccessControlList {
 //
 
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetBucketAclRequest {
     pub bucket: BucketName,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutBucketAclRequest {
     /// Allows grantee the read, write, read ACP, and write ACP permissions on the
     /// bucket.
@@ -144,7 +149,8 @@ pub struct PutBucketAclRequest {
     pub grant_read_acp: Option<GrantReadACP>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetObjectAclRequest {
     /// VersionId used to reference a specific version of the object.
     pub version_id: Option<ObjectVersionId>,
@@ -153,7 +159,8 @@ pub struct GetObjectAclRequest {
     pub key: ObjectKey,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutObjectAclRequest {
     /// Allows grantee the read, write, read ACP, and write ACP permissions on the
     /// bucket.
@@ -175,7 +182,8 @@ pub struct PutObjectAclRequest {
     pub grant_read_acp: Option<GrantReadACP>,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct GetObjectAclOutput {
     pub owner: Owner,
     /// A list of grants.
@@ -183,7 +191,8 @@ pub struct GetObjectAclOutput {
     pub request_charged: RequestCharged,
 }
 
-#[derive(Debug, Default)]
+//#[derive(Debug, Default)]
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct PutObjectAclOutput {
     pub request_charged: RequestCharged,
 }

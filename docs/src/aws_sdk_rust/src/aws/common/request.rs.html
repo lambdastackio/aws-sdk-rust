@@ -203,6 +203,7 @@
 <span id="159">159</span>
 <span id="160">160</span>
 <span id="161">161</span>
+<span id="162">162</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -245,6 +246,7 @@
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// All HTTP calls are sent from here.</span>
 <span class='doccomment'>///</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>HttpResponse</span> {
     <span class='doccomment'>/// HTTP status code</span>
     <span class='kw'>pub</span> <span class='ident'>status</span>: <span class='ident'>u16</span>,
@@ -255,7 +257,7 @@
 }
 
 <span class='doccomment'>/// HTTP Error returned from the DispatchSignedRequest Trait. It also implements the Error Trait.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>PartialEq</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>HttpDispatchError</span> {
     <span class='ident'>message</span>: <span class='ident'>String</span>,
 }

@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors["aws_sdk_rust"] = ["impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='aws_sdk_rust/aws/common/region/enum.Region.html' title='aws_sdk_rust::aws::common::region::Region'>Region</a>","impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='aws_sdk_rust/aws/s3/endpoint/enum.Signature.html' title='aws_sdk_rust::aws::s3::endpoint::Signature'>Signature</a>",];
+implementors["aws_sdk_rust"] = ["impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='aws_sdk_rust/aws/common/region/enum.Region.html' title='aws_sdk_rust::aws::common::region::Region'>Region</a>",];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);

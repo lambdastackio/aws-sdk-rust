@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-3098' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#18-2016' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-4482' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#18-2074' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Library Documentation</p>
 
 <p>This file contains everything related to <code>Objects</code>.</p>
@@ -78,7 +78,8 @@
                            <td><a class='struct' href='struct.CompleteMultipartUploadRequest.html'
                                   title='aws_sdk_rust::aws::s3::object::CompleteMultipartUploadRequest'>CompleteMultipartUploadRequest</a></td>
                            <td class='docblock short'>
-                                
+                                <p>NB: CompleteMultipartUploadRequest is <em>not</em> JSON decodable without implementing a custom to_json trait
+because of Option&lt;&amp;&#39;a [u8]&gt;.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -500,7 +501,8 @@ in the object&#39;s lifetime.</p>
                            <td><a class='struct' href='struct.PutObjectRequest.html'
                                   title='aws_sdk_rust::aws::s3::object::PutObjectRequest'>PutObjectRequest</a></td>
                            <td class='docblock short'>
-                                
+                                <p>NB: PutObjectRequest is <em>not</em> JSON decodable without implementing a custom to_json trait
+because of Option&lt;&amp;&#39;a [u8]&gt;.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -614,7 +616,8 @@ events to an Amazon Simple Notification Service (Amazon SNS) topic.</p>
                            <td><a class='struct' href='struct.UploadPartRequest.html'
                                   title='aws_sdk_rust::aws::s3::object::UploadPartRequest'>UploadPartRequest</a></td>
                            <td class='docblock short'>
-                                
+                                <p>NB: UploadPartRequest is <em>not</em> JSON decodable without implementing a custom to_json trait
+because of Option&lt;&amp;&#39;a [u8]&gt;.</p>
                            </td>
                        </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
 <table>

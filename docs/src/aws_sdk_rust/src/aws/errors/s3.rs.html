@@ -188,6 +188,8 @@
 <span id="144">144</span>
 <span id="145">145</span>
 <span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
 </pre><pre class='rust '>
 <span class='comment'>/*
  Copyright 2016 LambdaStack All rights reserved.
@@ -224,13 +226,15 @@
 
 <span class='doccomment'>/// S3Error is a larger container error struct that contains a more general error about the task</span>
 <span class='doccomment'>/// that was requested + `AWSError` which contains the details from AWS S3.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
+<span class='comment'>//#[derive(Debug)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>S3Error</span> {
     <span class='kw'>pub</span> <span class='ident'>message</span>: <span class='ident'>String</span>,
     <span class='kw'>pub</span> <span class='ident'>aws</span>: <span class='ident'>AWSError</span>
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>S3ClientError</span> {
     <span class='kw'>pub</span> <span class='ident'>version_id</span>: <span class='ident'>ObjectVersionId</span>,
     <span class='kw'>pub</span> <span class='ident'>code</span>: <span class='ident'>Code</span>,

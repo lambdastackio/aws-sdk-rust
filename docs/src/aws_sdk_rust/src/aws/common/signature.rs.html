@@ -724,6 +724,7 @@
 <span id="680">680</span>
 <span id="681">681</span>
 <span id="682">682</span>
+<span id="683">683</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -781,6 +782,7 @@
 <span class='doccomment'>/// the Amazon Signature Version 4 signing process</span>
 <span class='doccomment'>/// version - represents the Signature version. The default is 4 but it can also be set to 2 for older environments.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default, RustcDecodable, RustcEncodable)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>SignedRequest</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='ident'>method</span>: <span class='ident'>String</span>,
     <span class='ident'>service</span>: <span class='ident'>String</span>,
@@ -1030,7 +1032,7 @@
         <span class='comment'>//println!(&quot;{:?}&quot;, self.path);</span>
         <span class='comment'>//println!(&quot;{:?}&quot;, self.params);</span>
         <span class='comment'>//println!(&quot;---------------------&quot;);</span>
-        
+
         <span class='comment'>// NOTE: If you set the &#39;date&#39; header then include it in the string_to_sign w/o the</span>
         <span class='comment'>// x-amz-date resource. If you do not use the date header but use the x-amz-date then set</span>
         <span class='comment'>// the date in string_to_sign to &quot;&quot; and include x-amz-date in the resource. It makes it</span>

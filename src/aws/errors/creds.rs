@@ -24,7 +24,8 @@ use std::io::Error as IoError;
 
 use chrono::ParseError;
 
-#[derive(Debug, PartialEq)]
+//#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Default, RustcDecodable, RustcEncodable)]
 pub struct CredentialsError{
     pub message: String
 }

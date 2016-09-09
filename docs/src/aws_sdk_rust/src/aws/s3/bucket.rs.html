@@ -397,6 +397,44 @@
 <span id="353">353</span>
 <span id="354">354</span>
 <span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -426,7 +464,8 @@
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>header</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>grant</span>::<span class='op'>*</span>;
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>TopicConfigurationDeprecated</span> {
     <span class='doccomment'>/// Amazon SNS topic to which Amazon S3 will publish a message to report the</span>
     <span class='doccomment'>/// specified events for the bucket.</span>
@@ -437,7 +476,8 @@
     <span class='kw'>pub</span> <span class='ident'>events</span>: <span class='ident'>EventList</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>QueueConfigurationDeprecated</span> {
     <span class='kw'>pub</span> <span class='ident'>queue</span>: <span class='ident'>QueueArn</span>,
     <span class='kw'>pub</span> <span class='ident'>events</span>: <span class='ident'>EventList</span>,
@@ -445,7 +485,8 @@
     <span class='kw'>pub</span> <span class='ident'>event</span>: <span class='ident'>Event</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CloudFunctionConfiguration</span> {
     <span class='kw'>pub</span> <span class='ident'>invocation_role</span>: <span class='ident'>CloudFunctionInvocationRole</span>,
     <span class='kw'>pub</span> <span class='ident'>cloud_function</span>: <span class='ident'>CloudFunction</span>,
@@ -454,48 +495,56 @@
     <span class='kw'>pub</span> <span class='ident'>event</span>: <span class='ident'>Event</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutBucketReplicationRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>replication_configuration</span>: <span class='ident'>ReplicationConfiguration</span>,
     <span class='kw'>pub</span> <span class='ident'>content_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ContentMD5</span><span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutBucketNotificationRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>notification_configuration</span>: <span class='ident'>NotificationConfigurationDeprecated</span>,
     <span class='kw'>pub</span> <span class='ident'>content_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ContentMD5</span><span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketLoggingRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutBucketLifecycleRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>lifecycle_configuration</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>LifecycleConfiguration</span><span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>content_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ContentMD5</span><span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketCorsRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketCorsOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>cors_rules</span>: <span class='ident'>CORSRules</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketVersioningRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketVersioningOutput</span> {
     <span class='doccomment'>/// The versioning state of the bucket.</span>
     <span class='kw'>pub</span> <span class='ident'>status</span>: <span class='ident'>BucketVersioningStatus</span>,
@@ -506,7 +555,8 @@
     <span class='kw'>pub</span> <span class='ident'>mfa_delete</span>: <span class='ident'>MFADeleteStatus</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutBucketVersioningRequest</span> {
     <span class='doccomment'>/// The concatenation of the authentication device&#39;s serial number, a space, and</span>
     <span class='doccomment'>/// the value that is displayed on your authentication device.</span>
@@ -516,7 +566,8 @@
     <span class='kw'>pub</span> <span class='ident'>versioning_configuration</span>: <span class='ident'>VersioningConfiguration</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CORSRule</span> {
     <span class='doccomment'>/// Specifies which headers are allowed in a pre-flight OPTIONS request.</span>
     <span class='kw'>pub</span> <span class='ident'>allowed_headers</span>: <span class='ident'>AllowedHeaders</span>,
@@ -534,7 +585,8 @@
     <span class='kw'>pub</span> <span class='ident'>allowed_origins</span>: <span class='ident'>AllowedOrigins</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>VersioningConfiguration</span> {
     <span class='doccomment'>/// The versioning state of the bucket.</span>
     <span class='kw'>pub</span> <span class='ident'>status</span>: <span class='ident'>BucketVersioningStatus</span>,
@@ -545,43 +597,50 @@
     <span class='kw'>pub</span> <span class='ident'>mfa_delete</span>: <span class='ident'>MFADelete</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteBucketCorsRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
 <span class='doccomment'>/// Container for specifying the notification configuration of the bucket. If this</span>
 <span class='doccomment'>/// element is empty, notifications are turned off on the bucket.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>NotificationConfiguration</span> {
     <span class='kw'>pub</span> <span class='ident'>queue_configurations</span>: <span class='ident'>QueueConfigurationList</span>,
     <span class='kw'>pub</span> <span class='ident'>lambda_function_configurations</span>: <span class='ident'>LambdaFunctionConfigurationList</span>,
     <span class='kw'>pub</span> <span class='ident'>topic_configurations</span>: <span class='ident'>TopicConfigurationList</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketNotificationConfigurationRequest</span> {
     <span class='doccomment'>/// Name of the buket to get the notification configuration for.</span>
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteBucketWebsiteRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteBucketTaggingRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LifecycleConfiguration</span> {
     <span class='kw'>pub</span> <span class='ident'>rules</span>: <span class='ident'>Rules</span>,
 }
 
 <span class='doccomment'>/// Put bucket policy request</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutBucketPolicyRequest</span> {
     <span class='doccomment'>/// The bucket policy as a JSON document.</span>
     <span class='kw'>pub</span> <span class='ident'>policy</span>: <span class='ident'>Policy</span>,
@@ -589,7 +648,8 @@
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>RoutingRule</span> {
     <span class='doccomment'>/// Container for redirect information. You can redirect requests to another host,</span>
     <span class='doccomment'>/// to another page, or with another protocol. In the event of an error, you can</span>
@@ -602,7 +662,8 @@
     <span class='kw'>pub</span> <span class='ident'>condition</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Condition</span><span class='op'>&gt;</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CreateBucketRequest</span> {
     <span class='doccomment'>/// Allows grantee the read, write, read ACP, and write ACP permissions on the</span>
     <span class='doccomment'>/// bucket.</span>
@@ -621,7 +682,8 @@
     <span class='kw'>pub</span> <span class='ident'>grant_read_acp</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>GrantReadACP</span><span class='op'>&gt;</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutBucketLoggingRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket_logging_status</span>: <span class='ident'>BucketLoggingStatus</span>,
     <span class='kw'>pub</span> <span class='ident'>content_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ContentMD5</span><span class='op'>&gt;</span>,
@@ -630,7 +692,8 @@
 
 <span class='doccomment'>/// Container for replication rules. You can add as many as 1,000 rules. Total</span>
 <span class='doccomment'>/// replication configuration size can be up to 2 MB.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ReplicationConfiguration</span> {
     <span class='doccomment'>/// Container for information about a particular replication rule. Replication</span>
     <span class='doccomment'>/// configuration must have at least one rule and can contain up to 1,000 rules.</span>
@@ -640,7 +703,8 @@
     <span class='kw'>pub</span> <span class='ident'>role</span>: <span class='ident'>Role</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LoggingEnabled</span> {
     <span class='doccomment'>/// This element lets you specify a prefix for the keys that the log files will be</span>
     <span class='doccomment'>/// stored under.</span>
@@ -655,7 +719,8 @@
     <span class='kw'>pub</span> <span class='ident'>target_grants</span>: <span class='ident'>TargetGrants</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>WebsiteConfiguration</span> {
     <span class='kw'>pub</span> <span class='ident'>redirect_all_requests_to</span>: <span class='ident'>RedirectAllRequestsTo</span>,
     <span class='kw'>pub</span> <span class='ident'>index_document</span>: <span class='ident'>IndexDocument</span>,
@@ -663,26 +728,30 @@
     <span class='kw'>pub</span> <span class='ident'>routing_rules</span>: <span class='ident'>RoutingRules</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>BucketLoggingStatus</span> {
     <span class='kw'>pub</span> <span class='ident'>logging_enabled</span>: <span class='ident'>LoggingEnabled</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Destination</span> {
     <span class='doccomment'>/// Amazon resource name (ARN) of the bucket where you want Amazon S3 to store</span>
     <span class='doccomment'>/// replicas of the object identified by the rule.</span>
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutBucketRequestPaymentRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>request_payment_configuration</span>: <span class='ident'>RequestPaymentConfiguration</span>,
     <span class='kw'>pub</span> <span class='ident'>content_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ContentMD5</span><span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Bucket</span> {
     <span class='doccomment'>/// Date the bucket was created.</span>
     <span class='kw'>pub</span> <span class='ident'>creation_date</span>: <span class='ident'>CreationDate</span>,
@@ -690,37 +759,44 @@
     <span class='kw'>pub</span> <span class='ident'>name</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>HeadBucketRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteBucketRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteBucketPolicyRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DeleteBucketReplicationRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketLoggingOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>logging_enabled</span>: <span class='ident'>LoggingEnabled</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketReplicationOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>replication_configuration</span>: <span class='ident'>ReplicationConfiguration</span>,
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PutBucketWebsiteRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>content_md5</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ContentMD5</span><span class='op'>&gt;</span>,
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,

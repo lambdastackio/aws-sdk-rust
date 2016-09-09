@@ -232,7 +232,7 @@
 
 <span class='doccomment'>/// An AWS region.</span>
 <span class='doccomment'>/// CnNorth1 is currently untested due to Rusoto maintainers not having access to AWS China.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>, <span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Clone</span>, <span class='ident'>Copy</span>, <span class='ident'>PartialEq</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Region</span> {
     <span class='ident'>ApNortheast1</span>,
     <span class='ident'>ApNortheast2</span>,
@@ -249,7 +249,7 @@
 }
 
 <span class='doccomment'>/// An error produced when attempting to convert a `str` into a `Region` fails.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>,<span class='ident'>PartialEq</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ParseRegionError</span> {
     <span class='ident'>message</span>: <span class='ident'>String</span>,
 }

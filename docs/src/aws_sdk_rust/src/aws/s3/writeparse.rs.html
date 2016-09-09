@@ -6869,6 +6869,20 @@
 <span id="6825">6825</span>
 <span id="6826">6826</span>
 <span id="6827">6827</span>
+<span id="6828">6828</span>
+<span id="6829">6829</span>
+<span id="6830">6830</span>
+<span id="6831">6831</span>
+<span id="6832">6832</span>
+<span id="6833">6833</span>
+<span id="6834">6834</span>
+<span id="6835">6835</span>
+<span id="6836">6836</span>
+<span id="6837">6837</span>
+<span id="6838">6838</span>
+<span id="6839">6839</span>
+<span id="6840">6840</span>
+<span id="6841">6841</span>
 </pre><pre class='rust '>
 <span class='comment'>//</span>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
@@ -8083,7 +8097,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>NotificationConfigurationDeprecated</span> {
     <span class='kw'>pub</span> <span class='ident'>cloud_function_configuration</span>: <span class='ident'>CloudFunctionConfiguration</span>,
     <span class='kw'>pub</span> <span class='ident'>queue_configuration</span>: <span class='ident'>QueueConfigurationDeprecated</span>,
@@ -9189,7 +9204,7 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CommonPrefix</span> {
     <span class='kw'>pub</span> <span class='ident'>prefix</span>: <span class='ident'>Prefix</span>,
 }
@@ -10575,7 +10590,8 @@
 }
 
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>RequestPaymentConfiguration</span> {
     <span class='doccomment'>/// Specifies who pays for the download and request fees.</span>
     <span class='kw'>pub</span> <span class='ident'>payer</span>: <span class='ident'>Payer</span>,
@@ -10639,7 +10655,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketWebsiteRequest</span> {
     <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>BucketName</span>,
 }
@@ -10703,7 +10720,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Rule</span> {
     <span class='doccomment'>/// If &#39;Enabled&#39;, the rule is currently being applied. If &#39;Disabled&#39;, the rule is</span>
     <span class='doccomment'>/// not currently being applied.</span>
@@ -10812,6 +10830,7 @@
 
 <span class='doccomment'>/// Write `GetBucketVersioningRequest` contents to a `SignedRequest`</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>GetBucketVersioningRequestWriter</span>;
+
 <span class='kw'>impl</span> <span class='ident'>GetBucketVersioningRequestWriter</span> {
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write_params</span>(<span class='ident'>params</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Params</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>obj</span>: <span class='kw-2'>&amp;</span><span class='ident'>GetBucketVersioningRequest</span>) {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>prefix</span> <span class='op'>=</span> <span class='ident'>name</span>.<span class='ident'>to_string</span>();
@@ -10878,7 +10897,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>LifecycleExpiration</span> {
     <span class='doccomment'>/// Indicates at what date the object is to be moved or deleted. Should be in GMT</span>
     <span class='doccomment'>/// ISO 8601 Format.</span>
@@ -10984,7 +11004,8 @@
 <span class='doccomment'>/// (or versioning is suspended), you can set this action to request that Amazon</span>
 <span class='doccomment'>/// S3 transition noncurrent object versions to the GLACIER storage class at a</span>
 <span class='doccomment'>/// specific period in the object&#39;s lifetime.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>NoncurrentVersionTransition</span> {
     <span class='doccomment'>/// Specifies the number of days an object is noncurrent before Amazon S3 can</span>
     <span class='doccomment'>/// perform the associated action. For information about the noncurrent days</span>
@@ -11232,7 +11253,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Condition</span> {
     <span class='doccomment'>/// The HTTP error code when the redirect is applied. In the event of an error, if</span>
     <span class='doccomment'>/// the error code equals this value, then the specified redirect is applied.</span>
@@ -11286,7 +11308,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Transition</span> {
     <span class='doccomment'>/// Indicates at what date the object is to be moved or deleted. Should be in GMT</span>
     <span class='doccomment'>/// ISO 8601 Format.</span>
@@ -11457,7 +11480,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ListBucketsOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>owner</span>: <span class='ident'>Owner</span>,
     <span class='kw'>pub</span> <span class='ident'>buckets</span>: <span class='ident'>Buckets</span>,
@@ -11493,6 +11517,7 @@
 
 <span class='doccomment'>/// Write `ListBucketsOutput` contents to a `SignedRequest`</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ListBucketsOutputWriter</span>;
+
 <span class='kw'>impl</span> <span class='ident'>ListBucketsOutputWriter</span> {
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write_params</span>(<span class='ident'>params</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Params</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>obj</span>: <span class='kw-2'>&amp;</span><span class='ident'>ListBucketsOutput</span>) {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>prefix</span> <span class='op'>=</span> <span class='ident'>name</span>.<span class='ident'>to_string</span>();
@@ -11502,7 +11527,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CreateBucketOutput</span> {
     <span class='kw'>pub</span> <span class='ident'>location</span>: <span class='ident'>Location</span>,
 }
@@ -11625,7 +11651,8 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CreateBucketConfiguration</span> {
     <span class='doccomment'>/// Specifies the region where the bucket will be created. If you don&#39;t specify a</span>
     <span class='doccomment'>/// region, the bucket will be created in US Standard.</span>
@@ -12963,7 +12990,8 @@
 
 
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>)]</span>
+<span class='comment'>//#[derive(Debug, Default)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ObjectVersion</span> {
     <span class='doccomment'>/// Date and time the object was last modified.</span>
     <span class='kw'>pub</span> <span class='ident'>last_modified</span>: <span class='ident'>LastModified</span>,

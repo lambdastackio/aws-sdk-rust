@@ -28,7 +28,7 @@ use std::fmt::{Display, Error as FmtError, Formatter};
 
 /// An AWS region.
 /// CnNorth1 is currently untested due to Rusoto maintainers not having access to AWS China.
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, RustcDecodable, RustcEncodable)]
 pub enum Region {
     ApNortheast1,
     ApNortheast2,
@@ -45,7 +45,7 @@ pub enum Region {
 }
 
 /// An error produced when attempting to convert a `str` into a `Region` fails.
-#[derive(Debug,PartialEq)]
+#[derive(Debug, PartialEq, Default, RustcDecodable, RustcEncodable)]
 pub struct ParseRegionError {
     message: String,
 }

@@ -23,10 +23,15 @@
 extern crate aws_sdk_rust;
 extern crate url;
 extern crate hyper;
+//extern crate serde;
+//extern crate serde_json;
+extern crate rustc_serialize;
 
 //use std::default::Default;
 use std::str;
 use std::str::FromStr;
+
+use rustc_serialize::json;
 
 use aws_sdk_rust::aws::common::credentials::DefaultCredentialsProvider;
 // NOTE: The bucket and obect use is using * but you may want to use specific items instead of everything
@@ -157,16 +162,19 @@ fn main() {
         Err(e) => println!("{:#?}", e)
     }
 */
-/*
+
     let mut get_object_acl = GetObjectAclRequest::default();
     get_object_acl.bucket = bucket_name.to_string();
     get_object_acl.key = "mytest.txt".to_string();
 
     match client.get_object_acl(&get_object_acl) {
-        Ok(acl) => println!("{:#?}", acl),
+        Ok(acl) => {
+            println!("{:#?}", acl);
+            println!("{}", json::as_pretty_json(&acl));
+        },
         Err(e) => println!("{:#?}", e)
     }
-*/
+
 /*
     let bucket_head = HeadBucketRequest { bucket: bucket_name.to_string() };
 
@@ -223,7 +231,11 @@ fn main() {
     //list_objects.version = Some(2);
 
     match client.list_objects(&list_objects) {
-        Ok(version) => println!("{:#?}", version),
+        Ok(objects) => {
+            println!("{:#?}", objects);
+            //let encoded = json::encode(&objects).unwrap();
+            println!("{}", json::as_pretty_json(&objects));
+        },
         Err(e) => println!("{:#?}", e)
     }
 

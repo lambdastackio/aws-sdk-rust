@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-16' class='srclink' href='../../src/aws_sdk_rust/src/aws/mod.rs.html#16-31' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-16' class='srclink' href='../../src/aws_sdk_rust/src/aws/mod.rs.html#16-61' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Each of the modules listed below contain <code>Client</code> and <code>Library</code> documentation. At the top of
 each file the documentation identifies if the given source file is mainly used for <code>Client</code>
 or by the <code>Library</code>. Of course, we welcome <em>ALL</em> pull requests so digging into the <code>Library</code>
@@ -55,6 +55,35 @@ documentation is encouraged to get an idea how <code>aws-sdk-rust</code> works.<
 
 <p>However, if you&#39;re only interested in how to use it from your app then skip the docs that
 start with <code>Library</code> and focus on those that start with <code>Client</code>.</p>
+
+<p>NB: ####Endpoint is the only non-unit structure that is not JSON encodable/decodable due to
+third party Url struct. A custom to_json trait would need to be implemented. Not real impactful
+since this struct is mainly used for initial endpoint connections.</p>
+
+<p>NB: ####CompleteMultipartUploadRequest is <em>not</em> JSON decodable without implementing a custom to_json trait
+because of Option&lt;&amp;&#39;a [u8]&gt;. You can still encode to JSON.</p>
+
+<p>NB: ####PutObjectRequest is <em>not</em> JSON decodable without implementing a custom to_json trait
+because of Option&lt;&amp;&#39;a [u8]&gt;. You can still encode to JSON.</p>
+
+<p>NB: ####UploadPartRequest is <em>not</em> JSON decodable without implementing a custom to_json trait
+because of Option&lt;&amp;&#39;a [u8]&gt;. You can still encode to JSON.</p>
+
+<p>Example JSON output: (see /src/main.rs for full examples)
+   use rustc_serialize::json;</p>
+
+<p>let mut list_objects = ListObjectsRequest::default();
+   list_objects.bucket = bucket_name.to_string();</p>
+
+<p>match client.list_objects(&amp;list_objects) {
+       Ok(objects) =&gt; {
+           // Example of Serializing Rust struct
+           println!(&quot;{:#?}&quot;, objects);
+           // Example of converting to JSON. Can also call json::encode(&amp;objects).unwrap();
+           println!(&quot;{}&quot;, json::as_pretty_json(&amp;objects));
+       },
+       Err(e) =&gt; println!(&quot;{:#?}&quot;, e)
+   }</p>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                        <tr class=' module-item'>
