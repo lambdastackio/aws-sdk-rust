@@ -47,6 +47,7 @@ use aws::common::credentials::AwsCredentials;
 use aws::common::params::Params;
 use aws::common::region::Region;
 use aws::s3::endpoint::Signature;
+use aws::s3::endpoint::Endpoint;
 
 // const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
@@ -68,8 +69,9 @@ pub struct SignedRequest<'a> {
     content_type: Option<String>,
     canonical_query_string: String,
     canonical_uri: String,
-    signature: Signature,
-    ssl: bool,
+    pub endpoint: &'a Endpoint,
+    //signature: Signature,
+    //ssl: bool,
 }
 
 impl<'a> SignedRequest<'a> {
@@ -79,7 +81,8 @@ impl<'a> SignedRequest<'a> {
                region: Region,
                bucket: &str,
                path: &str,
-               signature: &Signature)
+               endpoint: &'a Endpoint)
+               //signature: &Signature)
                -> SignedRequest<'a> {
         SignedRequest {
             method: method.to_string(),
@@ -94,8 +97,9 @@ impl<'a> SignedRequest<'a> {
             content_type: None,
             canonical_query_string: String::new(),
             canonical_uri: String::new(),
-            signature: signature.clone(),
-            ssl: true,
+            endpoint: endpoint,
+            //signature: signature.clone(),
+            //ssl: true,
         }
     }
 
@@ -105,9 +109,9 @@ impl<'a> SignedRequest<'a> {
     }
 
     /// Allows for overriding inital `Signature` used when struct was created.
-    pub fn set_signature(&mut self, signature: Signature) {
-        self.signature = signature;
-    }
+    //pub fn set_signature(&mut self, signature: Signature) {
+    //    self.signature = signature;
+    //}
 
     /// Allows for overriding inital bucket name used when struct was created.
     pub fn set_bucket(&mut self, bucket: &str) {
@@ -139,15 +143,15 @@ impl<'a> SignedRequest<'a> {
     /// Mainly used with proxies and inside firewalls where certificates may not be used
     /// (non AWS environments).
     /// Default is `true`.
-    pub fn set_ssl(&mut self, ssl: bool) {
-        self.ssl = ssl;
-    }
+    //pub fn set_ssl(&mut self, ssl: bool) {
+    //    self.ssl = ssl;
+    //}
 
     /// Returns the `ssl` bool flag. Mainly used for inside firewalls where proxies are used.
     /// Default is `true`.
-    pub fn ssl(&self) -> bool {
-        self.ssl
-    }
+    //pub fn ssl(&self) -> bool {
+    //    self.ssl
+    //}
 
     /// Returns the `bucket` name.
     pub fn bucket(&self) -> &str {
@@ -160,8 +164,19 @@ impl<'a> SignedRequest<'a> {
     }
 
     /// Returns the `Signature` enum value: V2 or V4.
-    pub fn signature(&self) -> &Signature {
-        &self.signature
+    //pub fn signature(&self) -> &Signature {
+    //    &self.signature
+    //}
+
+    pub fn endpoint(&self) -> &Endpoint {
+        &self.endpoint
+    }
+
+    pub fn endpoint_scheme(&self) -> &str {
+        match self.endpoint.endpoint {
+            Some(ref url) => url.scheme(),
+            None => "https"
+        }
     }
 
     /// Returns the `path (uri)` used for calculating signature.
@@ -259,7 +274,7 @@ impl<'a> SignedRequest<'a> {
 
     /// Called by `Requests` and determines which signature function to use.
     pub fn sign(&mut self, creds: &AwsCredentials) {
-        match self.signature {
+        match self.endpoint.signature {
             Signature::V2 => self.sign_v2(&creds),
             Signature::V4 => self.sign_v4(&creds),
         }

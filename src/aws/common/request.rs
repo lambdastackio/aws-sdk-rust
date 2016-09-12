@@ -101,12 +101,15 @@ impl DispatchSignedRequest for Client {
             hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
         }
 
+/*
+if request.ssl() {
+    "https"
+} else {
+    "http"
+},
+*/
         let mut final_uri = format!("{}://{}{}",
-                                    if request.ssl() {
-                                        "https"
-                                    } else {
-                                        "http"
-                                    },
+                                    request.endpoint_scheme(),
                                     request.hostname(),
                                     request.path());
         if !request.canonical_query_string().is_empty() {
