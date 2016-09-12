@@ -111,7 +111,9 @@ impl AWSError {
                 break;
             }
             // No reason for listing parse error...
-            exp_msg += &SkipElementParser::parse_xml(&current_name, stack).unwrap_or("".to_string());
+            //exp_msg += &SkipElementParser::parse_xml(&current_name, stack).unwrap_or("".to_string());
+            let tmp = &SkipElementParser::parse_xml(&current_name, stack).unwrap_or("".to_string());
+            exp_msg.push_str(tmp);
         }
         // end_element_skip instead of end_element is used because AWSError changes based on the
         // type of error. However, certain portions are always there and those are the ones we're

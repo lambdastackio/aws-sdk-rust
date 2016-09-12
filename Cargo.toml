@@ -1,6 +1,6 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.11"
+version = "0.1.12"
 authors = ["Chris Jones <chris.jones@lambdastack.io>"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -10,7 +10,7 @@ homepage = "https://github.com/lambdastackio/aws-sdk-rust"
 documentation = "https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws"
 description = """
 BETA! - Heavy enhacements and updated docs.
-Important Enhancements: 
+Important Enhancements:
 1) Supports V2 and V4 API Signatures for third party S3 compliant products like Ceph
 2) Works behind proxies
 3) Returned data can be in Rust structs, JSON or XML
