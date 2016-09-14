@@ -94,7 +94,6 @@ impl DispatchSignedRequest for Client {
             "HEAD" => Method::Head,
             v @ _ => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) }),
         };
-
         // translate the headers map to a format Hyper likes
         let mut hyper_headers = Headers::new();
         for h in request.headers().iter() {
@@ -138,9 +137,9 @@ if request.ssl() {
         let mut hyper_response = match request.payload() {
             None => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send()),
             Some(payload_contents) => try!(self.request(hyper_method, &final_uri)
-                .headers(hyper_headers)
-                .body(payload_contents)
-                .send()),
+                                                            .headers(hyper_headers)
+                                                            .body(payload_contents)
+                                                            .send()),
         };
 
         let mut body = String::new();

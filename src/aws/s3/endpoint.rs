@@ -53,7 +53,7 @@ pub struct Endpoint {
 /// Required to specify which type of API Signature to use. AWS defaults to using V4 by default.
 /// However, third party applications often use V2 (AWS will still honor V2).
 //#[derive(Debug, Clone, Copy)]
-#[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
+#[derive(Debug, Clone, PartialEq, RustcDecodable, RustcEncodable)]
 pub enum Signature {
     V2,
     V4,

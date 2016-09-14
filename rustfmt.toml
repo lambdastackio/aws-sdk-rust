@@ -1,3 +1,4 @@
+format_strings = false
 reorder_imports = true
 reorder_imported_names = true
 where_trailing_comma = true

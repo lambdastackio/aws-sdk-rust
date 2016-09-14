@@ -197,10 +197,6 @@ impl<P, D> S3Client<P, D>
                                              &input.bucket,
                                              "/",
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "HeadBucket");
-        // HeadBucketRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -228,13 +224,15 @@ impl<P, D> S3Client<P, D>
     /// Returns a list of all buckets owned by the authenticated sender of the
     /// request.
     pub fn list_buckets(&self) -> Result<ListBucketsOutput, S3Error> {
-        let mut request = SignedRequest::new("GET", "s3", self.region, "", "/", &self.endpoint);
-        request.set_hostname(self.endpoint.hostname());
+        let mut request = SignedRequest::new(
+                                        "GET",
+                                        "s3",
+                                        self.region,
+                                        "",
+                                        "/",
+                                        &self.endpoint);
 
-        // V4
-        // let mut params = Params::new();
-        // params.put("Action", "ListBuckets");
-        // request.set_params(params);
+        request.set_hostname(self.endpoint.hostname());
 
         let result = sign_and_execute(&self.dispatcher,
                                       &mut request,
@@ -263,12 +261,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?lifecycle",
+                                             if self.endpoint.signature == Signature::V2 {"/?lifecycle"} else {"/"},
                                              &self.endpoint);
-        let mut params = Params::new();
-        params.put("Action", "PutBucketLifecycle");
-        PutBucketLifecycleRequestWriter::write_params(&mut params, "", input);
-        request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("lifecycle", "");
+            //params.put("Action", "PutBucketLifecycle");
+            //PutBucketLifecycleRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -298,11 +300,17 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?acl",
+                                             if self.endpoint.signature == Signature::V2 {"/?acl"} else {"/"},
                                              &self.endpoint);
 
         // Not doing anything but allow unused_variables is set above to kill warning.
         let acls = build_bucket_acls(&mut request, &input);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("acl", "");
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -333,12 +341,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?policy",
+                                             if self.endpoint.signature == Signature::V2 {"/?policy"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "PutBucketPolicy");
-        // PutBucketPolicyRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("policy", "");
+            // params.put("Action", "PutBucketPolicy");
+            // PutBucketPolicyRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -368,12 +380,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?website",
+                                             if self.endpoint.signature == Signature::V2 {"/?website"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "PutBucketWebsite");
-        // PutBucketWebsiteRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("website", "");
+            // params.put("Action", "PutBucketWebsite");
+            // PutBucketWebsiteRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -405,12 +421,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?logging",
+                                             if self.endpoint.signature == Signature::V2 {"/?logging"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "PutBucketLogging");
-        // PutBucketLoggingRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("logging", "");
+            // params.put("Action", "PutBucketLogging");
+            // PutBucketLoggingRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -442,12 +462,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?replication",
+                                             if self.endpoint.signature == Signature::V2 {"/?replication"} else {""},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "PutBucketReplication");
-        // PutBucketReplicationRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("replication", "");
+            // params.put("Action", "PutBucketReplication");
+            // PutBucketReplicationRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -480,12 +504,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?versioning",
+                                             if self.endpoint.signature == Signature::V2 {"/?versioning"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "PutBucketVersioning");
-        // PutBucketVersioningRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("versioning", "");
+            // params.put("Action", "PutBucketVersioning");
+            // PutBucketVersioningRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -545,7 +573,6 @@ impl<P, D> S3Client<P, D>
                 let mut reader = EventReader::from_str(&result.body);
                 let mut stack = XmlResponse::new(reader.events().peekable());
                 stack.next(); // xml start tag
-                stack.next();
 
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
                 Err(S3Error::with_aws("Error deleting bucket", aws))
@@ -559,12 +586,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?tagging",
+                                             if self.endpoint.signature == Signature::V2 {"/?tagging"} else {""},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "DeleteBucketTagging");
-        // DeleteBucketTaggingRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("tagging", "");
+            // params.put("Action", "DeleteBucketTagging");
+            // DeleteBucketTaggingRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -595,12 +626,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?cors",
+                                             if self.endpoint.signature == Signature::V2 {"/?cors"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "DeleteBucketCors");
-        // DeleteBucketCorsRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("cors", "");
+            // params.put("Action", "DeleteBucketCors");
+            // DeleteBucketCorsRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -631,12 +666,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?website",
+                                             if self.endpoint.signature == Signature::V2 {"/?website"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "DeleteBucketWebsite");
-        // DeleteBucketWebsiteRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("website", "");
+            // params.put("Action", "DeleteBucketWebsite");
+            // DeleteBucketWebsiteRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -667,12 +706,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/{}?policy",
+                                             if self.endpoint.signature == Signature::V2 {"/?policy"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "DeleteBucketPolicy");
-        // DeleteBucketPolicyRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("policy", "");
+            // params.put("Action", "DeleteBucketPolicy");
+            // DeleteBucketPolicyRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -703,12 +746,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?replication",
+                                             if self.endpoint.signature == Signature::V2 {"/?replication"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "DeleteBucketReplication");
-        // DeleteBucketReplicationRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("replication", "");
+            // params.put("Action", "DeleteBucketReplication");
+            // DeleteBucketReplicationRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -739,12 +786,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?cors",
+                                             if self.endpoint.signature == Signature::V2 {"/?cors"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "GetBucketCors");
-        // GetBucketCorsRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("cors", "");
+            // params.put("Action", "GetBucketCors");
+            // GetBucketCorsRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -775,12 +826,19 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?acl",
+                                             if self.endpoint.signature == Signature::V2 {"/?acl"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "GetBucketAcl");
-        // GetBucketAclRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        // NOTE: V4 - For sub-resources add them as params and not part of the path
+        // NOTE: V2 - For sub-resources add then as part of the path and not as params
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("acl", "");
+            //params.put("Action", "GetBucketAcl");
+            //GetBucketAclRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -811,12 +869,19 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?logging",
+                                             if self.endpoint.signature == Signature::V2 {"/?logging"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "GetBucketLogging");
-        // GetBucketLoggingRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        // NOTE: V4 - For sub-resources add them as params and not part of the path
+        // NOTE: V2 - For sub-resources add then as part of the path and not as params
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("logging", "");
+            // params.put("Action", "GetBucketLogging");
+            // GetBucketLoggingRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -848,12 +913,19 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?notification",
+                                             if self.endpoint.signature == Signature::V2 {"/?notification"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "GetBucketNotificationConfiguration");
-        // GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+         // NOTE: V4 - For sub-resources add them as params and not part of the path
+         // NOTE: V2 - For sub-resources add then as part of the path and not as params
+
+         if self.endpoint.signature == Signature::V4 {
+             let mut params = Params::new();
+             params.put("notification", "");
+             // params.put("Action", "GetBucketNotificationConfiguration");
+             // GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", input);
+             request.set_params(params);
+         }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -884,13 +956,19 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?versioning",
+                                             if self.endpoint.signature == Signature::V2 {"/?versioning"} else {"/"},
                                              &self.endpoint);
 
-        // let mut params = Params::new();
-        // params.put("Action", "GetBucketVersioning");
-        // GetBucketVersioningRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+         // NOTE: V4 - For sub-resources add them as params and not part of the path
+         // NOTE: V2 - For sub-resources add then as part of the path and not as params
+
+         if self.endpoint.signature == Signature::V4 {
+             let mut params = Params::new();
+             params.put("versioning", "");
+             // params.put("Action", "GetBucketVersioning");
+             // GetBucketVersioningRequestWriter::write_params(&mut params, "", input);
+             request.set_params(params);
+         }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -996,20 +1074,33 @@ impl<P, D> S3Client<P, D>
 
     /// Returns the access control list (ACL) of an object.
     pub fn get_object_acl(&self, input: &GetObjectAclRequest) -> Result<AccessControlPolicy, S3Error> {
+        let mut path: String;
+        if self.endpoint.signature == Signature::V2 {
+            path = format!("/{}?acl", input.key);
+        } else {
+            path = format!("/{}", input.key);
+        }
+
         let mut request = SignedRequest::new("GET",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}?acl", input.key),
+                                             &path,
                                              &self.endpoint);
 
          let hostname = self.hostname(Some(&input.bucket));
          request.set_hostname(Some(hostname));
 
-        //let mut params = Params::new();
-        //params.put("Action", "GetObjectAcl");
-        //GetObjectAclRequestWriter::write_params(&mut params, "", input);
-        //request.set_params(params);
+         // NOTE: V4 - For sub-resources add them as params and not part of the path
+         // NOTE: V2 - For sub-resources add then as part of the path and not as params
+
+         if self.endpoint.signature == Signature::V4 {
+             let mut params = Params::new();
+             params.put("acl", "");
+             //params.put("Action", "GetObjectAcl");
+             //GetObjectAclRequestWriter::write_params(&mut params, "", input);
+             request.set_params(params);
+         }
 
         let result = sign_and_execute(&self.dispatcher,
                                       &mut request,
@@ -1369,16 +1460,28 @@ impl<P, D> S3Client<P, D>
 
     /// Restores an archived copy of an object back into Amazon S3
     pub fn restore_object(&self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, S3Error> {
+        let mut path: String;
+        if self.endpoint.signature == Signature::V2 {
+            path = format!("/{}?restore", input.key);
+        } else {
+            path = format!("/{}", input.key);
+        }
+
         let mut request = SignedRequest::new("POST",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}?restore", input.key),
+                                             &path,
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "RestoreObject");
-        // RestoreObjectRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("restore", "");
+            // params.put("Action", "RestoreObject");
+            // RestoreObjectRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
+
         let result = sign_and_execute(&self.dispatcher,
                                       &mut request,
                                       try!(self.credentials_provider.credentials()));
@@ -1478,17 +1581,27 @@ impl<P, D> S3Client<P, D>
     /// uses the acl subresource to set the access control list (ACL) permissions for
     /// an object that already exists in a bucket
     pub fn put_object_acl(&self, input: &PutObjectAclRequest) -> Result<(), S3Error> {
+        let mut path: String;
+        if self.endpoint.signature == Signature::V2 {
+            path = format!("/{}?acl", input.key);
+        } else {
+            path = format!("/{}", input.key);
+        }
+
         let mut request = SignedRequest::new("PUT",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}?acl", input.key),
+                                             &path,
                                              &self.endpoint);
 
-        //let mut params = Params::new();
-        //params.put("Action", "PutObjectAcl");
-        //PutObjectAclRequestWriter::write_params(&mut params, "", input);
-        //equest.set_params(params);
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("acl", "");
+            //params.put("Action", "PutObjectAcl");
+            //PutObjectAclRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         // Not doing anything but allow unused_variables is set above to kill warning.
         let acls = build_object_acls(&mut request, &input);
@@ -1522,12 +1635,16 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             "/?versions",
+                                             if self.endpoint.signature == Signature::V2 {"/?versions"} else {"/"},
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "ListObjectVersions");
-        // ListObjectVersionsRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("versions", "");
+            // params.put("Action", "ListObjectVersions");
+            // ListObjectVersionsRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -1554,7 +1671,14 @@ impl<P, D> S3Client<P, D>
 
     fn hostname(&self, bucket: Option<&BucketName>) -> String {
         match bucket {
-            Some(b) => format!("{}.{}", b, self.endpoint.hostname().unwrap()),
+            Some(b) => {
+                // NOTE: If the bucket name contains '.' then it must follow path vs virtual bucket
+                if b.contains(".") {
+                    format!("{}", self.endpoint.hostname().unwrap())
+                } else {
+                    format!("{}.{}", b, self.endpoint.hostname().unwrap())
+                }
+            },
             None => format!("{}", self.endpoint.hostname().unwrap()),
         }
     }
@@ -1576,7 +1700,6 @@ fn field_in_s3_redirect(name: &str) -> bool {
     }
     false
 }
-
 
 /// `extract_s3_temporary_endpoint_from_xml` takes in XML and tries to find the value of the Endpoint node.
 fn extract_s3_temporary_endpoint_from_xml<T: Peek + Next>(stack: &mut T) -> Result<String, S3Error> {

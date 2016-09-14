@@ -1,6 +1,6 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.13"
+version = "0.1.14"
 authors = ["Chris Jones <chris.jones@lambdastack.io>"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -9,16 +9,16 @@ repository = "https://github.com/lambdastackio/aws-sdk-rust"
 homepage = "https://github.com/lambdastackio/aws-sdk-rust"
 documentation = "https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws"
 description = """
-BETA! - Heavy enhacements and updated docs.
 Important Enhancements:
 1) Supports V2 and V4 API Signatures for third party S3 compliant products like Ceph
-2) Works behind proxies
+2) Works from behind proxies
 3) Returned data can be in Rust structs, JSON or XML
 
 Works only for S3. For a full AWS SDK look at rusoto.
 """
 
 [dependencies]
+lsio = "0.1"
 chrono = "0.2.21"
 httparse = "1.1.2"
 hyper = "0.9"
@@ -32,9 +32,11 @@ serde_json = "0.8"
 time = "0.1"
 url = "1.2"
 xml-rs = "0.1"
+# NOTE: term is only used for the example
+term = "0.4"
 
 # This section is here because there is a main.rs that used as an example.
 [[bin]]
 doc = false
-name = "main"
-path = "src/main.rs"
+name = "s3"
+path = "examples/s3.rs"

@@ -55,7 +55,7 @@ use aws::s3::endpoint::Endpoint;
 /// the Amazon Signature Version 4 signing process
 /// version - represents the Signature version. The default is 4 but it can also be set to 2 for older environments.
 #[derive(Debug)]
-//#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+// #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct SignedRequest<'a> {
     method: String,
     service: String,
@@ -69,20 +69,13 @@ pub struct SignedRequest<'a> {
     content_type: Option<String>,
     canonical_query_string: String,
     canonical_uri: String,
-    pub endpoint: &'a Endpoint,
-    //signature: Signature,
-    //ssl: bool,
+    pub endpoint: &'a Endpoint, /* signature: Signature,
+                                 * ssl: bool, */
 }
 
 impl<'a> SignedRequest<'a> {
     /// Default constructor
-    pub fn new(method: &str,
-               service: &str,
-               region: Region,
-               bucket: &str,
-               path: &str,
-               endpoint: &'a Endpoint)
-               //signature: &Signature)
+    pub fn new(method: &str, service: &str, region: Region, bucket: &str, path: &str, endpoint: &'a Endpoint)
                -> SignedRequest<'a> {
         SignedRequest {
             method: method.to_string(),
@@ -97,22 +90,19 @@ impl<'a> SignedRequest<'a> {
             content_type: None,
             canonical_query_string: String::new(),
             canonical_uri: String::new(),
-            endpoint: endpoint,
-            //signature: signature.clone(),
-            //ssl: true,
+            endpoint: endpoint, /* signature: signature.clone(),
+                                 * ssl: true, */
         }
     }
 
-    //?
     pub fn set_content_type(&mut self, content_type: String) {
         self.content_type = Some(content_type);
     }
 
     /// Allows for overriding inital `Signature` used when struct was created.
-    //pub fn set_signature(&mut self, signature: Signature) {
+    // pub fn set_signature(&mut self, signature: Signature) {
     //    self.signature = signature;
-    //}
-
+    // }
     /// Allows for overriding inital bucket name used when struct was created.
     pub fn set_bucket(&mut self, bucket: &str) {
         self.bucket = bucket.to_string();
@@ -143,16 +133,14 @@ impl<'a> SignedRequest<'a> {
     /// Mainly used with proxies and inside firewalls where certificates may not be used
     /// (non AWS environments).
     /// Default is `true`.
-    //pub fn set_ssl(&mut self, ssl: bool) {
+    // pub fn set_ssl(&mut self, ssl: bool) {
     //    self.ssl = ssl;
-    //}
-
+    // }
     /// Returns the `ssl` bool flag. Mainly used for inside firewalls where proxies are used.
     /// Default is `true`.
-    //pub fn ssl(&self) -> bool {
+    // pub fn ssl(&self) -> bool {
     //    self.ssl
-    //}
-
+    // }
     /// Returns the `bucket` name.
     pub fn bucket(&self) -> &str {
         &self.bucket
@@ -164,9 +152,9 @@ impl<'a> SignedRequest<'a> {
     }
 
     /// Returns the `Signature` enum value: V2 or V4.
-    //pub fn signature(&self) -> &Signature {
+    // pub fn signature(&self) -> &Signature {
     //    &self.signature
-    //}
+    // }
 
     pub fn endpoint(&self) -> &Endpoint {
         &self.endpoint
@@ -175,7 +163,7 @@ impl<'a> SignedRequest<'a> {
     pub fn endpoint_scheme(&self) -> &str {
         match self.endpoint.endpoint {
             Some(ref url) => url.scheme(),
-            None => "https"
+            None => "https",
         }
     }
 
@@ -259,9 +247,7 @@ impl<'a> SignedRequest<'a> {
 
         match self.headers.entry(key_lower) {
             Entry::Vacant(entry) => "".to_string(),
-            Entry::Occupied(entry) => {
-                canonical_values(entry.get())
-            },
+            Entry::Occupied(entry) => canonical_values(entry.get()),
         }
     }
 
@@ -274,6 +260,10 @@ impl<'a> SignedRequest<'a> {
 
     /// Called by `Requests` and determines which signature function to use.
     pub fn sign(&mut self, creds: &AwsCredentials) {
+        // NOTE: Check the bucket and path
+        if self.bucket.contains(".") && !self.path.contains(&format!("/{}/", self.bucket)) {
+            self.path = format!("/{}{}", self.bucket, self.path);
+        }
         match self.endpoint.signature {
             Signature::V2 => self.sign_v2(&creds),
             Signature::V4 => self.sign_v4(&creds),
@@ -305,20 +295,21 @@ impl<'a> SignedRequest<'a> {
         let date = now_utc().rfc822().to_string();
         self.update_header("Date", &date);
 
-        self.canonical_query_string = build_canonical_query_string(&self.params);
-        self.canonical_uri = canonical_uri(&self.path);
-        //let canonical_headers = canonical_headers_v2(&self.headers);
-        //println!("----sign_v2----------");
-        //println!("{:?}", self.bucket);
-        //println!("{:?}", hostname);
-        //println!("{:?}", self.canonical_query_string);
-        //println!("{:?}", self.canonical_uri);
-        //println!("{:?}", canonical_headers);
-        //println!("**-------------------");
-        //println!("{:?}", self.headers);
-        //println!("{:?}", self.path);
-        //println!("{:?}", self.params);
-        //println!("---------------------");
+        // self.canonical_query_string = build_canonical_query_string(&self.params);
+        // self.canonical_uri = canonical_uri(&self.path);
+        // let canonical_headers = canonical_headers_v2(&self.headers);
+        // let canonical_resources = canonical_resources_v2(&self.bucket, &self.path);
+        // println!("----sign_v2----------");
+        // println!("bucket {:#?}", self.bucket);
+        // println!("hostname {:#?}", hostname);
+        // println!("canonical_query_string {:#?}", self.canonical_query_string);
+        // println!("canonical_resources_v2 {:#?}", canonical_resources);
+        // println!("canonical_headers {:#?}", canonical_headers);
+        // println!("**-------------------");
+        // println!("headers {:#?}", self.headers);
+        // println!("path {:#?}", self.path);
+        // println!("params {:#?}", self.params);
+        // println!("---------------------");
 
         // NOTE: If you set the 'date' header then include it in the string_to_sign w/o the
         // x-amz-date resource. If you do not use the date header but use the x-amz-date then set
@@ -347,12 +338,13 @@ impl<'a> SignedRequest<'a> {
             Some(payload) => {
                 self.update_header("Content-Length", &format!("{}", payload.len()));
                 // println!("--------payload---------");
-                // println!("{:?}", payload);
+                // println!("{:#?}", payload);
             },
         }
-        //println!("{:?}", self.canonical_query_string);
-        //println!("{:?}", string_to_sign);
-        //println!("===================");
+
+        // println!("canonical_query_string {:#?}", self.canonical_query_string);
+        // println!("string_to_sign {:#?}", string_to_sign);
+        // println!("===================");
 
         let signature = {
             let mut hmac = HMAC::new(SHA1, creds.aws_secret_access_key().as_bytes());
@@ -360,12 +352,10 @@ impl<'a> SignedRequest<'a> {
             hmac.finish().to_base64(STANDARD)
         };
 
-        self.update_header("Authorization",
-                           &format!("AWS {}:{}", creds.aws_access_key_id(), signature));
+        self.update_header("Authorization", &format!("AWS {}:{}", creds.aws_access_key_id(), signature));
     }
 
     fn sign_v4(&mut self, creds: &AwsCredentials) {
-        debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
             None => build_hostname(&self.service, self.region),
@@ -385,8 +375,7 @@ impl<'a> SignedRequest<'a> {
 
         let date = now_utc();
         self.remove_header("x-amz-date");
-        self.add_header("x-amz-date",
-                        &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
+        self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
 
         // build the canonical request
         let signed_headers = signed_headers(&self.headers);
@@ -421,18 +410,18 @@ impl<'a> SignedRequest<'a> {
                 self.add_header("content-length", &format!("{}", payload.len()));
             },
         }
-/*
-        println!("----sign_v4----------");
-        println!("{:?}", self.canonical_query_string);
-        println!("{:?}", self.canonical_uri);
-        println!("{:?}", canonical_headers);
-        println!("---------------------");
-        println!("{:?}", self.headers);
-        println!("{:?}", self.path);
-        println!("{:?}", self.params);
-        println!("{:?}", canonical_request);
-        println!("=====================");
-*/
+
+        // println!("----sign_v4----------");
+        // println!("canonical_query_string {:?}", self.canonical_query_string);
+        // println!("canonical_uri {:?}", self.canonical_uri);
+        // println!("canonical_headers {:?}", canonical_headers);
+        // println!("---------------------");
+        // println!("headers {:?}", self.headers);
+        // println!("path {:?}", self.path);
+        // println!("params {:?}", self.params);
+        // println!("canonical_request {:?}", canonical_request);
+        // println!("=====================");
+
         self.remove_header("content-type");
         let ct = match self.content_type {
             Some(ref h) => h.to_string(),
@@ -443,17 +432,14 @@ impl<'a> SignedRequest<'a> {
 
         // use the hashed canonical request to build the string to sign
         let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
-        let scope = format!("{}/{}/{}/aws4_request",
-                            date.strftime("%Y%m%d").unwrap(),
-                            self.region,
-                            &self.service);
+        let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), self.region, &self.service);
         let string_to_sign = string_to_sign_v4(date, &hashed_canonical_request, &scope);
 
         // construct the signing key and sign the string with it
-        let signing_key = signing_key(creds.aws_secret_access_key(),
-                                      date,
-                                      &self.region.to_string(),
-                                      &self.service);
+        let signing_key = signing_key(creds.aws_secret_access_key(), date, &self.region.to_string(), &self.service);
+
+        // println!("signing_key {:?}", signing_key);
+
         let signature = signature(&string_to_sign, signing_key);
 
         // build the actual auth header
@@ -464,6 +450,12 @@ impl<'a> SignedRequest<'a> {
                                   signature);
         self.remove_header("authorization");
         self.add_header("authorization", &auth_header);
+
+        // println!("hashed_canonical_request {:?}", hashed_canonical_request);
+        // println!("scope {:?}", scope);
+        // println!("string_to_sign {:?}", string_to_sign);
+        // println!("signature {:?}", signature);
+        // println!("auth_header {:?}", auth_header);
     }
 }
 
@@ -498,10 +490,7 @@ fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
         if skipped_headers(item.0) {
             continue;
         }
-        canonical.push_str(format!("{}:{}\n",
-                                   item.0.to_ascii_lowercase(),
-                                   canonical_values(item.1))
-            .as_ref());
+        canonical.push_str(format!("{}:{}\n", item.0.to_ascii_lowercase(), canonical_values(item.1)).as_ref());
     }
     canonical
 }
@@ -525,7 +514,9 @@ fn canonical_values(values: &[Vec<u8>]) -> String {
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
-        _ => encode_uri(path),
+        _ => {
+            encode_uri(path)
+        },
     }
 }
 
@@ -556,7 +547,7 @@ fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
 }
 
 fn skipped_headers(header: &str) -> bool {
-    ["authorization", "content-length", "user-agent"].contains(&header)
+    ["authorization", "content-length", "content-type", "user-agent"].contains(&header)
 }
 
 fn build_canonical_query_string(params: &Params) -> String {
@@ -647,20 +638,25 @@ fn canonical_headers_v2(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     canonical
 }
 
+// NOTE: If bucket contains '.' it is already formatted in path so just encode it.
 fn canonical_resources_v2(bucket: &str, path: &str) -> String {
-    match bucket {
-        "" => {
-            match path {
-                "" => "/".to_string(),
-                _ => encode_uri(&format!("{}", path)),  // This assumes / as leading char
-            }
-        },
-        _ => {
-            match path {
-                "" => format!("/{}/", bucket),
-                _ => encode_uri(&format!("/{}{}", bucket, path)),  // This assumes path with leading / char
-            }
-        },
+    if bucket.to_string().contains(".") {
+        encode_uri(path)
+    } else {
+        match bucket {
+            "" => {
+                match path {
+                    "" => "/".to_string(),
+                    _ => encode_uri(path),  // This assumes / as leading char
+                }
+            },
+            _ => {
+                match path {
+                    "" => format!("/{}/", bucket),
+                    _ => encode_uri(&format!("/{}{}", bucket, path)),  // This assumes path with leading / char
+                }
+            },
+        }
     }
 }
 // V2 Signature related - End
