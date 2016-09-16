@@ -47,12 +47,26 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-4482' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#18-2074' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-4569' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#18-2551' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Library Documentation</p>
 
 <p>This file contains everything related to <code>Objects</code>.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.AbortMultipartUploadOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::AbortMultipartUploadOutput'>AbortMultipartUploadOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.AbortMultipartUploadRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::AbortMultipartUploadRequest'>AbortMultipartUploadRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.CompleteMultipartUploadOutput.html'
                                   title='aws_sdk_rust::aws::s3::object::CompleteMultipartUploadOutput'>CompleteMultipartUploadOutput</a></td>
@@ -272,6 +286,13 @@ because of Option&lt;&amp;&#39;a [u8]&gt;.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListMultipartUploadsRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListMultipartUploadsRequest'>ListMultipartUploadsRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='struct' href='struct.ListObjectVersionsOutput.html'
                                   title='aws_sdk_rust::aws::s3::object::ListObjectVersionsOutput'>ListObjectVersionsOutput</a></td>
                            <td class='docblock short'>
@@ -314,6 +335,34 @@ to version 1.</p>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.ListObjectsRequest.html'
                                   title='aws_sdk_rust::aws::s3::object::ListObjectsRequest'>ListObjectsRequest</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListPartsOutput.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListPartsOutput'>ListPartsOutput</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListPartsOutputParser.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListPartsOutputParser'>ListPartsOutputParser</a></td>
+                           <td class='docblock short'>
+                                <p>Parse <code>ListPartsOutput</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListPartsOutputWriter.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListPartsOutputWriter'>ListPartsOutputWriter</a></td>
+                           <td class='docblock short'>
+                                <p>Write <code>ListPartsOutput</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ListPartsRequest.html'
+                                  title='aws_sdk_rust::aws::s3::object::ListPartsRequest'>ListPartsRequest</a></td>
                            <td class='docblock short'>
                                 
                            </td>
@@ -619,11 +668,26 @@ events to an Amazon Simple Notification Service (Amazon SNS) topic.</p>
                                 <p>NB: UploadPartRequest is <em>not</em> JSON decodable without implementing a custom to_json trait
 because of Option&lt;&amp;&#39;a [u8]&gt;.</p>
                            </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.multipart_upload_finish_xml.html'
+                                  title='aws_sdk_rust::aws::s3::object::multipart_upload_finish_xml'>multipart_upload_finish_xml</a></td>
+                           <td class='docblock short'>
+                                <p>Writes out XML with all the parts in it for S3 to complete.</p>
+                           </td>
                        </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.Expires.html'
                                   title='aws_sdk_rust::aws::s3::object::Expires'>Expires</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MaxParts.html'
+                                  title='aws_sdk_rust::aws::s3::object::MaxParts'>MaxParts</a></td>
                            <td class='docblock short'>
                                 
                            </td>
@@ -638,6 +702,13 @@ because of Option&lt;&amp;&#39;a [u8]&gt;.</p>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.MultipartUploadList.html'
                                   title='aws_sdk_rust::aws::s3::object::MultipartUploadList'>MultipartUploadList</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.NextPartNumberMarker.html'
+                                  title='aws_sdk_rust::aws::s3::object::NextPartNumberMarker'>NextPartNumberMarker</a></td>
                            <td class='docblock short'>
                                 
                            </td>
@@ -666,6 +737,20 @@ because of Option&lt;&amp;&#39;a [u8]&gt;.</p>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.PartNumber.html'
                                   title='aws_sdk_rust::aws::s3::object::PartNumber'>PartNumber</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PartNumberMarker.html'
+                                  title='aws_sdk_rust::aws::s3::object::PartNumberMarker'>PartNumberMarker</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Parts.html'
+                                  title='aws_sdk_rust::aws::s3::object::Parts'>Parts</a></td>
                            <td class='docblock short'>
                                 
                            </td>

@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `ObjectWriter` struct in crate `aws_sdk_rust`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, ObjectWriter">
+    <meta name="description" content="API documentation for the Rust `Parts` type in crate `aws_sdk_rust`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Parts">
 
-    <title>aws_sdk_rust::aws::s3::writeparse::ObjectWriter - Rust</title>
+    <title>aws_sdk_rust::aws::s3::object::Parts - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         <a href='../../../../aws_sdk_rust/index.html'><img src='https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png' alt='logo' width='100'></a>
-        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>writeparse</a></p><script>window.sidebarCurrent = {name: 'ObjectWriter', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>object</a></p><script>window.sidebarCurrent = {name: 'Parts', ty: 'type', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,16 +42,13 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>writeparse</a>::<wbr><a class='struct' href=''>ObjectWriter</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content type">
+<h1 class='fqn'><span class='in-band'>Type Definition <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>object</a>::<wbr><a class='type' href=''>Parts</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-9265' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/writeparse.rs.html#6055' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct ObjectWriter;</pre><div class='docblock'><p>Write <code>Object</code> contents to a <code>SignedRequest</code></p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../../../../aws_sdk_rust/aws/s3/writeparse/struct.ObjectWriter.html' title='aws_sdk_rust::aws::s3::writeparse::ObjectWriter'>ObjectWriter</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-9267' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/writeparse.rs.html#6057-6068' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.write_params' class='method'><span id='write_params.v' class='invisible'><code>fn <a href='#method.write_params' class='fnname'>write_params</a>(params: &amp;mut <a class='type' href='../../../../aws_sdk_rust/aws/common/params/type.Params.html' title='aws_sdk_rust::aws::common::params::Params'>Params</a>, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, obj: &amp;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.Object.html' title='aws_sdk_rust::aws::s3::object::Object'>Object</a>)</code></span></h4>
-</div></section>
+               </span><a id='src-4583' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#39' title='goto source code'>[src]</a></span></h1>
+<pre class='rust typedef'>type Parts = <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.Part.html' title='aws_sdk_rust::aws::s3::object::Part'>Part</a>&gt;;</pre></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

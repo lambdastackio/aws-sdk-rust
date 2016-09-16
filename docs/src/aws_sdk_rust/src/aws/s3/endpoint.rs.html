@@ -202,7 +202,7 @@
 <span class='doccomment'>/// Required to specify which type of API Signature to use. AWS defaults to using V4 by default.</span>
 <span class='doccomment'>/// However, third party applications often use V2 (AWS will still honor V2).</span>
 <span class='comment'>//#[derive(Debug, Clone, Copy)]</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Clone</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Clone</span>, <span class='ident'>PartialEq</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Signature</span> {
     <span class='ident'>V2</span>,
     <span class='ident'>V4</span>,

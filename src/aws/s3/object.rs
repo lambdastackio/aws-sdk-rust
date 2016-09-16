@@ -27,6 +27,7 @@ use aws::common::params::{Params, ServiceParams};
 use aws::common::xmlutil::*;
 use aws::common::common::*;
 use aws::errors::http::*;
+use aws::errors::s3::*;
 use aws::s3::header::*;
 use aws::s3::bucket::*;
 use aws::s3::acl::*;
@@ -35,6 +36,8 @@ use aws::s3::writeparse::*;
 
 pub type TagSet = Vec<Tag>;
 
+pub type Parts = Vec<Part>;
+
 pub type PartNumber = i32;
 
 pub type UploadIdMarker = String;
@@ -42,6 +45,12 @@ pub type UploadIdMarker = String;
 pub type NextUploadIdMarker = String;
 
 pub type MultipartUploadList = Vec<MultipartUpload>;
+
+pub type PartNumberMarker = i32;
+
+pub type NextPartNumberMarker = i32;
+
+pub type MaxParts = i32;
 
 pub type MaxUploads = i32;
 
@@ -103,6 +112,18 @@ pub struct ListMultipartUploadsOutputParser;
 /// Write `ListMultipartUploadsOutput` contents to a `SignedRequest`
 pub struct ListMultipartUploadsOutputWriter;
 
+/// Parse `ListPartsOutput` from XML
+pub struct ListPartsOutputParser;
+
+/// Write `ListPartsOutput` contents to a `SignedRequest`
+pub struct ListPartsOutputWriter;
+
+/// Parse `ListPartsRequest` from XML
+struct ListPartsRequestParser;
+
+/// Write `ListPartsRequest` contents to a `SignedRequest`
+struct ListPartsRequestWriter;
+
 /// Parse `CompleteMultipartUploadOutput` from XML
 pub struct CompleteMultipartUploadOutputParser;
 
@@ -150,6 +171,45 @@ pub struct ObjectMetadataParser;
 
 /// Write `ObjectMetadata` contents to a `SignedRequest`
 pub struct ObjectMetadataWriter;
+
+/// Parse `NextPartNumberMarker` from XML
+struct NextPartNumberMarkerParser;
+
+/// Write `NextPartNumberMarker` contents to a `SignedRequest`
+struct NextPartNumberMarkerWriter;
+
+/// Parse `MaxParts` from XML
+struct MaxPartsParser;
+
+/// Write `MaxParts` contents to a `SignedRequest`
+struct MaxPartsWriter;
+
+/// Parse `PartNumberMarker` from XML
+struct PartNumberMarkerParser;
+
+/// Write `PartNumberMarker` contents to a `SignedRequest`
+struct PartNumberMarkerWriter;
+
+/// Parse `Parts` from XML
+struct PartsParser;
+
+/// Write `Parts` contents to a `SignedRequest`
+struct PartsWriter;
+
+/// Write `AbortMultipartUploadOutput` contents to a `SignedRequest`
+struct AbortMultipartUploadOutputWriter;
+
+/// Parse `AbortMultipartUploadRequest` from XML
+struct AbortMultipartUploadRequestParser;
+
+/// Write `AbortMultipartUploadRequest` contents to a `SignedRequest`
+struct AbortMultipartUploadRequestWriter;
+
+/// Parse `ListMultipartUploadsRequest` from XML
+struct ListMultipartUploadsRequestParser;
+
+/// Write `ListMultipartUploadsRequest` contents to a `SignedRequest`
+struct ListMultipartUploadsRequestWriter;
 
 /// `ObjectMetadata` used for `Contents` for ListObjectsOutput
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
@@ -446,6 +506,14 @@ pub struct CompleteMultipartUploadRequest <'a> {
     pub key: ObjectKey,
 }
 
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+pub struct AbortMultipartUploadRequest {
+    pub upload_id: MultipartUploadId,
+    pub bucket: BucketName,
+    pub request_payer: Option<RequestPayer>,
+    pub key: ObjectKey,
+}
+
 //#[derive(Debug, Default)]
 // NOTE: &'a [u8] may require a custom RustcDecodable
 
@@ -494,6 +562,69 @@ pub struct Part {
     pub e_tag: ETag,
     /// Size of the uploaded part data.
     pub size: Size,
+}
+
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+pub struct ListPartsOutput {
+    /// Identifies who initiated the multipart upload.
+    pub initiator: Initiator,
+    /// Name of the bucket to which the multipart upload was initiated.
+    pub bucket: BucketName,
+    /// When a list is truncated, this element specifies the last part in the list, as
+    /// well as the value to use for the part-number-marker request parameter in a
+    /// subsequent request.
+    pub next_part_number_marker: NextPartNumberMarker,
+    pub parts: Parts,
+    /// Upload ID identifying the multipart upload whose parts are being listed.
+    pub upload_id: MultipartUploadId,
+    /// The class of storage used to store the object.
+    pub storage_class: StorageClass,
+    /// Object key for which the multipart upload was initiated.
+    pub key: ObjectKey,
+    pub request_charged: RequestCharged,
+    pub owner: Owner,
+    /// Maximum number of parts that were allowed in the response.
+    pub max_parts: MaxParts,
+    /// Indicates whether the returned list of parts is truncated.
+    pub is_truncated: IsTruncated,
+    /// Part number after which listing begins.
+    pub part_number_marker: PartNumberMarker,
+}
+
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+pub struct ListPartsRequest {
+    pub request_payer: Option<RequestPayer>,
+    pub bucket: BucketName,
+    /// Upload ID identifying the multipart upload whose parts are being listed.
+    pub upload_id: MultipartUploadId,
+    pub key: ObjectKey,
+    /// Sets the maximum number of parts to return.
+    pub max_parts: Option<MaxParts>,
+    /// Specifies the part after which listing should begin. Only parts with higher
+    /// part numbers will be listed.
+    pub part_number_marker: Option<PartNumberMarker>,
+}
+
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+pub struct ListMultipartUploadsRequest {
+    /// Together with key-marker, specifies the multipart upload after which listing
+    /// should begin. If key-marker is not specified, the upload-id-marker parameter
+    /// is ignored.
+    pub upload_id_marker: Option<UploadIdMarker>,
+    pub bucket: BucketName,
+    /// Character you use to group keys.
+    pub delimiter: Option<Delimiter>,
+    /// Lists in-progress uploads only for those keys that begin with the specified
+    /// prefix.
+    pub prefix: Option<Prefix>,
+    /// Together with upload-id-marker, this parameter specifies the multipart upload
+    /// after which listing should begin.
+    pub key_marker: Option<KeyMarker>,
+    /// Sets the maximum number of multipart uploads, from 1 to 1,000, to return in
+    /// the response body. 1,000 is the maximum number of uploads that can be returned
+    /// in a response.
+    pub max_uploads: Option<MaxUploads>,
+    pub encoding_type: Option<EncodingType>,
 }
 
 //#[derive(Debug, Default)]
@@ -795,6 +926,11 @@ pub struct CompleteMultipartUploadOutput {
     /// If the object expiration is configured, this will contain the expiration date
     /// (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded.
     pub expiration: Expiration,
+}
+
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+pub struct AbortMultipartUploadOutput {
+    pub request_charged: RequestCharged,
 }
 
 /// Specifies when noncurrent object versions expire. Upon expiration, Amazon S3
@@ -1192,6 +1328,28 @@ pub struct MultipartUpload {
     pub key: ObjectKey,
     pub owner: Owner,
 }
+
+// functions below...
+
+/// Writes out XML with all the parts in it for S3 to complete.
+pub fn multipart_upload_finish_xml(parts: &[String]) -> Result<Vec<u8>, S3Error> {
+    if parts.len() < 1 {
+        return Err(S3Error::new("Can't finish upload. NO parts!"));
+    }
+    let mut response = String::from("<CompleteMultipartUpload>");
+
+    let mut part_number = 1;
+    for etag in parts {
+        response = response + &format!("<Part><PartNumber>{}</PartNumber><ETag>{}</ETag></Part>", part_number, etag);
+        part_number += 1;
+    }
+
+    response = response + "</CompleteMultipartUpload>";
+
+    Ok(response.into_bytes())
+}
+
+// Impls below...
 
 impl TagParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
@@ -2070,5 +2228,324 @@ impl ObjectMetadataWriter {
         ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
         OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
         SizeWriter::write_params(params, &(prefix.to_string() + "Size"), &obj.size);
+    }
+}
+
+impl ListPartsOutputParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = ListPartsOutput::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "Initiator" {
+                obj.initiator = try!(InitiatorParser::parse_xml("Initiator", stack));
+                continue;
+            }
+            if current_name == "Bucket" {
+                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+                continue;
+            }
+            if current_name == "NextPartNumberMarker" {
+                obj.next_part_number_marker = try!(NextPartNumberMarkerParser::parse_xml("NextPartNumberMarker", stack));
+                continue;
+            }
+            if current_name == "Part" {
+                obj.parts = try!(PartsParser::parse_xml("Part", stack));
+                continue;
+            }
+            if current_name == "UploadId" {
+                obj.upload_id = try!(MultipartUploadIdParser::parse_xml("UploadId", stack));
+                continue;
+            }
+            if current_name == "StorageClass" {
+                obj.storage_class = try!(StorageClassParser::parse_xml("StorageClass", stack));
+                continue;
+            }
+            if current_name == "Key" {
+                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
+                continue;
+            }
+            if current_name == "x-amz-request-charged" {
+                obj.request_charged = try!(RequestChargedParser::parse_xml("x-amz-request-charged", stack));
+                continue;
+            }
+            if current_name == "Owner" {
+                obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
+                continue;
+            }
+            if current_name == "MaxParts" {
+                obj.max_parts = try!(MaxPartsParser::parse_xml("MaxParts", stack));
+                continue;
+            }
+            if current_name == "IsTruncated" {
+                obj.is_truncated = try!(IsTruncatedParser::parse_xml("IsTruncated", stack));
+                continue;
+            }
+            if current_name == "PartNumberMarker" {
+                obj.part_number_marker = try!(PartNumberMarkerParser::parse_xml("PartNumberMarker", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl ListPartsOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &ListPartsOutput) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        InitiatorWriter::write_params(params, &(prefix.to_string() + "Initiator"), &obj.initiator);
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+        NextPartNumberMarkerWriter::write_params(params, &(prefix.to_string() + "NextPartNumberMarker"), &obj.next_part_number_marker);
+        PartsWriter::write_params(params, &(prefix.to_string() + "Part"), &obj.parts);
+        MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "UploadId"), &obj.upload_id);
+        StorageClassWriter::write_params(params, &(prefix.to_string() + "StorageClass"), &obj.storage_class);
+        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
+        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
+        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
+        MaxPartsWriter::write_params(params, &(prefix.to_string() + "MaxParts"), &obj.max_parts);
+        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
+        PartNumberMarkerWriter::write_params(params, &(prefix.to_string() + "PartNumberMarker"), &obj.part_number_marker);
+    }
+}
+
+impl ListPartsRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsRequest, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = ListPartsRequest::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "x-amz-request-payer" {
+                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
+                continue;
+            }
+            if current_name == "Bucket" {
+                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+                continue;
+            }
+            if current_name == "uploadId" {
+                obj.upload_id = try!(MultipartUploadIdParser::parse_xml("uploadId", stack));
+                continue;
+            }
+            if current_name == "Key" {
+                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
+                continue;
+            }
+            if current_name == "max-parts" {
+                obj.max_parts = Some(try!(MaxPartsParser::parse_xml("max-parts", stack)));
+                continue;
+            }
+            if current_name == "part-number-marker" {
+                obj.part_number_marker = Some(try!(PartNumberMarkerParser::parse_xml("part-number-marker", stack)));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl ListPartsRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &ListPartsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        if let Some(ref obj) = obj.request_payer {
+            RequestPayerWriter::write_params(params, &(prefix.to_string() + "x-amz-request-payer"), obj);
+        }
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+        MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "uploadId"), &obj.upload_id);
+        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
+        if let Some(ref obj) = obj.max_parts {
+            MaxPartsWriter::write_params(params, &(prefix.to_string() + "max-parts"), obj);
+        }
+        if let Some(ref obj) = obj.part_number_marker {
+            PartNumberMarkerWriter::write_params(params, &(prefix.to_string() + "part-number-marker"), obj);
+        }
+    }
+}
+
+impl NextPartNumberMarkerParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextPartNumberMarker, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl NextPartNumberMarkerWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &NextPartNumberMarker) {
+        params.put(name, &obj.to_string());
+    }
+}
+
+impl MaxPartsParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxParts, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl MaxPartsWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MaxParts) {
+        params.put(name, &obj.to_string());
+    }
+}
+
+impl PartNumberMarkerParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PartNumberMarker, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl PartNumberMarkerWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &PartNumberMarker) {
+        params.put(name, &obj.to_string());
+    }
+}
+
+impl PartsParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Parts, XmlParseError> {
+        let mut obj = Vec::new();
+        while try!(peek_at_name(stack)) == "Part" {
+            obj.push(try!(PartParser::parse_xml("Part", stack)));
+        }
+        Ok(obj)
+    }
+}
+
+impl PartsWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Parts) {
+        let mut index = 1;
+        for element in obj.iter() {
+            let key = &format!("{}.{}", name, index);
+            PartWriter::write_params(params, key, element);
+            index += 1;
+        }
+    }
+}
+
+impl AbortMultipartUploadOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &AbortMultipartUploadOutput) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
+    }
+}
+
+impl AbortMultipartUploadRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AbortMultipartUploadRequest, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = AbortMultipartUploadRequest::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "uploadId" {
+                obj.upload_id = try!(MultipartUploadIdParser::parse_xml("uploadId", stack));
+                continue;
+            }
+            if current_name == "Bucket" {
+                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+                continue;
+            }
+            if current_name == "x-amz-request-payer" {
+                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
+                continue;
+            }
+            if current_name == "Key" {
+                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl AbortMultipartUploadRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &AbortMultipartUploadRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "uploadId"), &obj.upload_id);
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+        if let Some(ref obj) = obj.request_payer {
+            RequestPayerWriter::write_params(params, &(prefix.to_string() + "x-amz-request-payer"), obj);
+        }
+        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
+    }
+}
+
+impl ListMultipartUploadsRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsRequest, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = ListMultipartUploadsRequest::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "upload-id-marker" {
+                obj.upload_id_marker = Some(try!(UploadIdMarkerParser::parse_xml("upload-id-marker", stack)));
+                continue;
+            }
+            if current_name == "Bucket" {
+                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+                continue;
+            }
+            if current_name == "delimiter" {
+                obj.delimiter = Some(try!(DelimiterParser::parse_xml("delimiter", stack)));
+                continue;
+            }
+            if current_name == "prefix" {
+                obj.prefix = Some(try!(PrefixParser::parse_xml("prefix", stack)));
+                continue;
+            }
+            if current_name == "key-marker" {
+                obj.key_marker = Some(try!(KeyMarkerParser::parse_xml("key-marker", stack)));
+                continue;
+            }
+            if current_name == "max-uploads" {
+                obj.max_uploads = Some(try!(MaxUploadsParser::parse_xml("max-uploads", stack)));
+                continue;
+            }
+            if current_name == "encoding-type" {
+                obj.encoding_type = Some(try!(EncodingTypeParser::parse_xml("encoding-type", stack)));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl ListMultipartUploadsRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &ListMultipartUploadsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        if let Some(ref obj) = obj.upload_id_marker {
+            UploadIdMarkerWriter::write_params(params, &(prefix.to_string() + "upload-id-marker"), obj);
+        }
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+        if let Some(ref obj) = obj.delimiter {
+            DelimiterWriter::write_params(params, &(prefix.to_string() + "delimiter"), obj);
+        }
+        if let Some(ref obj) = obj.prefix {
+            PrefixWriter::write_params(params, &(prefix.to_string() + "prefix"), obj);
+        }
+        if let Some(ref obj) = obj.key_marker {
+            KeyMarkerWriter::write_params(params, &(prefix.to_string() + "key-marker"), obj);
+        }
+        if let Some(ref obj) = obj.max_uploads {
+            MaxUploadsWriter::write_params(params, &(prefix.to_string() + "max-uploads"), obj);
+        }
+        if let Some(ref obj) = obj.encoding_type {
+            EncodingTypeWriter::write_params(params, &(prefix.to_string() + "encoding-type"), obj);
+        }
     }
 }

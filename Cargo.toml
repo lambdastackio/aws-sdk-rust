@@ -1,6 +1,6 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.14"
+version = "0.1.15"
 authors = ["Chris Jones <chris.jones@lambdastack.io>"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -34,6 +34,7 @@ url = "1.2"
 xml-rs = "0.1"
 # NOTE: term is only used for the example
 term = "0.4"
+md5 = "0.2"
 
 # This section is here because there is a main.rs that used as an example.
 [[bin]]

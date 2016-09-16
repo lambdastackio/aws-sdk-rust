@@ -39,8 +39,6 @@ use aws::s3::bucket::*;
 use aws::s3::object::*;
 use aws::s3::acl::*;
 
-// header! { (ProxyAuthorization, "Proxy-Authorization") => [String] }
-
 /// Returns a valid hyper client. If proxies are passed in then a proxy version of the client is returned.
 /// If None is passed then in then the default Client is returned.
 ///
@@ -122,6 +120,7 @@ impl<P, D> S3Client<P, D>
     where P: AwsCredentialsProvider,
           D: DispatchSignedRequest,
 {
+    /// Creator of the S3Client object.
     pub fn with_request_dispatcher(request_dispatcher: D, credentials_provider: P, endpoint: Endpoint) -> Self {
         S3Client {
             credentials_provider: credentials_provider,
@@ -131,6 +130,7 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// Returns the current Endpoint of the S3Client.
     pub fn endpoint(&self) -> &Endpoint {
         &self.endpoint
     }
@@ -295,6 +295,7 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// Sets the bucket ACLs
     pub fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), S3Error> {
         let mut request = SignedRequest::new("PUT",
                                              "s3",
@@ -864,7 +865,8 @@ impl<P, D> S3Client<P, D>
 
     /// Returns the logging status of a bucket and the permissions users have to view
     /// and modify that status. To use GET, you must be the bucket owner.
-    pub fn get_bucket_logging(&self, input: &GetBucketLoggingRequest) -> Result<GetBucketLoggingOutput, S3Error> {
+    pub fn get_bucket_logging(&self, input: &GetBucketLoggingRequest)
+                -> Result<GetBucketLoggingOutput, S3Error> {
         let mut request = SignedRequest::new("GET",
                                              "s3",
                                              self.region,
@@ -909,12 +911,13 @@ impl<P, D> S3Client<P, D>
     pub fn get_bucket_notification_configuration(&self,
                                                  input: &GetBucketNotificationConfigurationRequest)
                                                  -> Result<NotificationConfiguration, S3Error> {
-        let mut request = SignedRequest::new("GET",
-                                             "s3",
-                                             self.region,
-                                             &input.bucket,
-                                             if self.endpoint.signature == Signature::V2 {"/?notification"} else {"/"},
-                                             &self.endpoint);
+        let mut request = SignedRequest::new(
+                        "GET",
+                        "s3",
+                        self.region,
+                        &input.bucket,
+                        if self.endpoint.signature == Signature::V2 {"/?notification"} else {"/"},
+                        &self.endpoint);
 
          // NOTE: V4 - For sub-resources add them as params and not part of the path
          // NOTE: V2 - For sub-resources add then as part of the path and not as params
@@ -949,6 +952,7 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// Returns the bucket versioning output object if versioning is enabled.
     pub fn get_bucket_versioning(&self,
                                  input: &GetBucketVersioningRequest)
                                  -> Result<GetBucketVersioningOutput, S3Error> {
@@ -1034,6 +1038,13 @@ impl<P, D> S3Client<P, D>
     }
 
     /// Retrieves objects from Amazon S3.
+    ///
+    /// Keep in mind way to increase performance:
+    /// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html
+    ///
+    /// AWS S3 recommends any GET operations that exceed 300 per second should open
+    /// a support ticket to increase the rate. See the link above more details.
+    ///
     pub fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, S3Error> {
         let mut request = SignedRequest::new("GET",
                                              "s3",
@@ -1120,6 +1131,7 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// Returns a value for a requested header.
     pub fn get_value_for_header(header_name: String, response: &HttpResponse) -> Result<String, S3Error> {
         match response.headers.get(&header_name) {
             Some(ref value) => Ok(value.to_string()),
@@ -1128,7 +1140,7 @@ impl<P, D> S3Client<P, D>
     }
 
     /// Use the Hyper resposne to populate the GetObjectOutput
-    // This would be a great candidate for some codegen magicks.
+    // This may be a great candidate for some codegen magicks.
     pub fn get_object_from_response(response: &mut HttpResponse) -> Result<GetObjectOutput, S3Error> {
         // get all the goodies for GetObjectOutput
         let delete_marker_string = try!(S3Client::<P, D>::get_value_for_header("x-amz-delete-marker".to_string(),
@@ -1256,6 +1268,10 @@ impl<P, D> S3Client<P, D>
     /// either complete or abort multipart upload in order to stop getting charged for storage of
     /// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3
     /// frees up the parts storage and stops charging you for the parts storage.
+    ///
+    /// Keep in mind ways to help performance:
+    /// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html
+    ///
     pub fn create_multipart_upload(&self,
                                    input: &CreateMultipartUploadRequest)
                                    -> Result<CreateMultipartUploadOutput, S3Error> {
@@ -1268,9 +1284,9 @@ impl<P, D> S3Client<P, D>
                                              &format!("/{}", object_name),
                                              &self.endpoint);
 
-        // let mut params = Params::new();
-        // params.put("uploads", "");
-        // request.set_params(params);
+        let mut params = Params::new();
+        params.put("uploads", "");
+        request.set_params(params);
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -1388,6 +1404,114 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// This operation lists in-progress multipart uploads.
+    pub fn list_multipart_uploads(&self, input: &ListMultipartUploadsRequest)
+                    -> Result<ListMultipartUploadsOutput, S3Error> {
+        let mut request = SignedRequest::new(
+                                        "GET",
+                                        "s3",
+                                        self.region,
+                                        &input.bucket,
+                                        "/",
+                                        &self.endpoint);
+
+        let mut params = Params::new();
+        params.put("uploads", "");
+        request.set_params(params);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let status = result.status;
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+
+        match status {
+            200 => {
+                Ok(try!(ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut stack)))
+            }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error completing list_multipart_uploads", aws))
+            }
+        }
+    }
+
+    /// Lists the parts that have been uploaded for a specific multipart upload.
+    pub fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, S3Error> {
+        let mut request = SignedRequest::new(
+                                        "GET",
+                                        "s3",
+                                        self.region,
+                                        &input.bucket,
+                                        &format!("/{}", input.key),
+                                        &self.endpoint);
+
+        let mut params = Params::new();
+        params.put("uploadId", &input.upload_id.to_string());
+        request.set_params(params);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let status = result.status;
+
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+
+        match status {
+            200 => {
+                Ok(try!(ListPartsOutputParser::parse_xml("ListPartsResult", &mut stack)))
+            }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error completing list_parts", aws))
+            }
+        }
+    }
+
+    /// Aborts a multipart upload.
+    /// To verify that all parts have been removed, so you don't get charged for the
+    /// part storage, you should call the List Parts operation and ensure the parts
+    /// list is empty.
+    pub fn abort_multipart_upload(&self, input: &AbortMultipartUploadRequest)
+                            -> Result<AbortMultipartUploadOutput, S3Error> {
+        let mut request = SignedRequest::new(
+                                        "DELETE",
+                                        "s3",
+                                        self.region,
+                                        &input.bucket,
+                                        &format!("/{}", input.key),
+                                        &self.endpoint);
+
+        let mut params = Params::new();
+        params.put("uploadId", &input.upload_id.to_string());
+        request.set_params(params);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let status = result.status;
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+
+        match status {
+            204 => {
+                Ok(AbortMultipartUploadOutput::default())
+            }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error completing list_parts", aws))
+            }
+        }
+    }
+
     /// This operation enables you to delete multiple objects from a bucket using a
     /// single HTTP request. You may specify up to 1000 keys.
     pub fn delete_objects(&self, input: &DeleteObjectsRequest) -> Result<DeleteObjectsOutput, S3Error> {
@@ -1413,6 +1537,7 @@ impl<P, D> S3Client<P, D>
         Err(S3Error::new("not implemented"))
     }
 
+    /// Deletes a given object from the bucket.
     pub fn delete_object(&self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, S3Error> {
         let path: String;
         if let Some(ref version_id) = input.version_id {
@@ -1503,6 +1628,12 @@ impl<P, D> S3Client<P, D>
     }
 
     /// Adds an object to a bucket.
+    ///
+    /// Keep in mind ways to increase performance:
+    /// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html
+    ///
+    /// AWS S3 recommends any PUT/LIST/DELETE operations that exceed 100 per second should open
+    /// a support ticket to increase the rate. See the link above more details.
     pub fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, S3Error> {
         let mut request = SignedRequest::new("PUT",
                                              "s3",
@@ -1669,6 +1800,7 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    // Internal hostname method - Checks for buckets names with '.' in it.
     fn hostname(&self, bucket: Option<&BucketName>) -> String {
         match bucket {
             Some(b) => {
@@ -1748,6 +1880,7 @@ fn sign_and_execute<D>(dispatcher: &D, signed_request: &mut SignedRequest, creds
     response
 }
 
+// Builds the bucket acl header
 fn build_bucket_acls(request: &mut SignedRequest, input: &PutBucketAclRequest) -> Result<(), S3Error> {
     match input.acl {
         Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(canned_acl)),
@@ -1769,6 +1902,7 @@ fn build_bucket_acls(request: &mut SignedRequest, input: &PutBucketAclRequest) -
     Ok(())
 }
 
+// Builds the object acl header
 fn build_object_acls(request: &mut SignedRequest, input: &PutObjectAclRequest) -> Result<(), S3Error> {
     match input.acl {
         Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(canned_acl)),
