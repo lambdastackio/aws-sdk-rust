@@ -17,6 +17,8 @@
 //
 
 use aws::common::region::Region;
+use aws::common::params::{Params, ServiceParams};
+use aws::common::xmlutil::*;
 // use aws::common::common::*;
 use aws::errors::http::*;
 use aws::s3::writeparse::*;
@@ -25,6 +27,28 @@ use aws::s3::policy::*;
 use aws::s3::acl::*;
 use aws::s3::header::*;
 use aws::s3::grant::*;
+
+pub type BucketName = String;
+
+pub type Buckets = Vec<Bucket>;
+
+/// Parse `BucketName` from XML
+pub struct BucketNameParser;
+
+/// Parse `Bucket` from XML
+pub struct BucketParser;
+
+/// Write `BucketName` contents to a `SignedRequest`
+pub struct BucketNameWriter;
+
+/// Write `Bucket` contents to a `SignedRequest`
+pub struct BucketWriter;
+
+/// Parse `Buckets` from XML
+pub struct BucketsParser;
+
+/// Write `Buckets` contents to a `SignedRequest`
+pub struct BucketsWriter;
 
 //#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
@@ -389,5 +413,72 @@ pub fn create_bucket_config_xml(region: Region) -> Vec<u8> {
                 </CreateBucketConfiguration >", region);
             xml.into_bytes()
         },
+    }
+}
+
+impl BucketNameParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketName, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl BucketParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Bucket, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = Bucket::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "CreationDate" {
+                obj.creation_date = try!(CreationDateParser::parse_xml("CreationDate", stack));
+                continue;
+            }
+            if current_name == "Name" {
+                obj.name = try!(BucketNameParser::parse_xml("Name", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl BucketNameWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &BucketName) {
+        params.put(name, obj);
+    }
+}
+
+impl BucketWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Bucket) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        CreationDateWriter::write_params(params, &(prefix.to_string() + "CreationDate"), &obj.creation_date);
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
+    }
+}
+
+impl BucketsParser {
+    #[allow(unused_variables)]
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Buckets, XmlParseError> {
+        let mut obj = Vec::new();
+        while try!(peek_at_name(stack)) == "Bucket" {
+            obj.push(try!(BucketParser::parse_xml("Bucket", stack)));
+        }
+        Ok(obj)
+    }
+}
+
+impl BucketsWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Buckets) {
+        let mut index = 1;
+        for element in obj.iter() {
+            let key = &format!("{}.{}", name, index);
+            BucketWriter::write_params(params, key, element);
+            index += 1;
+        }
     }
 }

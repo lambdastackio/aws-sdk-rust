@@ -1004,17 +1004,21 @@ impl<P, D> S3Client<P, D>
     /// request parameters as selection criteria to return a subset of the objects in
     /// a bucket.
     pub fn list_objects(&self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, S3Error> {
-        let format = format!("/{}", if input.version == None {""} else {"?list-type=2"});
         let mut request = SignedRequest::new("GET",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format,
+                                             //&format,
+                                             "/",
                                              &self.endpoint);
-        // let mut params = Params::new();
-        // params.put("Action", "ListObjects");
-        // ListObjectsRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+
+        if input.version != None {
+            let mut params = Params::new();
+            params.put("list-type", "2");
+            // params.put("Action", "ListObjects");
+            // ListObjectsRequestWriter::write_params(&mut params, "", input);
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));

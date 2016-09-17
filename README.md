@@ -1,11 +1,10 @@
 # AWS SDK for Rust
 [Documentation](https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws/index.html)
 
-## BETA! - Breaking Changes
-The primary testing going on right now is for V2 signatures for support of older S3 compatible systems and third
-party applications that use an S3 interface. V4 signatures may fail at the moment but this will change real soon.
-
 AWS SDK with initial emphasis on S3. Supports both V2 and V4 authentication signatures. Allows for custom app config, environment variables, standard /.aws/credentials and future Iam credentials. No environmental assumptions or opinions are made on how your access to AWS should be handled.
+
+## JSON and Examples
+See below...
 
 ## S3
 The initial access is for solid AWS S3 support. The SDK is built to allow non-aws environments that support an S3 API interface such as Ceph and other object stores to accessible from Rust.
@@ -48,6 +47,7 @@ To use a service in the SDK, create a service variable by calling the `S3Client:
 function. Once you have a service client, you can call API operations which each
 return response data and a possible error.
 
+## Simple Sample
 To list buckets from S3, you could run:
 
 ```rust
@@ -106,6 +106,13 @@ fn main() {
 }
 ```
 
+## Robust Sample
+Look at /examples/s3.rs. This example is used for testing all features and it goes through the process of
+creating a bucket loading objects (including multipart uploads), versioning etc and ends with removing
+the bucket it created. However, the bucket removal may throw an error because you may have versions of
+objects. If that is the case then simply login to the S3 Console and remove them. We may also provide a
+delete_all to clear out versions if the bucket is versioned.
+
 ## Inspiration
 If you need access to other AWS systems instead of S3 then take a look at rusoto (https://github.com/rusoto/rusoto). Initial inspiration comes from there, Python Boto3 and aws-sdk-go.
 
@@ -125,3 +132,8 @@ XML Serialization (serde works for Deserialization) so each XML construct for se
 had to be defined with a parser/writer (project rusoto did a lot of the heavy lifting in this area).
 
 Other AWS Services primarily use JSON and De/Serialization is possible for those service.
+
+### JSON
+The library now supports JSON for almost all structs. There are a few structs that use [u8] slices that are not
+easily serialized or deserialized so those few structs will support one or the other (serialize/deserialize)
+and the documentation notes it.

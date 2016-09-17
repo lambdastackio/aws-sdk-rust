@@ -18,6 +18,8 @@ use aws::common::params::{Params, ServiceParams};
 use aws::common::xmlutil::*;
 use aws::common::common::*;
 use aws::s3::writeparse::*;
+use aws::s3::object::*;
+use aws::s3::bucket::*;
 use aws::s3::grant::*;
 use aws::s3::header::*;
 

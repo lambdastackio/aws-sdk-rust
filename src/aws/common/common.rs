@@ -60,6 +60,8 @@ pub type StartAfter = String;
 
 pub type ContinuationToken = String;
 
+pub type Quiet = bool;
+
 /// Parse `Body` from XML
 pub struct BodyParser;
 
@@ -164,6 +166,12 @@ pub struct StartAfterParser;
 
 /// Write `StartAfter` contents to a `SignedRequest`
 pub struct StartAfterWriter;
+
+/// Parse `Quiet` from XML
+pub struct QuietParser;
+
+/// Write `Quiet` contents to a `SignedRequest`
+pub struct QuietWriter;
 
 /// Owner
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
@@ -460,5 +468,20 @@ impl StartAfterParser {
 impl StartAfterWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &StartAfter) {
         params.put(name, obj);
+    }
+}
+
+impl QuietParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Quiet, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl QuietWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Quiet) {
+        params.put(name, &obj.to_string());
     }
 }

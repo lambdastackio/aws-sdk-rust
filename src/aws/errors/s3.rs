@@ -29,7 +29,7 @@ use aws::common::xmlutil::*;
 use aws::common::params::*;
 use aws::common::common::*;
 use aws::s3::writeparse::*;
-//use aws::s3::object::*;
+use aws::s3::object::*;
 
 /// S3Error is a larger container error struct that contains a more general error about the task
 /// that was requested + `AWSError` which contains the details from AWS S3.
