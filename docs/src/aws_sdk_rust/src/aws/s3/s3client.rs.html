@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="../../../../../main.css">
     
 
-    <link rel="shortcut icon" href="https://www.rust-lang.org/favicon.ico">
+    <link rel="shortcut icon" href="https://lambdastackio.github.io/static/images/favicon.ico">
     
 </head>
 <body class="rustdoc">
@@ -27,7 +27,7 @@
     
 
     <nav class="sidebar">
-        <a href='../../../../../aws_sdk_rust/index.html'><img src='https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png' alt='logo' width='100'></a>
+        <a href='../../../../../aws_sdk_rust/index.html'><img src='https://lambdastackio.github.io/static/images/lambdastack-200x200.png' alt='logo' width='100'></a>
         
     </nav>
 
@@ -1967,6 +1967,10 @@
 <span id="1923">1923</span>
 <span id="1924">1924</span>
 <span id="1925">1925</span>
+<span id="1926">1926</span>
+<span id="1927">1927</span>
+<span id="1928">1928</span>
+<span id="1929">1929</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -2974,17 +2978,21 @@
     <span class='doccomment'>/// request parameters as selection criteria to return a subset of the objects in</span>
     <span class='doccomment'>/// a bucket.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list_objects</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>ListObjectsRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>ListObjectsOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>format</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='kw'>if</span> <span class='ident'>input</span>.<span class='ident'>version</span> <span class='op'>==</span> <span class='prelude-val'>None</span> {<span class='string'>&quot;&quot;</span>} <span class='kw'>else</span> {<span class='string'>&quot;?list-type=2&quot;</span>});
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;GET&quot;</span>,
                                              <span class='string'>&quot;s3&quot;</span>,
                                              <span class='self'>self</span>.<span class='ident'>region</span>,
                                              <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
-                                             <span class='kw-2'>&amp;</span><span class='ident'>format</span>,
+                                             <span class='comment'>//&amp;format,</span>
+                                             <span class='string'>&quot;/&quot;</span>,
                                              <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
-        <span class='comment'>// let mut params = Params::new();</span>
-        <span class='comment'>// params.put(&quot;Action&quot;, &quot;ListObjects&quot;);</span>
-        <span class='comment'>// ListObjectsRequestWriter::write_params(&amp;mut params, &quot;&quot;, input);</span>
-        <span class='comment'>// request.set_params(params);</span>
+
+        <span class='kw'>if</span> <span class='ident'>input</span>.<span class='ident'>version</span> <span class='op'>!=</span> <span class='prelude-val'>None</span> {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
+            <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;list-type&quot;</span>, <span class='string'>&quot;2&quot;</span>);
+            <span class='comment'>// params.put(&quot;Action&quot;, &quot;ListObjects&quot;);</span>
+            <span class='comment'>// ListObjectsRequestWriter::write_params(&amp;mut params, &quot;&quot;, input);</span>
+            <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+        }
 
         <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
         <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
@@ -3233,255 +3241,6 @@
         }
     }
 
-    <span class='doccomment'>/// Initiates a multipart upload and returns an upload ID.</span>
-    <span class='doccomment'>/// **Note:** After you initiate multipart upload and upload one or more parts, you must</span>
-    <span class='doccomment'>/// either complete or abort multipart upload in order to stop getting charged for storage of</span>
-    <span class='doccomment'>/// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3</span>
-    <span class='doccomment'>/// frees up the parts storage and stops charging you for the parts storage.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Keep in mind ways to help performance:</span>
-    <span class='doccomment'>/// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html</span>
-    <span class='doccomment'>///</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>create_multipart_upload</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>,
-                                   <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>CreateMultipartUploadRequest</span>)
-                                   <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>CreateMultipartUploadOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
-
-        <span class='kw'>let</span> <span class='ident'>object_name</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>key</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;POST&quot;</span>,
-                                             <span class='string'>&quot;s3&quot;</span>,
-                                             <span class='self'>self</span>.<span class='ident'>region</span>,
-                                             <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
-                                             <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>object_name</span>),
-                                             <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
-        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploads&quot;</span>, <span class='string'>&quot;&quot;</span>);
-        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
-
-        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
-        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
-
-        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
-                                      <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
-                                      <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
-        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
-        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
-
-        <span class='kw'>match</span> <span class='ident'>status</span> {
-            <span class='number'>200</span> <span class='op'>=&gt;</span> {
-                <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>CreateMultipartUploadOutputParser</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;InitiateMultipartUploadResult&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>)))
-            },
-            _ <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
-                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error creating multipart object upload&quot;</span>, <span class='ident'>aws</span>))
-            },
-        }
-    }
-
-    <span class='doccomment'>/// Uploads a part in a multipart upload.</span>
-    <span class='doccomment'>/// **Note:** After you initiate multipart upload and upload one or more parts, you must</span>
-    <span class='doccomment'>/// either complete or abort multipart upload in order to stop getting charged for storage of</span>
-    <span class='doccomment'>/// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3</span>
-    <span class='doccomment'>/// frees up the parts storage and stops charging you for the parts storage.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>upload_part</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>UploadPartRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>object_id</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>key</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;PUT&quot;</span>,
-                                             <span class='string'>&quot;s3&quot;</span>,
-                                             <span class='self'>self</span>.<span class='ident'>region</span>,
-                                             <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
-                                             <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>object_id</span>),
-                                             <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
-
-        <span class='ident'>request</span>.<span class='ident'>set_payload</span>(<span class='ident'>input</span>.<span class='ident'>body</span>);
-
-        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
-        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
-
-        <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>md5</span>) <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>content_md5</span> {
-            <span class='ident'>request</span>.<span class='ident'>add_header</span>(<span class='string'>&quot;Content-MD5&quot;</span>, <span class='ident'>md5</span>);
-        }
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
-        <span class='kw'>let</span> <span class='ident'>upload_id</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>upload_id</span>;
-        <span class='kw'>let</span> <span class='ident'>part_number</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>part_number</span>;
-        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;partNumber&quot;</span>, <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>part_number</span>));
-        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploadId&quot;</span>, <span class='ident'>upload_id</span>);
-        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
-                                          <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
-                                          <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
-        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
-
-        <span class='kw'>match</span> <span class='ident'>status</span> {
-            <span class='number'>200</span> <span class='op'>=&gt;</span> {
-                <span class='kw'>match</span> <span class='ident'>result</span>.<span class='ident'>headers</span>.<span class='ident'>get</span>(<span class='string'>&quot;ETag&quot;</span>) {
-                    <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>value</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>value</span>.<span class='ident'>to_string</span>()),
-                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>new</span>(<span class='string'>&quot;Couldn&#39;t find etag in response headers.&quot;</span>)),
-                }
-            },
-            _ <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
-                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
-                <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
-
-                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
-                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error uploading a part&quot;</span>, <span class='ident'>aws</span>))
-            },
-        }
-    }
-
-    <span class='doccomment'>/// Completes a multipart upload by assembling previously uploaded parts.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>complete_multipart_upload</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>,
-                                     <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>CompleteMultipartUploadRequest</span>)
-                                     <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>CompleteMultipartUploadOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;POST&quot;</span>,
-                                             <span class='string'>&quot;s3&quot;</span>,
-                                             <span class='self'>self</span>.<span class='ident'>region</span>,
-                                             <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
-                                             <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>),
-                                             <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
-        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploadId&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>upload_id</span>.<span class='ident'>to_string</span>());
-        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
-
-        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
-        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
-
-        <span class='ident'>request</span>.<span class='ident'>set_payload</span>(<span class='ident'>input</span>.<span class='ident'>multipart_upload</span>);
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
-                                          <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
-                                          <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
-        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
-        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
-
-        <span class='kw'>match</span> <span class='ident'>status</span> {
-            <span class='number'>200</span> <span class='op'>=&gt;</span> {
-                <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>CompleteMultipartUploadOutputParser</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;CompleteMultipartUploadResult&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>)))
-            },
-            _ <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
-                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error completing multipart upload&quot;</span>, <span class='ident'>aws</span>))
-            },
-        }
-    }
-
-    <span class='doccomment'>/// This operation lists in-progress multipart uploads.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list_multipart_uploads</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>ListMultipartUploadsRequest</span>)
-                    <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>ListMultipartUploadsOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(
-                                        <span class='string'>&quot;GET&quot;</span>,
-                                        <span class='string'>&quot;s3&quot;</span>,
-                                        <span class='self'>self</span>.<span class='ident'>region</span>,
-                                        <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
-                                        <span class='string'>&quot;/&quot;</span>,
-                                        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
-        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploads&quot;</span>, <span class='string'>&quot;&quot;</span>);
-        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
-
-        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
-        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
-
-        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>, <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
-        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
-        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
-
-        <span class='kw'>match</span> <span class='ident'>status</span> {
-            <span class='number'>200</span> <span class='op'>=&gt;</span> {
-                <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>ListMultipartUploadsOutputParser</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;ListMultipartUploadsResult&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>)))
-            }
-            _ <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
-                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error completing list_multipart_uploads&quot;</span>, <span class='ident'>aws</span>))
-            }
-        }
-    }
-
-    <span class='doccomment'>/// Lists the parts that have been uploaded for a specific multipart upload.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list_parts</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>ListPartsRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>ListPartsOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(
-                                        <span class='string'>&quot;GET&quot;</span>,
-                                        <span class='string'>&quot;s3&quot;</span>,
-                                        <span class='self'>self</span>.<span class='ident'>region</span>,
-                                        <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
-                                        <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>),
-                                        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
-        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploadId&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>upload_id</span>.<span class='ident'>to_string</span>());
-        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
-
-        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
-        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>, <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
-        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
-        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
-
-        <span class='kw'>match</span> <span class='ident'>status</span> {
-            <span class='number'>200</span> <span class='op'>=&gt;</span> {
-                <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>ListPartsOutputParser</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;ListPartsResult&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>)))
-            }
-            _ <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
-                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error completing list_parts&quot;</span>, <span class='ident'>aws</span>))
-            }
-        }
-    }
-
-    <span class='doccomment'>/// Aborts a multipart upload.</span>
-    <span class='doccomment'>/// To verify that all parts have been removed, so you don&#39;t get charged for the</span>
-    <span class='doccomment'>/// part storage, you should call the List Parts operation and ensure the parts</span>
-    <span class='doccomment'>/// list is empty.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>abort_multipart_upload</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>AbortMultipartUploadRequest</span>)
-                            <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>AbortMultipartUploadOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(
-                                        <span class='string'>&quot;DELETE&quot;</span>,
-                                        <span class='string'>&quot;s3&quot;</span>,
-                                        <span class='self'>self</span>.<span class='ident'>region</span>,
-                                        <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
-                                        <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>),
-                                        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
-        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploadId&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>upload_id</span>.<span class='ident'>to_string</span>());
-        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
-
-        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
-        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
-
-        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>, <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
-        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
-        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
-
-        <span class='kw'>match</span> <span class='ident'>status</span> {
-            <span class='number'>204</span> <span class='op'>=&gt;</span> {
-                <span class='prelude-val'>Ok</span>(<span class='ident'>AbortMultipartUploadOutput</span>::<span class='ident'>default</span>())
-            }
-            _ <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
-                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error completing list_parts&quot;</span>, <span class='ident'>aws</span>))
-            }
-        }
-    }
-
     <span class='doccomment'>/// This operation enables you to delete multiple objects from a bucket using a</span>
     <span class='doccomment'>/// single HTTP request. You may specify up to 1000 keys.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>delete_objects</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>DeleteObjectsRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>DeleteObjectsOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
@@ -3550,6 +3309,255 @@
                 <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
                 <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error deleting object&quot;</span>, <span class='ident'>aws</span>))
             },
+        }
+    }
+
+    <span class='doccomment'>/// Initiates a multipart upload and returns an upload ID.</span>
+    <span class='doccomment'>/// **Note:** After you initiate multipart upload and upload one or more parts, you must</span>
+    <span class='doccomment'>/// either complete or abort multipart upload in order to stop getting charged for storage of</span>
+    <span class='doccomment'>/// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3</span>
+    <span class='doccomment'>/// frees up the parts storage and stops charging you for the parts storage.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// Keep in mind ways to help performance:</span>
+    <span class='doccomment'>/// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html</span>
+    <span class='doccomment'>///</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>multipart_upload_create</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>,
+                                   <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>MultipartUploadCreateRequest</span>)
+                                   <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>MultipartUploadCreateOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+
+        <span class='kw'>let</span> <span class='ident'>object_name</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>key</span>;
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;POST&quot;</span>,
+                                             <span class='string'>&quot;s3&quot;</span>,
+                                             <span class='self'>self</span>.<span class='ident'>region</span>,
+                                             <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
+                                             <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>object_name</span>),
+                                             <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
+        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploads&quot;</span>, <span class='string'>&quot;&quot;</span>);
+        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+
+        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
+        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
+
+        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
+                                      <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
+                                      <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
+        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
+        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
+
+        <span class='kw'>match</span> <span class='ident'>status</span> {
+            <span class='number'>200</span> <span class='op'>=&gt;</span> {
+                <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>MultipartUploadCreateOutputParser</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;InitiateMultipartUploadResult&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>)))
+            },
+            _ <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
+                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error creating multipart object upload&quot;</span>, <span class='ident'>aws</span>))
+            },
+        }
+    }
+
+    <span class='doccomment'>/// Uploads a part in a multipart upload.</span>
+    <span class='doccomment'>/// **Note:** After you initiate multipart upload and upload one or more parts, you must</span>
+    <span class='doccomment'>/// either complete or abort multipart upload in order to stop getting charged for storage of</span>
+    <span class='doccomment'>/// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3</span>
+    <span class='doccomment'>/// frees up the parts storage and stops charging you for the parts storage.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>multipart_upload_part</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>MultipartUploadPartRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='ident'>object_id</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>key</span>;
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;PUT&quot;</span>,
+                                             <span class='string'>&quot;s3&quot;</span>,
+                                             <span class='self'>self</span>.<span class='ident'>region</span>,
+                                             <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
+                                             <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>object_id</span>),
+                                             <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
+
+        <span class='ident'>request</span>.<span class='ident'>set_payload</span>(<span class='ident'>input</span>.<span class='ident'>body</span>);
+
+        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
+        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
+
+        <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>md5</span>) <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>content_md5</span> {
+            <span class='ident'>request</span>.<span class='ident'>add_header</span>(<span class='string'>&quot;Content-MD5&quot;</span>, <span class='ident'>md5</span>);
+        }
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
+        <span class='kw'>let</span> <span class='ident'>upload_id</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>upload_id</span>;
+        <span class='kw'>let</span> <span class='ident'>part_number</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>part_number</span>;
+        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;partNumber&quot;</span>, <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>part_number</span>));
+        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploadId&quot;</span>, <span class='ident'>upload_id</span>);
+        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
+                                          <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
+                                          <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
+        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
+
+        <span class='kw'>match</span> <span class='ident'>status</span> {
+            <span class='number'>200</span> <span class='op'>=&gt;</span> {
+                <span class='kw'>match</span> <span class='ident'>result</span>.<span class='ident'>headers</span>.<span class='ident'>get</span>(<span class='string'>&quot;ETag&quot;</span>) {
+                    <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>value</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>value</span>.<span class='ident'>to_string</span>()),
+                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>new</span>(<span class='string'>&quot;Couldn&#39;t find etag in response headers.&quot;</span>)),
+                }
+            },
+            _ <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
+                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
+                <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
+
+                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
+                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error uploading a part&quot;</span>, <span class='ident'>aws</span>))
+            },
+        }
+    }
+
+    <span class='doccomment'>/// Completes a multipart upload by assembling previously uploaded parts.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>multipart_upload_complete</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>,
+                                     <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>MultipartUploadCompleteRequest</span>)
+                                     <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>MultipartUploadCompleteOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;POST&quot;</span>,
+                                             <span class='string'>&quot;s3&quot;</span>,
+                                             <span class='self'>self</span>.<span class='ident'>region</span>,
+                                             <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
+                                             <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>),
+                                             <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
+        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploadId&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>upload_id</span>.<span class='ident'>to_string</span>());
+        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+
+        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
+        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
+
+        <span class='ident'>request</span>.<span class='ident'>set_payload</span>(<span class='ident'>input</span>.<span class='ident'>multipart_upload</span>);
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
+                                          <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
+                                          <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
+        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
+        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
+
+        <span class='kw'>match</span> <span class='ident'>status</span> {
+            <span class='number'>200</span> <span class='op'>=&gt;</span> {
+                <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>MultipartUploadCompleteOutputParser</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;CompleteMultipartUploadResult&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>)))
+            },
+            _ <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
+                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error completing multipart upload&quot;</span>, <span class='ident'>aws</span>))
+            },
+        }
+    }
+
+    <span class='doccomment'>/// This operation lists in-progress multipart uploads.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>multipart_upload_list</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>MultipartUploadListRequest</span>)
+                    <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>MultipartUploadListOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(
+                                        <span class='string'>&quot;GET&quot;</span>,
+                                        <span class='string'>&quot;s3&quot;</span>,
+                                        <span class='self'>self</span>.<span class='ident'>region</span>,
+                                        <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
+                                        <span class='string'>&quot;/&quot;</span>,
+                                        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
+        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploads&quot;</span>, <span class='string'>&quot;&quot;</span>);
+        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+
+        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
+        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
+
+        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>, <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
+        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
+        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
+
+        <span class='kw'>match</span> <span class='ident'>status</span> {
+            <span class='number'>200</span> <span class='op'>=&gt;</span> {
+                <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>MultipartUploadListOutputParser</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;ListMultipartUploadsResult&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>)))
+            }
+            _ <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
+                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error completing list_multipart_uploads&quot;</span>, <span class='ident'>aws</span>))
+            }
+        }
+    }
+
+    <span class='doccomment'>/// Lists the parts that have been uploaded for a specific multipart upload.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>multipart_upload_list_parts</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>MultipartUploadListPartsRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>MultipartUploadListPartsOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(
+                                        <span class='string'>&quot;GET&quot;</span>,
+                                        <span class='string'>&quot;s3&quot;</span>,
+                                        <span class='self'>self</span>.<span class='ident'>region</span>,
+                                        <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
+                                        <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>),
+                                        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
+        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploadId&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>upload_id</span>.<span class='ident'>to_string</span>());
+        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+
+        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
+        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>, <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
+        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
+        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
+
+        <span class='kw'>match</span> <span class='ident'>status</span> {
+            <span class='number'>200</span> <span class='op'>=&gt;</span> {
+                <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>MultipartUploadListPartsOutputParser</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;ListPartsResult&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>)))
+            }
+            _ <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
+                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error completing list_parts&quot;</span>, <span class='ident'>aws</span>))
+            }
+        }
+    }
+
+    <span class='doccomment'>/// Aborts a multipart upload.</span>
+    <span class='doccomment'>/// To verify that all parts have been removed, so you don&#39;t get charged for the</span>
+    <span class='doccomment'>/// part storage, you should call the List Parts operation and ensure the parts</span>
+    <span class='doccomment'>/// list is empty.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>multipart_upload_abort</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>MultipartUploadAbortRequest</span>)
+                            <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>MultipartUploadAbortOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(
+                                        <span class='string'>&quot;DELETE&quot;</span>,
+                                        <span class='string'>&quot;s3&quot;</span>,
+                                        <span class='self'>self</span>.<span class='ident'>region</span>,
+                                        <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
+                                        <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>),
+                                        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
+        <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;uploadId&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>upload_id</span>.<span class='ident'>to_string</span>());
+        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+
+        <span class='kw'>let</span> <span class='ident'>hostname</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>hostname</span>(<span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>));
+        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
+
+        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>, <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
+        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
+        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
+
+        <span class='kw'>match</span> <span class='ident'>status</span> {
+            <span class='number'>204</span> <span class='op'>=&gt;</span> {
+                <span class='prelude-val'>Ok</span>(<span class='ident'>MultipartUploadAbortOutput</span>::<span class='ident'>default</span>())
+            }
+            _ <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
+                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error completing list_parts&quot;</span>, <span class='ident'>aws</span>))
+            }
         }
     }
 
