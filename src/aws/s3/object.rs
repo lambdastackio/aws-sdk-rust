@@ -125,29 +125,29 @@ pub struct MultipartUploadListParser;
 /// Write `MultipartUploadList` contents to a `SignedRequest`
 pub struct MultipartUploadListWriter;
 
-/// Parse `ListMultipartUploadsOutput` from XML
-pub struct ListMultipartUploadsOutputParser;
+/// Parse `MultipartUploadListOutput` from XML
+pub struct MultipartUploadListOutputParser;
 
-/// Write `ListMultipartUploadsOutput` contents to a `SignedRequest`
-pub struct ListMultipartUploadsOutputWriter;
+/// Write `MultipartUploadListOutput` contents to a `SignedRequest`
+pub struct MultipartUploadListOutputWriter;
 
-/// Parse `ListPartsOutput` from XML
-pub struct ListPartsOutputParser;
+/// Parse `MultipartUploadListPartsOutput` from XML
+pub struct MultipartUploadListPartsOutputParser;
 
-/// Write `ListPartsOutput` contents to a `SignedRequest`
-pub struct ListPartsOutputWriter;
+/// Write `MultipartUploadListPartsOutput` contents to a `SignedRequest`
+pub struct MultipartUploadListPartsOutputWriter;
 
-/// Parse `ListPartsRequest` from XML
-pub struct ListPartsRequestParser;
+/// Parse `MultipartUploadListPartsRequest` from XML
+pub struct MultipartUploadListPartsRequestParser;
 
-/// Write `ListPartsRequest` contents to a `SignedRequest`
-pub struct ListPartsRequestWriter;
+/// Write `MultipartUploadListPartsRequest` contents to a `SignedRequest`
+pub struct MultipartUploadListPartsRequestWriter;
 
-/// Parse `CompleteMultipartUploadOutput` from XML
-pub struct CompleteMultipartUploadOutputParser;
+/// Parse `MultipartUploadCompleteOutput` from XML
+pub struct MultipartUploadCompleteOutputParser;
 
-/// Write `CompleteMultipartUploadOutput` contents to a `SignedRequest`
-pub struct CompleteMultipartUploadOutputWriter;
+/// Write `MultipartUploadCompleteOutput` contents to a `SignedRequest`
+pub struct MultipartUploadCompleteOutputWriter;
 
 /// Parse `GetObjectRequest` from XML
 pub struct GetObjectRequestParser;
@@ -215,20 +215,20 @@ pub struct PartsParser;
 /// Write `Parts` contents to a `SignedRequest`
 pub struct PartsWriter;
 
-/// Write `AbortMultipartUploadOutput` contents to a `SignedRequest`
-pub struct AbortMultipartUploadOutputWriter;
+/// Write `MultipartUploadAbortOutput` contents to a `SignedRequest`
+pub struct MultipartUploadAbortOutputWriter;
 
-/// Parse `AbortMultipartUploadRequest` from XML
-pub struct AbortMultipartUploadRequestParser;
+/// Parse `MultipartUploadAbortRequest` from XML
+pub struct MultipartUploadAbortRequestParser;
 
-/// Write `AbortMultipartUploadRequest` contents to a `SignedRequest`
-pub struct AbortMultipartUploadRequestWriter;
+/// Write `MultipartUploadAbortRequest` contents to a `SignedRequest`
+pub struct MultipartUploadAbortRequestWriter;
 
-/// Parse `ListMultipartUploadsRequest` from XML
-pub struct ListMultipartUploadsRequestParser;
+/// Parse `MultipartUploadListRequest` from XML
+pub struct MultipartUploadListRequestParser;
 
-/// Write `ListMultipartUploadsRequest` contents to a `SignedRequest`
-pub struct ListMultipartUploadsRequestWriter;
+/// Write `MultipartUploadListRequest` contents to a `SignedRequest`
+pub struct MultipartUploadListRequestWriter;
 
 /// Parse `ObjectIdentifierList` from XML
 pub struct ObjectIdentifierListParser;
@@ -374,11 +374,11 @@ pub struct GetObjectOutputParser;
 /// Write `GetObjectOutput` contents to a `SignedRequest`
 pub struct GetObjectOutputWriter;
 
-/// Parse `CreateMultipartUploadRequest` from XML
-pub struct CreateMultipartUploadRequestParser;
+/// Parse `MultipartUploadCreateRequest` from XML
+pub struct MultipartUploadCreateRequestParser;
 
-/// Write `CreateMultipartUploadRequest` contents to a `SignedRequest`
-pub struct CreateMultipartUploadRequestWriter;
+/// Write `MultipartUploadCreateRequest` contents to a `SignedRequest`
+pub struct MultipartUploadCreateRequestWriter;
 
 /// Parse `GetObjectTorrentRequest` from XML
 pub struct GetObjectTorrentRequestParser;
@@ -422,11 +422,11 @@ pub struct ListObjectVersionsRequestParser;
 /// Write `ListObjectVersionsRequest` contents to a `SignedRequest`
 pub struct ListObjectVersionsRequestWriter;
 
-/// Parse `CreateMultipartUploadOutput` from XML
-pub struct CreateMultipartUploadOutputParser;
+/// Parse `MultipartUploadCreateOutput` from XML
+pub struct MultipartUploadCreateOutputParser;
 
-/// Write `CreateMultipartUploadOutput` contents to a `SignedRequest`
-pub struct CreateMultipartUploadOutputWriter;
+/// Write `MultipartUploadCreateOutput` contents to a `SignedRequest`
+pub struct MultipartUploadCreateOutputWriter;
 
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ObjectVersion {
@@ -667,7 +667,7 @@ pub struct ObjectIdentifier {
 
 //#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct CreateMultipartUploadRequest {
+pub struct MultipartUploadCreateRequest {
     pub request_payer: Option<RequestPayer>,
     /// Specifies what content encodings have been applied to the object and thus what
     /// decoding mechanisms must be applied to obtain the media-type referenced by the
@@ -730,11 +730,11 @@ pub struct CreateMultipartUploadRequest {
 //#[derive(Debug, Default)]
 // NOTE: &'a [u8] may require a custom RustcDecodable
 
-/// NB: CompleteMultipartUploadRequest is *not* JSON decodable without implementing a custom to_json trait
+/// NB: MultipartUploadCompleteRequest is *not* JSON decodable without implementing a custom to_json trait
 /// because of Option<&'a [u8]>.
 ///
 #[derive(Debug, Default, RustcEncodable)]
-pub struct CompleteMultipartUploadRequest <'a> {
+pub struct MultipartUploadCompleteRequest <'a> {
     pub multipart_upload: Option<&'a [u8]>,
     pub upload_id: MultipartUploadId,
     pub bucket: BucketName,
@@ -743,7 +743,7 @@ pub struct CompleteMultipartUploadRequest <'a> {
 }
 
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct AbortMultipartUploadRequest {
+pub struct MultipartUploadAbortRequest {
     pub upload_id: MultipartUploadId,
     pub bucket: BucketName,
     pub request_payer: Option<RequestPayer>,
@@ -753,11 +753,11 @@ pub struct AbortMultipartUploadRequest {
 //#[derive(Debug, Default)]
 // NOTE: &'a [u8] may require a custom RustcDecodable
 
-/// NB: UploadPartRequest is *not* JSON decodable without implementing a custom to_json trait
+/// NB: MultipartUploadPartRequest is *not* JSON decodable without implementing a custom to_json trait
 /// because of Option<&'a [u8]>.
 ///
 #[derive(Debug, Default, RustcEncodable)]
-pub struct UploadPartRequest <'a> {
+pub struct MultipartUploadPartRequest <'a> {
     pub body: Option<&'a [u8]>,
     /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
     pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
@@ -801,7 +801,7 @@ pub struct Part {
 }
 
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct ListPartsOutput {
+pub struct MultipartUploadListPartsOutput {
     /// Identifies who initiated the multipart upload.
     pub initiator: Initiator,
     /// Name of the bucket to which the multipart upload was initiated.
@@ -828,7 +828,7 @@ pub struct ListPartsOutput {
 }
 
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct ListPartsRequest {
+pub struct MultipartUploadListPartsRequest {
     pub request_payer: Option<RequestPayer>,
     pub bucket: BucketName,
     /// Upload ID identifying the multipart upload whose parts are being listed.
@@ -842,7 +842,7 @@ pub struct ListPartsRequest {
 }
 
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct ListMultipartUploadsRequest {
+pub struct MultipartUploadListRequest {
     /// Together with key-marker, specifies the multipart upload after which listing
     /// should begin. If key-marker is not specified, the upload-id-marker parameter
     /// is ignored.
@@ -1085,7 +1085,7 @@ pub struct CopyObjectResult {
 
 //#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct ListMultipartUploadsOutput {
+pub struct MultipartUploadListOutput {
     /// Upload ID after which listing began.
     pub upload_id_marker: UploadIdMarker,
     pub common_prefixes: CommonPrefixList,
@@ -1118,7 +1118,7 @@ pub struct ListMultipartUploadsOutput {
 
 //#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct CreateMultipartUploadOutput {
+pub struct MultipartUploadCreateOutput {
     /// If server-side encryption with a customer-provided encryption key was
     /// requested, the response will include this header confirming the encryption
     /// algorithm used.
@@ -1144,7 +1144,7 @@ pub struct CreateMultipartUploadOutput {
 
 //#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct CompleteMultipartUploadOutput {
+pub struct MultipartUploadCompleteOutput {
     pub request_charged: RequestCharged,
     pub bucket: BucketName,
     /// Version of the object.
@@ -1165,7 +1165,7 @@ pub struct CompleteMultipartUploadOutput {
 }
 
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
-pub struct AbortMultipartUploadOutput {
+pub struct MultipartUploadAbortOutput {
     pub request_charged: RequestCharged,
 }
 
@@ -1819,11 +1819,11 @@ impl MultipartUploadListWriter {
     }
 }
 
-impl ListMultipartUploadsOutputParser {
+impl MultipartUploadListOutputParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
-        -> Result<ListMultipartUploadsOutput, XmlParseError> {
+        -> Result<MultipartUploadListOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = ListMultipartUploadsOutput::default();
+        let mut obj = MultipartUploadListOutput::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "UploadIdMarker" {
@@ -1890,8 +1890,8 @@ impl ListMultipartUploadsOutputParser {
     }
 }
 
-impl ListMultipartUploadsOutputWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &ListMultipartUploadsOutput) {
+impl MultipartUploadListOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadListOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         UploadIdMarkerWriter::write_params(
@@ -1921,11 +1921,11 @@ impl ListMultipartUploadsOutputWriter {
     }
 }
 
-impl CompleteMultipartUploadOutputParser {
+impl MultipartUploadCompleteOutputParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T)
-        -> Result<CompleteMultipartUploadOutput, XmlParseError> {
+        -> Result<MultipartUploadCompleteOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = CompleteMultipartUploadOutput::default();
+        let mut obj = MultipartUploadCompleteOutput::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "x-amz-request-charged" {
@@ -1975,8 +1975,8 @@ impl CompleteMultipartUploadOutputParser {
     }
 }
 
-impl CompleteMultipartUploadOutputWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &CompleteMultipartUploadOutput) {
+impl MultipartUploadCompleteOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadCompleteOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         RequestChargedWriter::write_params(
@@ -2467,10 +2467,10 @@ impl ObjectMetadataWriter {
     }
 }
 
-impl ListPartsOutputParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsOutput, XmlParseError> {
+impl MultipartUploadListPartsOutputParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadListPartsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = ListPartsOutput::default();
+        let mut obj = MultipartUploadListPartsOutput::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "Initiator" {
@@ -2528,8 +2528,8 @@ impl ListPartsOutputParser {
     }
 }
 
-impl ListPartsOutputWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &ListPartsOutput) {
+impl MultipartUploadListPartsOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadListPartsOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         InitiatorWriter::write_params(params, &(prefix.to_string() + "Initiator"), &obj.initiator);
@@ -2547,10 +2547,10 @@ impl ListPartsOutputWriter {
     }
 }
 
-impl ListPartsRequestParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsRequest, XmlParseError> {
+impl MultipartUploadListPartsRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadListPartsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = ListPartsRequest::default();
+        let mut obj = MultipartUploadListPartsRequest::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "x-amz-request-payer" {
@@ -2584,8 +2584,8 @@ impl ListPartsRequestParser {
     }
 }
 
-impl ListPartsRequestWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &ListPartsRequest) {
+impl MultipartUploadListPartsRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadListPartsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         if let Some(ref obj) = obj.request_payer {
@@ -2669,18 +2669,18 @@ impl PartsWriter {
     }
 }
 
-impl AbortMultipartUploadOutputWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &AbortMultipartUploadOutput) {
+impl MultipartUploadAbortOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadAbortOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
     }
 }
 
-impl AbortMultipartUploadRequestParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AbortMultipartUploadRequest, XmlParseError> {
+impl MultipartUploadAbortRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadAbortRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = AbortMultipartUploadRequest::default();
+        let mut obj = MultipartUploadAbortRequest::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "uploadId" {
@@ -2706,8 +2706,8 @@ impl AbortMultipartUploadRequestParser {
     }
 }
 
-impl AbortMultipartUploadRequestWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &AbortMultipartUploadRequest) {
+impl MultipartUploadAbortRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadAbortRequest) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "uploadId"), &obj.upload_id);
@@ -2719,10 +2719,10 @@ impl AbortMultipartUploadRequestWriter {
     }
 }
 
-impl ListMultipartUploadsRequestParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsRequest, XmlParseError> {
+impl MultipartUploadListRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadListRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = ListMultipartUploadsRequest::default();
+        let mut obj = MultipartUploadListRequest::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "upload-id-marker" {
@@ -2760,8 +2760,8 @@ impl ListMultipartUploadsRequestParser {
     }
 }
 
-impl ListMultipartUploadsRequestWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &ListMultipartUploadsRequest) {
+impl MultipartUploadListRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadListRequest) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         if let Some(ref obj) = obj.upload_id_marker {
@@ -3959,10 +3959,10 @@ impl GetObjectOutputWriter {
     }
 }
 
-impl CreateMultipartUploadRequestParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateMultipartUploadRequest, XmlParseError> {
+impl MultipartUploadCreateRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadCreateRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = CreateMultipartUploadRequest::default();
+        let mut obj = MultipartUploadCreateRequest::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "x-amz-request-payer" {
@@ -4060,8 +4060,8 @@ impl CreateMultipartUploadRequestParser {
     }
 }
 
-impl CreateMultipartUploadRequestWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &CreateMultipartUploadRequest) {
+impl MultipartUploadCreateRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadCreateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         if let Some(ref obj) = obj.request_payer {
@@ -4461,10 +4461,10 @@ impl ListObjectVersionsRequestWriter {
     }
 }
 
-impl CreateMultipartUploadOutputParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateMultipartUploadOutput, XmlParseError> {
+impl MultipartUploadCreateOutputParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadCreateOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let mut obj = CreateMultipartUploadOutput::default();
+        let mut obj = MultipartUploadCreateOutput::default();
         loop {
             let current_name = try!(peek_at_name(stack));
             if current_name == "x-amz-server-side-encryption-customer-algorithm" {
@@ -4506,8 +4506,8 @@ impl CreateMultipartUploadOutputParser {
     }
 }
 
-impl CreateMultipartUploadOutputWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &CreateMultipartUploadOutput) {
+impl MultipartUploadCreateOutputWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadCreateOutput) {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);

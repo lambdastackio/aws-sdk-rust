@@ -1267,255 +1267,6 @@ impl<P, D> S3Client<P, D>
         }
     }
 
-    /// Initiates a multipart upload and returns an upload ID.
-    /// **Note:** After you initiate multipart upload and upload one or more parts, you must
-    /// either complete or abort multipart upload in order to stop getting charged for storage of
-    /// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3
-    /// frees up the parts storage and stops charging you for the parts storage.
-    ///
-    /// Keep in mind ways to help performance:
-    /// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html
-    ///
-    pub fn create_multipart_upload(&self,
-                                   input: &CreateMultipartUploadRequest)
-                                   -> Result<CreateMultipartUploadOutput, S3Error> {
-
-        let object_name = &input.key;
-        let mut request = SignedRequest::new("POST",
-                                             "s3",
-                                             self.region,
-                                             &input.bucket,
-                                             &format!("/{}", object_name),
-                                             &self.endpoint);
-
-        let mut params = Params::new();
-        params.put("uploads", "");
-        request.set_params(params);
-
-        let hostname = self.hostname(Some(&input.bucket));
-        request.set_hostname(Some(hostname));
-
-        let result = sign_and_execute(&self.dispatcher,
-                                      &mut request,
-                                      try!(self.credentials_provider.credentials()));
-        let status = result.status;
-
-        let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
-        stack.next(); // xml start tag
-
-        match status {
-            200 => {
-                Ok(try!(CreateMultipartUploadOutputParser::parse_xml("InitiateMultipartUploadResult", &mut stack)))
-            },
-            _ => {
-                let aws = try!(AWSError::parse_xml("Error", &mut stack));
-                Err(S3Error::with_aws("Error creating multipart object upload", aws))
-            },
-        }
-    }
-
-    /// Uploads a part in a multipart upload.
-    /// **Note:** After you initiate multipart upload and upload one or more parts, you must
-    /// either complete or abort multipart upload in order to stop getting charged for storage of
-    /// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3
-    /// frees up the parts storage and stops charging you for the parts storage.
-    pub fn upload_part(&self, input: &UploadPartRequest) -> Result<String, S3Error> {
-        let object_id = &input.key;
-        let mut request = SignedRequest::new("PUT",
-                                             "s3",
-                                             self.region,
-                                             &input.bucket,
-                                             &format!("/{}", object_id),
-                                             &self.endpoint);
-
-        request.set_payload(input.body);
-
-        let hostname = self.hostname(Some(&input.bucket));
-        request.set_hostname(Some(hostname));
-
-        if let Some(ref md5) = input.content_md5 {
-            request.add_header("Content-MD5", md5);
-        }
-
-        let mut params = Params::new();
-        let upload_id = &input.upload_id;
-        let part_number = &input.part_number;
-        params.put("partNumber", &format!("{}", part_number));
-        params.put("uploadId", upload_id);
-        request.set_params(params);
-
-        let mut result = sign_and_execute(&self.dispatcher,
-                                          &mut request,
-                                          try!(self.credentials_provider.credentials()));
-        let status = result.status;
-
-        match status {
-            200 => {
-                match result.headers.get("ETag") {
-                    Some(ref value) => Ok(value.to_string()),
-                    None => Err(S3Error::new("Couldn't find etag in response headers.")),
-                }
-            },
-            _ => {
-                let mut reader = EventReader::from_str(&result.body);
-                let mut stack = XmlResponse::new(reader.events().peekable());
-                stack.next(); // xml start tag
-
-                let aws = try!(AWSError::parse_xml("Error", &mut stack));
-                Err(S3Error::with_aws("Error uploading a part", aws))
-            },
-        }
-    }
-
-    /// Completes a multipart upload by assembling previously uploaded parts.
-    pub fn complete_multipart_upload(&self,
-                                     input: &CompleteMultipartUploadRequest)
-                                     -> Result<CompleteMultipartUploadOutput, S3Error> {
-        let mut request = SignedRequest::new("POST",
-                                             "s3",
-                                             self.region,
-                                             &input.bucket,
-                                             &format!("/{}", input.key),
-                                             &self.endpoint);
-
-        let mut params = Params::new();
-        params.put("uploadId", &input.upload_id.to_string());
-        request.set_params(params);
-
-        let hostname = self.hostname(Some(&input.bucket));
-        request.set_hostname(Some(hostname));
-
-        request.set_payload(input.multipart_upload);
-
-        let mut result = sign_and_execute(&self.dispatcher,
-                                          &mut request,
-                                          try!(self.credentials_provider.credentials()));
-        let status = result.status;
-
-        let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
-        stack.next(); // xml start tag
-
-        match status {
-            200 => {
-                Ok(try!(CompleteMultipartUploadOutputParser::parse_xml("CompleteMultipartUploadResult", &mut stack)))
-            },
-            _ => {
-                let aws = try!(AWSError::parse_xml("Error", &mut stack));
-                Err(S3Error::with_aws("Error completing multipart upload", aws))
-            },
-        }
-    }
-
-    /// This operation lists in-progress multipart uploads.
-    pub fn list_multipart_uploads(&self, input: &ListMultipartUploadsRequest)
-                    -> Result<ListMultipartUploadsOutput, S3Error> {
-        let mut request = SignedRequest::new(
-                                        "GET",
-                                        "s3",
-                                        self.region,
-                                        &input.bucket,
-                                        "/",
-                                        &self.endpoint);
-
-        let mut params = Params::new();
-        params.put("uploads", "");
-        request.set_params(params);
-
-        let hostname = self.hostname(Some(&input.bucket));
-        request.set_hostname(Some(hostname));
-
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
-        let status = result.status;
-        let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
-        stack.next(); // xml start tag
-
-        match status {
-            200 => {
-                Ok(try!(ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut stack)))
-            }
-            _ => {
-                let aws = try!(AWSError::parse_xml("Error", &mut stack));
-                Err(S3Error::with_aws("Error completing list_multipart_uploads", aws))
-            }
-        }
-    }
-
-    /// Lists the parts that have been uploaded for a specific multipart upload.
-    pub fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, S3Error> {
-        let mut request = SignedRequest::new(
-                                        "GET",
-                                        "s3",
-                                        self.region,
-                                        &input.bucket,
-                                        &format!("/{}", input.key),
-                                        &self.endpoint);
-
-        let mut params = Params::new();
-        params.put("uploadId", &input.upload_id.to_string());
-        request.set_params(params);
-
-        let hostname = self.hostname(Some(&input.bucket));
-        request.set_hostname(Some(hostname));
-
-        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
-        let status = result.status;
-
-        let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
-        stack.next(); // xml start tag
-
-        match status {
-            200 => {
-                Ok(try!(ListPartsOutputParser::parse_xml("ListPartsResult", &mut stack)))
-            }
-            _ => {
-                let aws = try!(AWSError::parse_xml("Error", &mut stack));
-                Err(S3Error::with_aws("Error completing list_parts", aws))
-            }
-        }
-    }
-
-    /// Aborts a multipart upload.
-    /// To verify that all parts have been removed, so you don't get charged for the
-    /// part storage, you should call the List Parts operation and ensure the parts
-    /// list is empty.
-    pub fn abort_multipart_upload(&self, input: &AbortMultipartUploadRequest)
-                            -> Result<AbortMultipartUploadOutput, S3Error> {
-        let mut request = SignedRequest::new(
-                                        "DELETE",
-                                        "s3",
-                                        self.region,
-                                        &input.bucket,
-                                        &format!("/{}", input.key),
-                                        &self.endpoint);
-
-        let mut params = Params::new();
-        params.put("uploadId", &input.upload_id.to_string());
-        request.set_params(params);
-
-        let hostname = self.hostname(Some(&input.bucket));
-        request.set_hostname(Some(hostname));
-
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
-        let status = result.status;
-        let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
-        stack.next(); // xml start tag
-
-        match status {
-            204 => {
-                Ok(AbortMultipartUploadOutput::default())
-            }
-            _ => {
-                let aws = try!(AWSError::parse_xml("Error", &mut stack));
-                Err(S3Error::with_aws("Error completing list_parts", aws))
-            }
-        }
-    }
-
     /// This operation enables you to delete multiple objects from a bucket using a
     /// single HTTP request. You may specify up to 1000 keys.
     pub fn delete_objects(&self, input: &DeleteObjectsRequest) -> Result<DeleteObjectsOutput, S3Error> {
@@ -1584,6 +1335,255 @@ impl<P, D> S3Client<P, D>
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
                 Err(S3Error::with_aws("Error deleting object", aws))
             },
+        }
+    }
+
+    /// Initiates a multipart upload and returns an upload ID.
+    /// **Note:** After you initiate multipart upload and upload one or more parts, you must
+    /// either complete or abort multipart upload in order to stop getting charged for storage of
+    /// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3
+    /// frees up the parts storage and stops charging you for the parts storage.
+    ///
+    /// Keep in mind ways to help performance:
+    /// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html
+    ///
+    pub fn multipart_upload_create(&self,
+                                   input: &MultipartUploadCreateRequest)
+                                   -> Result<MultipartUploadCreateOutput, S3Error> {
+
+        let object_name = &input.key;
+        let mut request = SignedRequest::new("POST",
+                                             "s3",
+                                             self.region,
+                                             &input.bucket,
+                                             &format!("/{}", object_name),
+                                             &self.endpoint);
+
+        let mut params = Params::new();
+        params.put("uploads", "");
+        request.set_params(params);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        let result = sign_and_execute(&self.dispatcher,
+                                      &mut request,
+                                      try!(self.credentials_provider.credentials()));
+        let status = result.status;
+
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+
+        match status {
+            200 => {
+                Ok(try!(MultipartUploadCreateOutputParser::parse_xml("InitiateMultipartUploadResult", &mut stack)))
+            },
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error creating multipart object upload", aws))
+            },
+        }
+    }
+
+    /// Uploads a part in a multipart upload.
+    /// **Note:** After you initiate multipart upload and upload one or more parts, you must
+    /// either complete or abort multipart upload in order to stop getting charged for storage of
+    /// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3
+    /// frees up the parts storage and stops charging you for the parts storage.
+    pub fn multipart_upload_part(&self, input: &MultipartUploadPartRequest) -> Result<String, S3Error> {
+        let object_id = &input.key;
+        let mut request = SignedRequest::new("PUT",
+                                             "s3",
+                                             self.region,
+                                             &input.bucket,
+                                             &format!("/{}", object_id),
+                                             &self.endpoint);
+
+        request.set_payload(input.body);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        if let Some(ref md5) = input.content_md5 {
+            request.add_header("Content-MD5", md5);
+        }
+
+        let mut params = Params::new();
+        let upload_id = &input.upload_id;
+        let part_number = &input.part_number;
+        params.put("partNumber", &format!("{}", part_number));
+        params.put("uploadId", upload_id);
+        request.set_params(params);
+
+        let mut result = sign_and_execute(&self.dispatcher,
+                                          &mut request,
+                                          try!(self.credentials_provider.credentials()));
+        let status = result.status;
+
+        match status {
+            200 => {
+                match result.headers.get("ETag") {
+                    Some(ref value) => Ok(value.to_string()),
+                    None => Err(S3Error::new("Couldn't find etag in response headers.")),
+                }
+            },
+            _ => {
+                let mut reader = EventReader::from_str(&result.body);
+                let mut stack = XmlResponse::new(reader.events().peekable());
+                stack.next(); // xml start tag
+
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error uploading a part", aws))
+            },
+        }
+    }
+
+    /// Completes a multipart upload by assembling previously uploaded parts.
+    pub fn multipart_upload_complete(&self,
+                                     input: &MultipartUploadCompleteRequest)
+                                     -> Result<MultipartUploadCompleteOutput, S3Error> {
+        let mut request = SignedRequest::new("POST",
+                                             "s3",
+                                             self.region,
+                                             &input.bucket,
+                                             &format!("/{}", input.key),
+                                             &self.endpoint);
+
+        let mut params = Params::new();
+        params.put("uploadId", &input.upload_id.to_string());
+        request.set_params(params);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        request.set_payload(input.multipart_upload);
+
+        let mut result = sign_and_execute(&self.dispatcher,
+                                          &mut request,
+                                          try!(self.credentials_provider.credentials()));
+        let status = result.status;
+
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+
+        match status {
+            200 => {
+                Ok(try!(MultipartUploadCompleteOutputParser::parse_xml("CompleteMultipartUploadResult", &mut stack)))
+            },
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error completing multipart upload", aws))
+            },
+        }
+    }
+
+    /// This operation lists in-progress multipart uploads.
+    pub fn multipart_upload_list(&self, input: &MultipartUploadListRequest)
+                    -> Result<MultipartUploadListOutput, S3Error> {
+        let mut request = SignedRequest::new(
+                                        "GET",
+                                        "s3",
+                                        self.region,
+                                        &input.bucket,
+                                        "/",
+                                        &self.endpoint);
+
+        let mut params = Params::new();
+        params.put("uploads", "");
+        request.set_params(params);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let status = result.status;
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+
+        match status {
+            200 => {
+                Ok(try!(MultipartUploadListOutputParser::parse_xml("ListMultipartUploadsResult", &mut stack)))
+            }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error completing list_multipart_uploads", aws))
+            }
+        }
+    }
+
+    /// Lists the parts that have been uploaded for a specific multipart upload.
+    pub fn multipart_upload_list_parts(&self, input: &MultipartUploadListPartsRequest) -> Result<MultipartUploadListPartsOutput, S3Error> {
+        let mut request = SignedRequest::new(
+                                        "GET",
+                                        "s3",
+                                        self.region,
+                                        &input.bucket,
+                                        &format!("/{}", input.key),
+                                        &self.endpoint);
+
+        let mut params = Params::new();
+        params.put("uploadId", &input.upload_id.to_string());
+        request.set_params(params);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let status = result.status;
+
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+
+        match status {
+            200 => {
+                Ok(try!(MultipartUploadListPartsOutputParser::parse_xml("ListPartsResult", &mut stack)))
+            }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error completing list_parts", aws))
+            }
+        }
+    }
+
+    /// Aborts a multipart upload.
+    /// To verify that all parts have been removed, so you don't get charged for the
+    /// part storage, you should call the List Parts operation and ensure the parts
+    /// list is empty.
+    pub fn multipart_upload_abort(&self, input: &MultipartUploadAbortRequest)
+                            -> Result<MultipartUploadAbortOutput, S3Error> {
+        let mut request = SignedRequest::new(
+                                        "DELETE",
+                                        "s3",
+                                        self.region,
+                                        &input.bucket,
+                                        &format!("/{}", input.key),
+                                        &self.endpoint);
+
+        let mut params = Params::new();
+        params.put("uploadId", &input.upload_id.to_string());
+        request.set_params(params);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let status = result.status;
+        let mut reader = EventReader::from_str(&result.body);
+        let mut stack = XmlResponse::new(reader.events().peekable());
+        stack.next(); // xml start tag
+
+        match status {
+            204 => {
+                Ok(MultipartUploadAbortOutput::default())
+            }
+            _ => {
+                let aws = try!(AWSError::parse_xml("Error", &mut stack));
+                Err(S3Error::with_aws("Error completing list_parts", aws))
+            }
         }
     }
 

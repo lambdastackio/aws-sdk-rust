@@ -188,12 +188,12 @@ fn main() {
     let file_remove: bool = true;
     let file_create: bool = true;
 
-    let mut create_multipart_upload_output: Option<CreateMultipartUploadOutput> = None;
-    let mut create_multipart_upload = CreateMultipartUploadRequest::default();
+    let mut create_multipart_upload_output: Option<MultipartUploadCreateOutput> = None;
+    let mut create_multipart_upload = MultipartUploadCreateRequest::default();
     create_multipart_upload.bucket = bucket_name.to_string();
     create_multipart_upload.key = file_name.to_string();
 
-    match client.create_multipart_upload(&create_multipart_upload) {
+    match client.multipart_upload_create(&create_multipart_upload) {
         Ok(output) => {
             println_color!(term::color::GREEN, "{:#?}", output);
             create_multipart_upload_output = Some(output);
@@ -242,7 +242,7 @@ fn main() {
         let mut part1_buffer: Vec<u8> = Vec::with_capacity(min_size as usize); // 5MB
         let mut part2_buffer: Vec<u8> = Vec::with_capacity(if len > min_size as usize {min_size as usize} else {len});
 
-        let mut upload_part = UploadPartRequest::default();
+        let mut upload_part = MultipartUploadPartRequest::default();
         upload_part.bucket = bucket_name.to_string();
         upload_part.upload_id = upload_id.to_string();
         upload_part.key = file_name.to_string();
@@ -259,7 +259,7 @@ fn main() {
         //let hash = md5::compute(upload_part.body.unwrap()).to_base64(STANDARD);
         //upload_part.content_md5 = Some(hash);
 
-        match client.upload_part(&upload_part) {
+        match client.multipart_upload_part(&upload_part) {
             Ok(output) => {
                 // Collecting the partid in a list.
                 let new_out = output.clone();
@@ -275,22 +275,22 @@ fn main() {
 
         repeat_color!(term::color::WHITE, "-", "list_multipart_uploads", width);
 
-        let mut list_multipart_uploads = ListMultipartUploadsRequest::default();
+        let mut list_multipart_uploads = MultipartUploadListRequest::default();
         list_multipart_uploads.bucket = bucket_name.to_string();
 
-        match client.list_multipart_uploads(&list_multipart_uploads) {
+        match client.multipart_upload_list(&list_multipart_uploads) {
             Ok(output) => println_color!(term::color::GREEN, "{:#?}", output),
             Err(e) => println_color!(term::color::RED, "{:#?}", e),
         }
 
         repeat_color!(term::color::WHITE, "-", "list_parts (#1)", width);
 
-        let mut list_parts = ListPartsRequest::default();
+        let mut list_parts = MultipartUploadListPartsRequest::default();
         list_parts.bucket = bucket_name.to_string();
         list_parts.upload_id = upload_id.to_string();
         list_parts.key = file_name.to_string();
 
-        match client.list_parts(&list_parts) {
+        match client.multipart_upload_list_parts(&list_parts) {
             Ok(output) => println_color!(term::color::GREEN, "{:#?}", output),
             Err(e) => println_color!(term::color::RED, "{:#?}", e),
         }
@@ -312,7 +312,7 @@ fn main() {
             //let hash = md5::compute(upload_part.body.unwrap()).to_base64(STANDARD);
             //upload_part.content_md5 = Some(hash);
 
-            match client.upload_part(&upload_part) {
+            match client.multipart_upload_part(&upload_part) {
                 Ok(output) => {
                     let new_out = output.clone();
                     parts_list.push(output);
@@ -324,12 +324,12 @@ fn main() {
             // Just to show both parts now.
             repeat_color!(term::color::WHITE, "-", "list_parts (#2)", width);
 
-            let mut list_parts = ListPartsRequest::default();
+            let mut list_parts = MultipartUploadListPartsRequest::default();
             list_parts.bucket = bucket_name.to_string();
             list_parts.upload_id = upload_id.to_string();
             list_parts.key = file_name.to_string();
 
-            match client.list_parts(&list_parts) {
+            match client.multipart_upload_list_parts(&list_parts) {
                 Ok(output) => println_color!(term::color::GREEN, "{:#?}", output),
                 Err(e) => println_color!(term::color::RED, "{:#?}", e),
             }
@@ -339,12 +339,12 @@ fn main() {
         if test_abort {
             repeat_color!(term::color::WHITE, "-", "abort_upload", width);
 
-            let mut abort_multipart_upload = AbortMultipartUploadRequest::default();
+            let mut abort_multipart_upload = MultipartUploadAbortRequest::default();
             abort_multipart_upload.bucket = bucket_name.to_string();
             abort_multipart_upload.upload_id = upload_id.to_string();
             abort_multipart_upload.key = file_name.to_string();
 
-            match client.abort_multipart_upload(&abort_multipart_upload) {
+            match client.multipart_upload_abort(&abort_multipart_upload) {
                 Ok(output) => println_color!(term::color::GREEN, "{:#?}", output),
                 Err(e) => println_color!(term::color::RED, "{:#?}", e),
             }
@@ -354,7 +354,7 @@ fn main() {
 
             let item_list : Vec<u8>;
 
-            let mut complete_multipart_upload = CompleteMultipartUploadRequest::default();
+            let mut complete_multipart_upload = MultipartUploadCompleteRequest::default();
             complete_multipart_upload.bucket = bucket_name.to_string();
             complete_multipart_upload.upload_id = upload_id.to_string();
             complete_multipart_upload.key = file_name.to_string();
@@ -370,7 +370,7 @@ fn main() {
 
             complete_multipart_upload.multipart_upload = Some(&item_list);
 
-            match client.complete_multipart_upload(&complete_multipart_upload) {
+            match client.multipart_upload_complete(&complete_multipart_upload) {
                 Ok(output) => println_color!(term::color::GREEN, "{:#?}", output),
                 Err(e) => println_color!(term::color::RED, "{:#?}", e),
             }
