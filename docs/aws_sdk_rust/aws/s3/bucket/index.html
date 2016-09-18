@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-3060' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#19-484' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-3063' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#19-688' title='goto source code'>[src]</a></span></h1>
 <h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
@@ -55,6 +55,42 @@
                                   title='aws_sdk_rust::aws::s3::bucket::Bucket'>Bucket</a></td>
                            <td class='docblock-short'>
                                 
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.BucketAlreadyExists.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::BucketAlreadyExists'>BucketAlreadyExists</a></td>
+                           <td class='docblock-short'>
+                                <p>The requested bucket name is not available. The bucket namespace is shared by
+all users of the system. Please select a different name and try again.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.BucketAlreadyExistsParser.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::BucketAlreadyExistsParser'>BucketAlreadyExistsParser</a></td>
+                           <td class='docblock-short'>
+                                <p>Parse <code>BucketAlreadyExists</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.BucketAlreadyExistsWriter.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::BucketAlreadyExistsWriter'>BucketAlreadyExistsWriter</a></td>
+                           <td class='docblock-short'>
+                                <p>Write <code>BucketAlreadyExists</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.BucketLocationConstraintParser.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::BucketLocationConstraintParser'>BucketLocationConstraintParser</a></td>
+                           <td class='docblock-short'>
+                                <p>Parse <code>BucketLocationConstraint</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.BucketLocationConstraintWriter.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::BucketLocationConstraintWriter'>BucketLocationConstraintWriter</a></td>
+                           <td class='docblock-short'>
+                                <p>Write <code>BucketLocationConstraint</code> contents to a <code>SignedRequest</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -118,6 +154,20 @@
                                   title='aws_sdk_rust::aws::s3::bucket::CloudFunctionConfiguration'>CloudFunctionConfiguration</a></td>
                            <td class='docblock-short'>
                                 
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CloudFunctionConfigurationListParser.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::CloudFunctionConfigurationListParser'>CloudFunctionConfigurationListParser</a></td>
+                           <td class='docblock-short'>
+                                <p>Parse <code>CloudFunctionConfigurationList</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CloudFunctionConfigurationListWriter.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::CloudFunctionConfigurationListWriter'>CloudFunctionConfigurationListWriter</a></td>
+                           <td class='docblock-short'>
+                                <p>Write <code>CloudFunctionConfigurationList</code> contents to a <code>SignedRequest</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -262,6 +312,20 @@ element is empty, notifications are turned off on the bucket.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class='struct' href='struct.NotificationConfigurationParser.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::NotificationConfigurationParser'>NotificationConfigurationParser</a></td>
+                           <td class='docblock-short'>
+                                <p>Parse <code>NotificationConfiguration</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.NotificationConfigurationWriter.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::NotificationConfigurationWriter'>NotificationConfigurationWriter</a></td>
+                           <td class='docblock-short'>
+                                <p>Write <code>NotificationConfiguration</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='struct' href='struct.PutBucketLifecycleRequest.html'
                                   title='aws_sdk_rust::aws::s3::bucket::PutBucketLifecycleRequest'>PutBucketLifecycleRequest</a></td>
                            <td class='docblock-short'>
@@ -347,6 +411,34 @@ replication configuration size can be up to 2 MB.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TopicConfigurationListParser.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationListParser'>TopicConfigurationListParser</a></td>
+                           <td class='docblock-short'>
+                                <p>Parse <code>TopicConfigurationList</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TopicConfigurationListWriter.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationListWriter'>TopicConfigurationListWriter</a></td>
+                           <td class='docblock-short'>
+                                <p>Write <code>TopicConfigurationList</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TopicConfigurationParser.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationParser'>TopicConfigurationParser</a></td>
+                           <td class='docblock-short'>
+                                <p>Parse <code>TopicConfiguration</code> from XML</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.TopicConfigurationWriter.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationWriter'>TopicConfigurationWriter</a></td>
+                           <td class='docblock-short'>
+                                <p>Write <code>TopicConfiguration</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='struct' href='struct.VersioningConfiguration.html'
                                   title='aws_sdk_rust::aws::s3::bucket::VersioningConfiguration'>VersioningConfiguration</a></td>
                            <td class='docblock-short'>
@@ -377,6 +469,13 @@ replication configuration size can be up to 2 MB.</p>
                        </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
 <table>
                        <tr class=' module-item'>
+                           <td><a class='type' href='type.BucketLocationConstraint.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::BucketLocationConstraint'>BucketLocationConstraint</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='type' href='type.BucketName.html'
                                   title='aws_sdk_rust::aws::s3::bucket::BucketName'>BucketName</a></td>
                            <td class='docblock-short'>
@@ -386,6 +485,20 @@ replication configuration size can be up to 2 MB.</p>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.Buckets.html'
                                   title='aws_sdk_rust::aws::s3::bucket::Buckets'>Buckets</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CloudFunctionConfigurationList.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::CloudFunctionConfigurationList'>CloudFunctionConfigurationList</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.TopicConfigurationList.html'
+                                  title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationList'>TopicConfigurationList</a></td>
                            <td class='docblock-short'>
                                 
                            </td>

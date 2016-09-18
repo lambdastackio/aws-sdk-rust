@@ -941,6 +941,8 @@ impl<P, D> S3Client<P, D>
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
 
+        println!("Status: {} - {:?}", status, result.body);
+
         match status {
             200 => {
                 Ok(try!(NotificationConfigurationParser::parse_xml("NotificationConfiguration", &mut stack)))

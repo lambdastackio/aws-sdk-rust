@@ -3979,48 +3979,6 @@ impl QueueConfigurationWriter {
     }
 }
 
-/// Parse `TopicConfiguration` from XML
-pub struct TopicConfigurationParser;
-
-impl TopicConfigurationParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicConfiguration, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = TopicConfiguration::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Id" {
-                obj.id = Some(try!(NotificationIdParser::parse_xml("Id", stack)));
-                continue;
-            }
-            if current_name == "Topic" {
-                obj.topic_arn = try!(TopicArnParser::parse_xml("Topic", stack));
-                continue;
-            }
-            if current_name == "Event" {
-                obj.events = try!(EventListParser::parse_xml("Event", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `TopicConfiguration` contents to a `SignedRequest`
-pub struct TopicConfigurationWriter;
-
-impl TopicConfigurationWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &TopicConfiguration) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        if let Some(ref obj) = obj.id {
-            NotificationIdWriter::write_params(params, &(prefix.to_string() + "Id"), obj);
-        }
-        TopicArnWriter::write_params(params, &(prefix.to_string() + "Topic"), &obj.topic_arn);
-        EventListWriter::write_params(params, &(prefix.to_string() + "Event"), &obj.events);
-    }
-}
 
 
 pub type QueueConfigurationList = Vec<QueueConfiguration>;
@@ -4051,126 +4009,14 @@ impl QueueConfigurationListWriter {
     }
 }
 
-pub type TopicConfigurationList = Vec<TopicConfiguration>;
-/// Parse `TopicConfigurationList` from XML
-pub struct TopicConfigurationListParser;
-
-impl TopicConfigurationListParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicConfigurationList, XmlParseError> {
-        let mut obj = Vec::new();
-        while try!(peek_at_name(stack)) == "TopicConfiguration" {
-            obj.push(try!(TopicConfigurationParser::parse_xml("TopicConfiguration", stack)));
-        }
-        Ok(obj)
-    }
-}
-
-/// Write `TopicConfigurationList` contents to a `SignedRequest`
-pub struct TopicConfigurationListWriter;
-
-impl TopicConfigurationListWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &TopicConfigurationList) {
-        let mut index = 1;
-        for element in obj.iter() {
-            let key = &format!("{}.{}", name, index);
-            TopicConfigurationWriter::write_params(params, key, element);
-            index += 1;
-        }
-    }
-}
 
 
-/// Parse `NotificationConfiguration` from XML
-pub struct NotificationConfigurationParser;
-
-impl NotificationConfigurationParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NotificationConfiguration, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = NotificationConfiguration::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "QueueConfiguration" {
-                obj.queue_configurations = try!(QueueConfigurationListParser::parse_xml("QueueConfiguration", stack));
-                continue;
-            }
-            if current_name == "LambdaFunctionConfiguration" {
-                obj.lambda_function_configurations = try!(LambdaFunctionConfigurationListParser::parse_xml("LambdaFunctionConfiguration", stack));
-                continue;
-            }
-            if current_name == "TopicConfiguration" {
-                obj.topic_configurations = try!(TopicConfigurationListParser::parse_xml("TopicConfiguration", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `NotificationConfiguration` contents to a `SignedRequest`
-pub struct NotificationConfigurationWriter;
-
-impl NotificationConfigurationWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &NotificationConfiguration) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        QueueConfigurationListWriter::write_params(params, &(prefix.to_string() + "QueueConfiguration"), &obj.queue_configurations);
-        LambdaFunctionConfigurationListWriter::write_params(params, &(prefix.to_string() + "LambdaFunctionConfiguration"), &obj.lambda_function_configurations);
-        TopicConfigurationListWriter::write_params(params, &(prefix.to_string() + "TopicConfiguration"), &obj.topic_configurations);
-    }
-}
 
 
-/// The requested bucket name is not available. The bucket namespace is shared by
-/// all users of the system. Please select a different name and try again.
-#[derive(Debug, Default)]
-pub struct BucketAlreadyExists;
 
-/// Parse `BucketAlreadyExists` from XML
-pub struct BucketAlreadyExistsParser;
 
-impl BucketAlreadyExistsParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketAlreadyExists, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = BucketAlreadyExists::default();
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 
-/// Write `BucketAlreadyExists` contents to a `SignedRequest`
-pub struct BucketAlreadyExistsWriter;
 
-impl BucketAlreadyExistsWriter {
-    #[allow(unused_variables)]
-    pub fn write_params(params: &mut Params, name: &str, obj: &BucketAlreadyExists) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-    }
-}
-
-pub type BucketLocationConstraint = String;
-/// Parse `BucketLocationConstraint` from XML
-pub struct BucketLocationConstraintParser;
-
-impl BucketLocationConstraintParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketLocationConstraint, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `BucketLocationConstraint` contents to a `SignedRequest`
-pub struct BucketLocationConstraintWriter;
-
-impl BucketLocationConstraintWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &BucketLocationConstraint) {
-        params.put(name, obj);
-    }
-}
 
 pub type MFADeleteStatus = String;
 /// Parse `MFADeleteStatus` from XML

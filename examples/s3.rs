@@ -94,7 +94,7 @@ fn main() {
 
     repeat_color!(term::color::GREEN, "=", "Start", width);
 
-
+/*
     repeat_color_with_ends!(term::color::WHITE, "-", "create_bucket", "", "", width);
 
     let mut bucket = CreateBucketRequest::default();
@@ -104,7 +104,7 @@ fn main() {
         Ok(bucket) => println_color!(term::color::GREEN, "{:#?}", bucket),
         Err(e) => println_color!(term::color::RED, "{:#?}", e),
     }
-
+*/
 
     repeat_color!(term::color::WHITE, "-", "get_bucket_notification_configuration", width);
 
@@ -127,7 +127,7 @@ fn main() {
         Err(e) => println_color!(term::color::RED, "{:#?}", e),
     }
 
-
+/*
     repeat_color!(term::color::WHITE, "-", "put_bucket_acl", width);
 
     let mut put_bucket_acl = PutBucketAclRequest::default();
@@ -524,6 +524,6 @@ fn main() {
             println_color!(term::color::RED, "Error: {:#?}", error);
         },
     }
-
+*/
     repeat_color!(term::color::GREEN, "=", "Finished", width);
 }
