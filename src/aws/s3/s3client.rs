@@ -941,8 +941,6 @@ impl<P, D> S3Client<P, D>
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
 
-        println!("Status: {} - {:?}", status, result.body);
-
         match status {
             200 => {
                 Ok(try!(NotificationConfigurationParser::parse_xml("NotificationConfiguration", &mut stack)))
@@ -1352,18 +1350,29 @@ impl<P, D> S3Client<P, D>
     pub fn multipart_upload_create(&self,
                                    input: &MultipartUploadCreateRequest)
                                    -> Result<MultipartUploadCreateOutput, S3Error> {
-
         let object_name = &input.key;
+        let path: String;
+
+        // NOTE: Need to change these signature items in the signature code instead of in this code set
+
+        if self.endpoint.signature == Signature::V2 {
+            path = format!("/{}?uploads", object_name);
+        } else {
+            path = format!("/{}", object_name);
+        }
+
         let mut request = SignedRequest::new("POST",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}", object_name),
+                                             &path,
                                              &self.endpoint);
 
-        let mut params = Params::new();
-        params.put("uploads", "");
-        request.set_params(params);
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("uploads", "");
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -1394,12 +1403,22 @@ impl<P, D> S3Client<P, D>
     /// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3
     /// frees up the parts storage and stops charging you for the parts storage.
     pub fn multipart_upload_part(&self, input: &MultipartUploadPartRequest) -> Result<String, S3Error> {
-        let object_id = &input.key;
+        let object_name = &input.key;
+        let upload_id = &input.upload_id;
+        let part_number = &input.part_number;
+        let path: String;
+
+        if self.endpoint.signature == Signature::V2 {
+            path = format!("/{}?partNumber={}&uploadId={}", object_name, part_number, upload_id);
+        } else {
+            path = format!("/{}", object_name);
+        }
+
         let mut request = SignedRequest::new("PUT",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}", object_id),
+                                             &path,
                                              &self.endpoint);
 
         request.set_payload(input.body);
@@ -1411,12 +1430,12 @@ impl<P, D> S3Client<P, D>
             request.add_header("Content-MD5", md5);
         }
 
-        let mut params = Params::new();
-        let upload_id = &input.upload_id;
-        let part_number = &input.part_number;
-        params.put("partNumber", &format!("{}", part_number));
-        params.put("uploadId", upload_id);
-        request.set_params(params);
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("partNumber", &format!("{}", part_number));
+            params.put("uploadId", upload_id);
+            request.set_params(params);
+        }
 
         let mut result = sign_and_execute(&self.dispatcher,
                                           &mut request,
@@ -1445,16 +1464,28 @@ impl<P, D> S3Client<P, D>
     pub fn multipart_upload_complete(&self,
                                      input: &MultipartUploadCompleteRequest)
                                      -> Result<MultipartUploadCompleteOutput, S3Error> {
+        let object_name = &input.key;
+        let upload_id = &input.upload_id;
+        let path: String;
+
+        if self.endpoint.signature == Signature::V2 {
+            path = format!("/{}?uploadId={}", object_name, upload_id);
+        } else {
+            path = format!("/{}", object_name);
+        }
+
         let mut request = SignedRequest::new("POST",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}", input.key),
+                                             &path,
                                              &self.endpoint);
 
-        let mut params = Params::new();
-        params.put("uploadId", &input.upload_id.to_string());
-        request.set_params(params);
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("uploadId", &input.upload_id.to_string());
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -1489,12 +1520,14 @@ impl<P, D> S3Client<P, D>
                                         "s3",
                                         self.region,
                                         &input.bucket,
-                                        "/",
+                                        if self.endpoint.signature == Signature::V4 {"/"} else {"/?uploads"},
                                         &self.endpoint);
 
-        let mut params = Params::new();
-        params.put("uploads", "");
-        request.set_params(params);
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("uploads", "");
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -1518,17 +1551,29 @@ impl<P, D> S3Client<P, D>
 
     /// Lists the parts that have been uploaded for a specific multipart upload.
     pub fn multipart_upload_list_parts(&self, input: &MultipartUploadListPartsRequest) -> Result<MultipartUploadListPartsOutput, S3Error> {
+        let object_name = &input.key;
+        let upload_id = &input.upload_id;
+        let path: String;
+
+        if self.endpoint.signature == Signature::V2 {
+            path = format!("/{}?uploadId={}", object_name, upload_id);
+        } else {
+            path = format!("/{}", object_name);
+        }
+
         let mut request = SignedRequest::new(
                                         "GET",
                                         "s3",
                                         self.region,
                                         &input.bucket,
-                                        &format!("/{}", input.key),
+                                        &path,
                                         &self.endpoint);
 
-        let mut params = Params::new();
-        params.put("uploadId", &input.upload_id.to_string());
-        request.set_params(params);
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("uploadId", &input.upload_id.to_string());
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
@@ -1557,17 +1602,29 @@ impl<P, D> S3Client<P, D>
     /// list is empty.
     pub fn multipart_upload_abort(&self, input: &MultipartUploadAbortRequest)
                             -> Result<MultipartUploadAbortOutput, S3Error> {
+        let object_name = &input.key;
+        let upload_id = &input.upload_id;
+        let path: String;
+
+        if self.endpoint.signature == Signature::V2 {
+            path = format!("/{}?uploadId={}", object_name, upload_id);
+        } else {
+            path = format!("/{}", object_name);
+        }
+
         let mut request = SignedRequest::new(
                                         "DELETE",
                                         "s3",
                                         self.region,
                                         &input.bucket,
-                                        &format!("/{}", input.key),
+                                        &path,
                                         &self.endpoint);
 
-        let mut params = Params::new();
-        params.put("uploadId", &input.upload_id.to_string());
-        request.set_params(params);
+        if self.endpoint.signature == Signature::V4 {
+            let mut params = Params::new();
+            params.put("uploadId", &input.upload_id.to_string());
+            request.set_params(params);
+        }
 
         let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));

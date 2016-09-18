@@ -295,7 +295,8 @@ impl<'a> SignedRequest<'a> {
         let date = now_utc().rfc822().to_string();
         self.update_header("Date", &date);
 
-        // self.canonical_query_string = build_canonical_query_string(&self.params);
+        self.canonical_query_string = build_canonical_query_string(&self.params);
+        
         // self.canonical_uri = canonical_uri(&self.path);
         // let canonical_headers = canonical_headers_v2(&self.headers);
         // let canonical_resources = canonical_resources_v2(&self.bucket, &self.path);
@@ -304,9 +305,9 @@ impl<'a> SignedRequest<'a> {
         // println!("hostname {:#?}", hostname);
         // println!("canonical_query_string {:#?}", self.canonical_query_string);
         // println!("canonical_resources_v2 {:#?}", canonical_resources);
-        // println!("canonical_headers {:#?}", canonical_headers);
+        // println!("canonical_headers {:?}", canonical_headers);
         // println!("**-------------------");
-        // println!("headers {:#?}", self.headers);
+        // println!("headers {:?}", self.headers);
         // println!("path {:#?}", self.path);
         // println!("params {:#?}", self.params);
         // println!("---------------------");
@@ -514,9 +515,7 @@ fn canonical_values(values: &[Vec<u8>]) -> String {
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
-        _ => {
-            encode_uri(path)
-        },
+        _ => encode_uri(path),
     }
 }
 
