@@ -1041,6 +1041,47 @@ impl<P, D> S3Client<P, D>
         }
     }
 
+    /// The HEAD operation retrieves metadata from an object without returning the
+    /// object itself. This operation is useful if you're only interested in an
+    /// object's metadata. To use HEAD, you must have READ access to the object.
+    pub fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, S3Error> {
+        let mut request = SignedRequest::new("HEAD",
+                                             "s3",
+                                             self.region,
+                                             &input.bucket,
+                                             &format!("/{}", input.key),
+                                             &self.endpoint);
+
+        let hostname = self.hostname(Some(&input.bucket));
+        request.set_hostname(Some(hostname));
+
+        // let mut params = Params::new();
+        // params.put("Action", "HeadObject");
+        // GetObjectRequestWriter::write_params(&mut params, "", input);
+        // request.set_params(params);
+
+        let mut result = sign_and_execute(&self.dispatcher,
+                                          &mut request,
+                                          try!(self.credentials_provider.credentials()));
+        let status = result.status;
+        
+        match status {
+            200 => {
+                let head_object = try!(S3Client::<P,D>::head_object_from_response(&mut result));
+
+                Ok(head_object)
+            }
+            _ => {
+              let mut reader = EventReader::from_str(&result.body);
+              let mut stack = XmlResponse::new(reader.events().peekable());
+              stack.next(); // xml start tag
+
+              let aws = try!(AWSError::parse_xml("Error", &mut stack));
+              Err(S3Error::with_aws("Error getting object head", aws))
+            }
+        }
+    }
+
     /// Retrieves objects from Amazon S3.
     ///
     /// Keep in mind way to increase performance:
@@ -1143,7 +1184,78 @@ impl<P, D> S3Client<P, D>
         }
     }
 
-    /// Use the Hyper resposne to populate the GetObjectOutput
+    pub fn head_object_from_response(response: &mut HttpResponse) -> Result<HeadObjectOutput, S3Error> {
+        // get all the goodies for HeadObjectOutput
+        let delete_marker_string = try!(S3Client::<P,D>::get_value_for_header("x-amz-delete-marker".to_string(), &response));
+        let delete_marker : bool;
+        if delete_marker_string.is_empty() {
+            delete_marker = false;
+        } else {
+            delete_marker = try!(bool::from_str(&delete_marker_string));
+        }
+        let accept_ranges = try!(S3Client::<P,D>::get_value_for_header("accept-ranges".to_string(), response));
+        let last_modified = try!(S3Client::<P,D>::get_value_for_header("Last-Modified".to_string(), response));
+        let request_charged = try!(S3Client::<P,D>::get_value_for_header("x-amz-request-charged".to_string(), response));
+        let content_encoding = try!(S3Client::<P,D>::get_value_for_header("Content-Encoding".to_string(), response));
+        let replication_status = try!(S3Client::<P,D>::get_value_for_header("x-amz-replication-status".to_string(), response));
+        let storage_class = try!(S3Client::<P,D>::get_value_for_header("x-amz-storage-class".to_string(), response));
+        let server_side_encryption = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption".to_string(), response));
+        let ssekms_key_id = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-aws-kms-key-id".to_string(), response));
+        let content_disposition = try!(S3Client::<P,D>::get_value_for_header("Content-Disposition".to_string(), response));
+        let metadata = try!(S3Client::<P,D>::get_value_for_header("x-amz-meta-".to_string(), response));
+        let website_redirect_location = try!(S3Client::<P,D>::get_value_for_header("x-amz-website-redirect-location".to_string(), response));
+        let expires = try!(S3Client::<P,D>::get_value_for_header("Expires".to_string(), response));
+        let cache_control = try!(S3Client::<P,D>::get_value_for_header("Cache-Control".to_string(), response));
+
+        let content_length_string = try!(S3Client::<P,D>::get_value_for_header("Content-Length".to_string(), response));
+        let content_length = try!(content_length_string.parse::<i32>());
+
+        let expiration = try!(S3Client::<P,D>::get_value_for_header("x-amz-expiration".to_string(), response));
+        let missing_meta_string = try!(S3Client::<P,D>::get_value_for_header("x-amz-missing-meta".to_string(), response));
+        let missing_meta : i32;
+        if missing_meta_string.is_empty() {
+            missing_meta = 0;
+        } else {
+            missing_meta = try!(missing_meta_string.parse::<i32>());
+        }
+        let restore = try!(S3Client::<P,D>::get_value_for_header("x-amz-restore".to_string(), response));
+        let sse_customer_algorithm = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-customer-algorithm".to_string(), response));
+        let content_type = try!(S3Client::<P,D>::get_value_for_header("Content-Type".to_string(), response));
+        let content_language = try!(S3Client::<P,D>::get_value_for_header("Content-Language".to_string(), response));
+        let version_id = try!(S3Client::<P,D>::get_value_for_header("x-amz-version-id".to_string(), response));
+        let e_tag = try!(S3Client::<P,D>::get_value_for_header("ETag".to_string(), response));
+        let sse_customer_key_md5 = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-customer-key-MD5".to_string(), response));
+        // make the object to return
+        let head_object = HeadObjectOutput {
+            delete_marker: delete_marker,
+            accept_ranges: accept_ranges,
+            last_modified: last_modified,
+            request_charged: request_charged,
+            content_encoding: content_encoding,
+            replication_status: replication_status,
+            storage_class: storage_class,
+            server_side_encryption: server_side_encryption,
+            ssekms_key_id: ssekms_key_id,
+            content_disposition: content_disposition,
+            metadata: HashMap::new(),
+            website_redirect_location: website_redirect_location,
+            expires: expires,
+            cache_control: cache_control,
+            content_length: content_length,
+            expiration: expiration,
+            missing_meta: missing_meta,
+            restore: restore,
+            sse_customer_algorithm: sse_customer_algorithm,
+            content_type: content_type,
+            content_language: content_language,
+            version_id: version_id,
+            e_tag: e_tag,
+            sse_customer_key_md5: sse_customer_key_md5,
+        };
+        Ok(head_object)
+    }
+
+    /// Use the Hyper response to populate the GetObjectOutput
     // This may be a great candidate for some codegen magicks.
     pub fn get_object_from_response(response: &mut HttpResponse) -> Result<GetObjectOutput, S3Error> {
         // get all the goodies for GetObjectOutput

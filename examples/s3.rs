@@ -176,6 +176,18 @@ fn main() {
     }
 
 
+    repeat_color!(term::color::WHITE, "-", "head_object", width);
+
+    let mut head_object = HeadObjectRequest::default();
+    head_object.bucket = bucket_name.to_string();
+    head_object.key = "mytest.txt".to_string();
+
+    match client.head_object(&head_object) {
+        Ok(output) => println_color!(term::color::GREEN, "{:#?}", output),
+        Err(e) => println_color!(term::color::RED, "{:#?}", e),
+    }
+
+
     repeat_color!(term::color::WHITE, "-", "create_multipart_upload", width);
 
     // This is the first thing that needs to be done. Initiate the request and get the uploadid.

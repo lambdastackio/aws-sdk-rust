@@ -428,6 +428,12 @@ pub struct MultipartUploadCreateOutputParser;
 /// Write `MultipartUploadCreateOutput` contents to a `SignedRequest`
 pub struct MultipartUploadCreateOutputWriter;
 
+/// Write `HeadObjectRequest` contents to a `SignedRequest`
+struct HeadObjectRequestWriter;
+
+/// Parse `HeadObjectRequest` from XML
+struct HeadObjectRequestParser;
+
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ObjectVersion {
     /// Date and time the object was last modified.
@@ -1185,7 +1191,6 @@ pub struct NoncurrentVersionExpiration {
     pub noncurrent_days: Days,
 }
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ReplicationRule {
     /// The rule is ignored if status is not Enabled.
@@ -1200,7 +1205,6 @@ pub struct ReplicationRule {
     pub id: Option<ID>,
 }
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListObjectsRequest {
     /// Required. Name of bucket.
@@ -1263,7 +1267,6 @@ pub struct ListObjectsOutput {
     pub start_after: StartAfter,
 }
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListObjectVersionsRequest {
     pub bucket: BucketName,
@@ -1343,7 +1346,6 @@ pub struct ListObjectVersionsOutput {
 }
 //OLD Way - end
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteMarkerEntry {
     pub owner: Owner,
@@ -1358,7 +1360,6 @@ pub struct DeleteMarkerEntry {
     pub last_modified: LastModified,
 }
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct HeadObjectOutput {
     /// Last modified date of the object
@@ -1426,7 +1427,6 @@ pub struct HeadObjectOutput {
     pub sse_customer_key_md5: SSECustomerKeyMD5,
 }
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CopyObjectOutput {
     /// If server-side encryption with a customer-provided encryption key was
@@ -1450,7 +1450,6 @@ pub struct CopyObjectOutput {
     pub ssekms_key_id: SSEKMSKeyId,
 }
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct CopyObjectRequest {
     pub request_payer: Option<RequestPayer>,
@@ -1538,7 +1537,6 @@ pub struct CopyObjectRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct DeleteObjectsRequest {
     /// The concatenation of the authentication device's serial number, a space, and
@@ -1549,7 +1547,6 @@ pub struct DeleteObjectsRequest {
     pub delete: Delete,
 }
 
-//#[derive(Debug, Default)]
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct MultipartUpload {
     /// Identifies who initiated the multipart upload.
@@ -1563,6 +1560,43 @@ pub struct MultipartUpload {
     /// Key of the object for which the multipart upload was initiated.
     pub key: ObjectKey,
     pub owner: Owner,
+}
+
+#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+pub struct HeadObjectRequest {
+    /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    /// Specifies the customer-provided encryption key for Amazon S3 to use in
+    /// encrypting data. This value is used to store the object and then it is
+    /// discarded; Amazon does not store the encryption key. The key must be
+    /// appropriate for use with the algorithm specified in the x-amz-server-side-
+    /// encryption-customer-algorithm header.
+    pub sse_customer_key: Option<SSECustomerKey>,
+    /// Return the object only if it has not been modified since the specified time,
+    /// otherwise return a 412 (precondition failed).
+    pub if_unmodified_since: Option<IfUnmodifiedSince>,
+    /// VersionId used to reference a specific version of the object.
+    pub version_id: Option<ObjectVersionId>,
+    pub request_payer: Option<RequestPayer>,
+    pub bucket: BucketName,
+    /// Return the object only if its entity tag (ETag) is different from the one
+    /// specified, otherwise return a 304 (not modified).
+    pub if_none_match: Option<IfNoneMatch>,
+    /// Downloads the specified range bytes of an object. For more information about
+    /// the HTTP Range header, go to
+    /// http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.
+    pub range: Option<Range>,
+    pub key: ObjectKey,
+    /// Return the object only if its entity tag (ETag) is the same as the one
+    /// specified, otherwise return a 412 (precondition failed).
+    pub if_match: Option<IfMatch>,
+    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321.
+    /// Amazon S3 uses this header for a message integrity check to ensure the
+    /// encryption key was transmitted without error.
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    /// Return the object only if it has been modified since the specified time,
+    /// otherwise return a 304 (not modified).
+    pub if_modified_since: Option<IfModifiedSince>,
 }
 
 // functions below...
@@ -4518,5 +4552,105 @@ impl MultipartUploadCreateOutputWriter {
         ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
         SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
         SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
+    }
+}
+
+impl HeadObjectRequestParser {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadObjectRequest, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = HeadObjectRequest::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "x-amz-server-side-encryption-customer-algorithm" {
+                obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
+                continue;
+            }
+            if current_name == "x-amz-server-side-encryption-customer-key" {
+                obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
+                continue;
+            }
+            if current_name == "If-Unmodified-Since" {
+                obj.if_unmodified_since = Some(try!(IfUnmodifiedSinceParser::parse_xml("If-Unmodified-Since", stack)));
+                continue;
+            }
+            if current_name == "versionId" {
+                obj.version_id = Some(try!(ObjectVersionIdParser::parse_xml("versionId", stack)));
+                continue;
+            }
+            if current_name == "x-amz-request-payer" {
+                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
+                continue;
+            }
+            if current_name == "Bucket" {
+                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+                continue;
+            }
+            if current_name == "If-None-Match" {
+                obj.if_none_match = Some(try!(IfNoneMatchParser::parse_xml("If-None-Match", stack)));
+                continue;
+            }
+            if current_name == "Range" {
+                obj.range = Some(try!(RangeParser::parse_xml("Range", stack)));
+                continue;
+            }
+            if current_name == "Key" {
+                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
+                continue;
+            }
+            if current_name == "If-Match" {
+                obj.if_match = Some(try!(IfMatchParser::parse_xml("If-Match", stack)));
+                continue;
+            }
+            if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
+                obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
+                continue;
+            }
+            if current_name == "If-Modified-Since" {
+                obj.if_modified_since = Some(try!(IfModifiedSinceParser::parse_xml("If-Modified-Since", stack)));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl HeadObjectRequestWriter {
+    fn write_params(params: &mut Params, name: &str, obj: &HeadObjectRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        if let Some(ref obj) = obj.sse_customer_algorithm {
+            SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), obj);
+        }
+        if let Some(ref obj) = obj.sse_customer_key {
+            SSECustomerKeyWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key"), obj);
+        }
+        if let Some(ref obj) = obj.if_unmodified_since {
+            IfUnmodifiedSinceWriter::write_params(params, &(prefix.to_string() + "If-Unmodified-Since"), obj);
+        }
+        if let Some(ref obj) = obj.version_id {
+            ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "versionId"), obj);
+        }
+        if let Some(ref obj) = obj.request_payer {
+            RequestPayerWriter::write_params(params, &(prefix.to_string() + "x-amz-request-payer"), obj);
+        }
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+        if let Some(ref obj) = obj.if_none_match {
+            IfNoneMatchWriter::write_params(params, &(prefix.to_string() + "If-None-Match"), obj);
+        }
+        if let Some(ref obj) = obj.range {
+            RangeWriter::write_params(params, &(prefix.to_string() + "Range"), obj);
+        }
+        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
+        if let Some(ref obj) = obj.if_match {
+            IfMatchWriter::write_params(params, &(prefix.to_string() + "If-Match"), obj);
+        }
+        if let Some(ref obj) = obj.sse_customer_key_md5 {
+            SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), obj);
+        }
+        if let Some(ref obj) = obj.if_modified_since {
+            IfModifiedSinceWriter::write_params(params, &(prefix.to_string() + "If-Modified-Since"), obj);
+        }
     }
 }
