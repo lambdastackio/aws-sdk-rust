@@ -2137,11 +2137,6 @@
 <span id="2093">2093</span>
 <span id="2094">2094</span>
 <span id="2095">2095</span>
-<span id="2096">2096</span>
-<span id="2097">2097</span>
-<span id="2098">2098</span>
-<span id="2099">2099</span>
-<span id="2100">2100</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -2350,18 +2345,17 @@
                                       <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
                                       <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
         <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
-        <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
-        <span class='ident'>stack</span>.<span class='ident'>next</span>();
+        <span class='comment'>//let mut reader = EventReader::from_str(&amp;result.body);</span>
+        <span class='comment'>//let mut stack = XmlResponse::new(reader.events().peekable());</span>
+        <span class='comment'>//stack.next(); // xml start tag</span>
+        <span class='comment'>//stack.next();</span>
 
         <span class='kw'>match</span> <span class='ident'>status</span> {
             <span class='number'>200</span> <span class='op'>=&gt;</span> {
                 <span class='prelude-val'>Ok</span>(())
             },
             _ <span class='op'>=&gt;</span> {
-                <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
-                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error bucket head&quot;</span>, <span class='ident'>aws</span>))
+                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>new</span>(<span class='string'>&quot;Error bucket does not exists or error in retrieving&quot;</span>))
             },
         }
     }
@@ -3209,7 +3203,7 @@
                                           <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
                                           <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
         <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
-        
+
         <span class='kw'>match</span> <span class='ident'>status</span> {
             <span class='number'>200</span> <span class='op'>=&gt;</span> {
                 <span class='kw'>let</span> <span class='ident'>head_object</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>S3Client</span>::<span class='op'>&lt;</span><span class='ident'>P</span>,<span class='ident'>D</span><span class='op'>&gt;</span>::<span class='ident'>head_object_from_response</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>result</span>));
@@ -3217,12 +3211,8 @@
                 <span class='prelude-val'>Ok</span>(<span class='ident'>head_object</span>)
             }
             _ <span class='op'>=&gt;</span> {
-              <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>EventReader</span>::<span class='ident'>from_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>result</span>.<span class='ident'>body</span>);
-              <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack</span> <span class='op'>=</span> <span class='ident'>XmlResponse</span>::<span class='ident'>new</span>(<span class='ident'>reader</span>.<span class='ident'>events</span>().<span class='ident'>peekable</span>());
-              <span class='ident'>stack</span>.<span class='ident'>next</span>(); <span class='comment'>// xml start tag</span>
-
-              <span class='kw'>let</span> <span class='ident'>aws</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>AWSError</span>::<span class='ident'>parse_xml</span>(<span class='string'>&quot;Error&quot;</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stack</span>));
-              <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>with_aws</span>(<span class='string'>&quot;Error getting object head&quot;</span>, <span class='ident'>aws</span>))
+              <span class='kw'>let</span> <span class='ident'>format</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Error getting object head with response: {} - {}&quot;</span>, <span class='ident'>status</span>, <span class='kw'>if</span> <span class='ident'>status</span> <span class='op'>==</span> <span class='number'>404</span> {<span class='string'>&quot;not found&quot;</span>} <span class='kw'>else</span> {<span class='string'>&quot;&quot;</span>});
+              <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>new</span>(<span class='ident'>format</span>))
             }
         }
     }

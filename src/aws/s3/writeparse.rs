@@ -3495,37 +3495,6 @@ impl PayerWriter {
     }
 }
 
-/// Parse `HeadBucketRequest` from XML
-pub struct HeadBucketRequestParser;
-
-impl HeadBucketRequestParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadBucketRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = HeadBucketRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `HeadBucketRequest` contents to a `SignedRequest`
-pub struct HeadBucketRequestWriter;
-
-impl HeadBucketRequestWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &HeadBucketRequest) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-    }
-}
-
 
 /// Parse `Policy` from XML
 pub struct PolicyParser;

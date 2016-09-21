@@ -205,18 +205,17 @@ impl<P, D> S3Client<P, D>
                                       &mut request,
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
-        let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
-        stack.next(); // xml start tag
-        stack.next();
+        //let mut reader = EventReader::from_str(&result.body);
+        //let mut stack = XmlResponse::new(reader.events().peekable());
+        //stack.next(); // xml start tag
+        //stack.next();
 
         match status {
             200 => {
                 Ok(())
             },
             _ => {
-                let aws = try!(AWSError::parse_xml("Error", &mut stack));
-                Err(S3Error::with_aws("Error bucket head", aws))
+                Err(S3Error::new("Error bucket does not exists or error in retrieving"))
             },
         }
     }
@@ -1064,7 +1063,7 @@ impl<P, D> S3Client<P, D>
                                           &mut request,
                                           try!(self.credentials_provider.credentials()));
         let status = result.status;
-        
+
         match status {
             200 => {
                 let head_object = try!(S3Client::<P,D>::head_object_from_response(&mut result));
@@ -1072,12 +1071,8 @@ impl<P, D> S3Client<P, D>
                 Ok(head_object)
             }
             _ => {
-              let mut reader = EventReader::from_str(&result.body);
-              let mut stack = XmlResponse::new(reader.events().peekable());
-              stack.next(); // xml start tag
-
-              let aws = try!(AWSError::parse_xml("Error", &mut stack));
-              Err(S3Error::with_aws("Error getting object head", aws))
+              let format = format!("Error getting object head with response: {} - {}", status, if status == 404 {"not found"} else {""});
+              Err(S3Error::new(format))
             }
         }
     }

@@ -39,7 +39,6 @@ pub type CloudFunctionConfigurationList = Vec<CloudFunctionConfiguration>;
 
 pub type TopicConfigurationList = Vec<TopicConfiguration>;
 
-
 pub type BucketLocationConstraint = String;
 
 /// Parse `BucketName` from XML
@@ -100,6 +99,12 @@ pub struct BucketLocationConstraintParser;
 
 /// Write `BucketLocationConstraint` contents to a `SignedRequest`
 pub struct BucketLocationConstraintWriter;
+
+/// Parse `HeadBucketRequest` from XML
+pub struct HeadBucketRequestParser;
+
+/// Write `HeadBucketRequest` contents to a `SignedRequest`
+pub struct HeadBucketRequestWriter;
 
 
 //#[derive(Debug, Default)]
@@ -684,5 +689,30 @@ impl BucketLocationConstraintParser {
 impl BucketLocationConstraintWriter {
     pub fn write_params(params: &mut Params, name: &str, obj: &BucketLocationConstraint) {
         params.put(name, obj);
+    }
+}
+
+impl HeadBucketRequestParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadBucketRequest, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = HeadBucketRequest::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "Bucket" {
+                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl HeadBucketRequestWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &HeadBucketRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
     }
 }
