@@ -1805,76 +1805,8 @@ impl MetadataValueWriter {
     }
 }
 
-pub type TargetPrefix = String;
-/// Parse `TargetPrefix` from XML
-pub struct TargetPrefixParser;
 
-impl TargetPrefixParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetPrefix, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 
-/// Write `TargetPrefix` contents to a `SignedRequest`
-pub struct TargetPrefixWriter;
-
-impl TargetPrefixWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &TargetPrefix) {
-        params.put(name, obj);
-    }
-}
-
-pub type TargetBucket = String;
-/// Parse `TargetBucket` from XML
-pub struct TargetBucketParser;
-
-impl TargetBucketParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetBucket, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `TargetBucket` contents to a `SignedRequest`
-pub struct TargetBucketWriter;
-
-impl TargetBucketWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &TargetBucket) {
-        params.put(name, obj);
-    }
-}
-
-/// Parse `TargetGrants` from XML
-pub struct TargetGrantsParser;
-
-impl TargetGrantsParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetGrants, XmlParseError> {
-        let mut obj = Vec::new();
-        while try!(peek_at_name(stack)) == "Grant" {
-            obj.push(try!(TargetGrantParser::parse_xml("Grant", stack)));
-        }
-        Ok(obj)
-    }
-}
-
-/// Write `TargetGrants` contents to a `SignedRequest`
-pub struct TargetGrantsWriter;
-
-impl TargetGrantsWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &TargetGrants) {
-        let mut index = 1;
-        for element in obj.iter() {
-            let key = &format!("{}.{}", name, index);
-            TargetGrantWriter::write_params(params, key, element);
-            index += 1;
-        }
-    }
-}
 
 pub type Role = String;
 /// Parse `Role` from XML
@@ -2238,46 +2170,6 @@ impl ExposeHeaderWriter {
     }
 }
 
-/// Parse `LoggingEnabled` from XML
-pub struct LoggingEnabledParser;
-
-impl LoggingEnabledParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LoggingEnabled, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = LoggingEnabled::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "TargetPrefix" {
-                obj.target_prefix = try!(TargetPrefixParser::parse_xml("TargetPrefix", stack));
-                continue;
-            }
-            if current_name == "TargetBucket" {
-                obj.target_bucket = try!(TargetBucketParser::parse_xml("TargetBucket", stack));
-                continue;
-            }
-            if current_name == "Grant" {
-                obj.target_grants = try!(TargetGrantsParser::parse_xml("Grant", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `LoggingEnabled` contents to a `SignedRequest`
-pub struct LoggingEnabledWriter;
-
-impl LoggingEnabledWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &LoggingEnabled) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        TargetPrefixWriter::write_params(params, &(prefix.to_string() + "TargetPrefix"), &obj.target_prefix);
-        TargetBucketWriter::write_params(params, &(prefix.to_string() + "TargetBucket"), &obj.target_bucket);
-        TargetGrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.target_grants);
-    }
-}
 
 pub type Marker = String;
 /// Parse `Marker` from XML

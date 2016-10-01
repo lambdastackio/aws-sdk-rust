@@ -489,7 +489,7 @@ fn main() {
 
     let mut list_objects = ListObjectsRequest::default();
     list_objects.bucket = bucket_name.to_string();
-    // NOTE: The default is version 1 listing. You must set it to version 2.
+    // NOTE: The default is version 1 listing. You must set it to version 2 if you want version 2.
     list_objects.version = Some(2);
 
     match client.list_objects(&list_objects) {

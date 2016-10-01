@@ -41,6 +41,10 @@ pub type TopicConfigurationList = Vec<TopicConfiguration>;
 
 pub type BucketLocationConstraint = String;
 
+pub type TargetBucket = String;
+
+pub type TargetPrefix = String;
+
 /// Parse `BucketName` from XML
 pub struct BucketNameParser;
 
@@ -105,6 +109,30 @@ pub struct HeadBucketRequestParser;
 
 /// Write `HeadBucketRequest` contents to a `SignedRequest`
 pub struct HeadBucketRequestWriter;
+
+/// Parse `TargetBucket` from XML
+pub struct TargetBucketParser;
+
+/// Write `TargetBucket` contents to a `SignedRequest`
+pub struct TargetBucketWriter;
+
+/// Parse `TargetPrefix` from XML
+pub struct TargetPrefixParser;
+
+/// Write `TargetPrefix` contents to a `SignedRequest`
+pub struct TargetPrefixWriter;
+
+/// Parse `TargetGrants` from XML
+pub struct TargetGrantsParser;
+
+/// Write `TargetGrants` contents to a `SignedRequest`
+pub struct TargetGrantsWriter;
+
+/// Parse `LoggingEnabled` from XML
+pub struct LoggingEnabledParser;
+
+/// Write `LoggingEnabled` contents to a `SignedRequest`
+pub struct LoggingEnabledWriter;
 
 
 //#[derive(Debug, Default)]
@@ -714,5 +742,91 @@ impl HeadBucketRequestWriter {
         let mut prefix = name.to_string();
         if prefix != "" { prefix.push_str("."); }
         BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
+    }
+}
+
+impl TargetPrefixParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetPrefix, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl TargetPrefixWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &TargetPrefix) {
+        params.put(name, obj);
+    }
+}
+
+impl TargetBucketParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetBucket, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl TargetBucketWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &TargetBucket) {
+        params.put(name, obj);
+    }
+}
+
+impl TargetGrantsParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetGrants, XmlParseError> {
+        let mut obj = Vec::new();
+        while try!(peek_at_name(stack)) == "Grant" {
+            obj.push(try!(TargetGrantParser::parse_xml("Grant", stack)));
+        }
+        Ok(obj)
+    }
+}
+
+impl TargetGrantsWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &TargetGrants) {
+        let mut index = 1;
+        for element in obj.iter() {
+            let key = &format!("{}.{}", name, index);
+            TargetGrantWriter::write_params(params, key, element);
+            index += 1;
+        }
+    }
+}
+
+impl LoggingEnabledParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LoggingEnabled, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let mut obj = LoggingEnabled::default();
+        loop {
+            let current_name = try!(peek_at_name(stack));
+            if current_name == "TargetPrefix" {
+                obj.target_prefix = try!(TargetPrefixParser::parse_xml("TargetPrefix", stack));
+                continue;
+            }
+            if current_name == "TargetBucket" {
+                obj.target_bucket = try!(TargetBucketParser::parse_xml("TargetBucket", stack));
+                continue;
+            }
+            if current_name == "Grant" {
+                obj.target_grants = try!(TargetGrantsParser::parse_xml("Grant", stack));
+                continue;
+            }
+            break;
+        }
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl LoggingEnabledWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &LoggingEnabled) {
+        let mut prefix = name.to_string();
+        if prefix != "" { prefix.push_str("."); }
+        TargetPrefixWriter::write_params(params, &(prefix.to_string() + "TargetPrefix"), &obj.target_prefix);
+        TargetBucketWriter::write_params(params, &(prefix.to_string() + "TargetBucket"), &obj.target_bucket);
+        TargetGrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.target_grants);
     }
 }

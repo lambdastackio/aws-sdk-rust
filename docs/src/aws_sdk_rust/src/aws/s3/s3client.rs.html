@@ -2137,6 +2137,13 @@
 <span id="2093">2093</span>
 <span id="2094">2094</span>
 <span id="2095">2095</span>
+<span id="2096">2096</span>
+<span id="2097">2097</span>
+<span id="2098">2098</span>
+<span id="2099">2099</span>
+<span id="2100">2100</span>
+<span id="2101">2101</span>
+<span id="2102">2102</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -3945,11 +3952,18 @@
     <span class='doccomment'>/// AWS S3 recommends any PUT/LIST/DELETE operations that exceed 100 per second should open</span>
     <span class='doccomment'>/// a support ticket to increase the rate. See the link above more details.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>put_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>PutObjectRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>PutObjectOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='ident'>path</span>: <span class='ident'>String</span>;
+        <span class='kw'>if</span> <span class='ident'>input</span>.<span class='ident'>key</span>.<span class='ident'>starts_with</span>(<span class='string'>&quot;/&quot;</span>) {
+          <span class='ident'>path</span> <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>key</span>.<span class='ident'>clone</span>();
+        } <span class='kw'>else</span> {
+          <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>);
+        }
+
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;PUT&quot;</span>,
                                              <span class='string'>&quot;s3&quot;</span>,
                                              <span class='self'>self</span>.<span class='ident'>region</span>,
                                              <span class='kw-2'>&amp;</span><span class='ident'>input</span>.<span class='ident'>bucket</span>,
-                                             <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>),
+                                             <span class='kw-2'>&amp;</span><span class='ident'>path</span>,
                                              <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
 
         <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>class</span>) <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>storage_class</span> {

@@ -1805,11 +1805,18 @@ impl<P, D> S3Client<P, D>
     /// AWS S3 recommends any PUT/LIST/DELETE operations that exceed 100 per second should open
     /// a support ticket to increase the rate. See the link above more details.
     pub fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, S3Error> {
+        let path: String;
+        if input.key.starts_with("/") {
+          path = input.key.clone();
+        } else {
+          path = format!("/{}", input.key);
+        }
+
         let mut request = SignedRequest::new("PUT",
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}", input.key),
+                                             &path,
                                              &self.endpoint);
 
         if let Some(ref class) = input.storage_class {
