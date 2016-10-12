@@ -33,9 +33,7 @@ use aws::errors::http::*;
 use aws::s3::bucket::*;
 use aws::s3::object::*;
 use aws::s3::policy::*;
-use aws::s3::grant::*;
 use aws::s3::header::*;
-
 
 pub type Errors = Vec<String>;
 /// Parse `Errors` from XML
@@ -2946,28 +2944,6 @@ impl LifecycleExpirationWriter {
         if prefix != "" { prefix.push_str("."); }
         DateWriter::write_params(params, &(prefix.to_string() + "Date"), &obj.date);
         DaysWriter::write_params(params, &(prefix.to_string() + "Days"), &obj.days);
-    }
-}
-
-pub type Prefix = String;
-/// Parse `Prefix` from XML
-pub struct PrefixParser;
-
-impl PrefixParser {
-    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Prefix, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
-/// Write `Prefix` contents to a `SignedRequest`
-pub struct PrefixWriter;
-
-impl PrefixWriter {
-    pub fn write_params(params: &mut Params, name: &str, obj: &Prefix) {
-        params.put(name, obj);
     }
 }
 

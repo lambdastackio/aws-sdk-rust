@@ -1100,6 +1100,9 @@ impl<P, D> S3Client<P, D>
         // params.put("Action", "GetObject");
         // GetObjectRequestWriter::write_params(&mut params, "", input);
         // request.set_params(params);
+        if let Some(ref range) = input.range {
+            request.add_header("Range", range);
+        }
 
         let mut result = sign_and_execute(&self.dispatcher,
                                           &mut request,
@@ -1107,7 +1110,7 @@ impl<P, D> S3Client<P, D>
         let status = result.status;
 
         match status {
-            200 => {
+            200...206 => {
                 let s3_object = try!(S3Client::<P, D>::get_object_from_response(&mut result));
 
                 Ok(s3_object)
@@ -1403,10 +1406,15 @@ impl<P, D> S3Client<P, D>
     pub fn delete_object(&self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, S3Error> {
         let path: String;
         if let Some(ref version_id) = input.version_id {
-            path = format!("/{}?versionId={}", input.key, version_id);
+            if self.endpoint.signature == Signature::V2 {
+              path = format!("/{}?versionId={}", input.key, version_id);
+            } else {
+              path = format!("/{}", input.key);
+            }
         } else {
             path = format!("/{}", input.key);
         }
+
         let mut request = SignedRequest::new("DELETE",
                                              "s3",
                                              self.region,
@@ -1419,9 +1427,11 @@ impl<P, D> S3Client<P, D>
 
         // Params & Writers create x-amz headers and resources that are extracted and formatted
         // correctly during the signing phase.
-        // let mut params = Params::new();
-        // DeleteObjectRequestWriter::write_params(&mut params, "", input);
-        // request.set_params(params);
+        if self.endpoint.signature != Signature::V2 {
+          let mut params = Params::new();
+          DeleteObjectRequestWriter::write_params(&mut params, "", input);
+          request.set_params(params);
+        }
 
         let result = sign_and_execute(&self.dispatcher,
                                       &mut request,

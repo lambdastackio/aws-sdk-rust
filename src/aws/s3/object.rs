@@ -77,6 +77,9 @@ pub type DeleteMarkers = Vec<DeleteMarkerEntry>;
 
 pub type NextVersionIdMarker = String;
 
+/// Partial object path
+pub type Prefix = String;
+
 /// Parse `Tag` from XML
 pub struct TagParser;
 
@@ -433,6 +436,12 @@ struct HeadObjectRequestWriter;
 
 /// Parse `HeadObjectRequest` from XML
 struct HeadObjectRequestParser;
+
+/// Parse `Prefix` from XML
+pub struct PrefixParser;
+
+/// Write `Prefix` contents to a `SignedRequest`
+pub struct PrefixWriter;
 
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ObjectVersion {
@@ -4652,5 +4661,20 @@ impl HeadObjectRequestWriter {
         if let Some(ref obj) = obj.if_modified_since {
             IfModifiedSinceWriter::write_params(params, &(prefix.to_string() + "If-Modified-Since"), obj);
         }
+    }
+}
+
+impl PrefixParser {
+    pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Prefix, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+    }
+}
+
+impl PrefixWriter {
+    pub fn write_params(params: &mut Params, name: &str, obj: &Prefix) {
+        params.put(name, obj);
     }
 }

@@ -1,7 +1,7 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.23"
-authors = ["Chris Jones <chris.jones@lambdastack.io>"]
+version = "0.1.24"
+authors = ["Chris Jones"]
 license = "Apache-2.0"
 readme = "README.md"
 keywords = ["aws", "s3"]
