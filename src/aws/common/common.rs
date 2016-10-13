@@ -23,6 +23,8 @@
 use std::str::FromStr;
 use std::str;
 
+use time::{Duration, SteadyTime};
+
 use aws::common::xmlutil::*;
 use aws::common::params::*;
 
@@ -178,6 +180,32 @@ pub struct QuietWriter;
 pub struct Owner {
     pub display_name: DisplayName,
     pub id: ID,
+}
+
+/// Allows for duration tracking of operations. You should not track time of this app running but
+/// of each operation and then the summation of the durations plus latency etc.
+/// The endpoint etc are Strings instead of Url so it easy to Clone.
+///
+#[derive(Debug, Default, Clone)]
+pub struct Operation {
+    /// Request (endpoint + path)
+    pub request: String,
+    /// Endpoint URL
+    pub endpoint: String,
+    /// GET, PUT, DELETE...
+    pub method: String,
+    /// If the operation succeeded or not
+    pub success: bool,
+    /// HTTP return code
+    pub code: u16,
+    /// Size of payload
+    pub payload_size: u64,
+    /// System time of beginning of actual operation (not time spent on condition logic, etc)
+    pub start_time: Option<SteadyTime>,
+    /// System time of end of actual operation (not time spent on condition logic, etc)
+    pub end_time: Option<SteadyTime>,
+    /// Duration of operation
+    pub duration: Option<Duration>,
 }
 
 // Impls below...

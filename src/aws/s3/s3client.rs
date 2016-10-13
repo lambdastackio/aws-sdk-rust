@@ -21,6 +21,7 @@ use std::str::FromStr;
 use std::str;
 use std::env;
 
+use time::SteadyTime;
 use hyper::client::{Client, RedirectPolicy};
 use url::Url;
 use xml::reader::EventReader;
@@ -31,6 +32,7 @@ use aws::common::xmlutil::*;
 use aws::common::params::{Params, ServiceParams};
 use aws::common::signature::SignedRequest;
 use aws::common::request::{DispatchSignedRequest, HttpResponse};
+use aws::common::common::Operation;
 use aws::errors::s3::*;
 use aws::errors::aws::*;
 use aws::s3::endpoint::*;
@@ -1002,7 +1004,9 @@ impl<P, D> S3Client<P, D>
     /// Returns some or all (up to 1000) of the objects in a bucket. You can use the
     /// request parameters as selection criteria to return a subset of the objects in
     /// a bucket.
-    pub fn list_objects(&self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, S3Error> {
+    pub fn list_objects(&self, input:
+                        &ListObjectsRequest)
+                        -> Result<ListObjectsOutput, S3Error> {
         let mut request = SignedRequest::new("GET",
                                              "s3",
                                              self.region,
@@ -1085,7 +1089,10 @@ impl<P, D> S3Client<P, D>
     /// AWS S3 recommends any GET operations that exceed 300 per second should open
     /// a support ticket to increase the rate. See the link above more details.
     ///
-    pub fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, S3Error> {
+    pub fn get_object(&self,
+                      input: &GetObjectRequest,
+                      operation: Option<&mut Operation>)
+                      -> Result<GetObjectOutput, S3Error> {
         let mut request = SignedRequest::new("GET",
                                              "s3",
                                              self.region,
@@ -1104,9 +1111,11 @@ impl<P, D> S3Client<P, D>
             request.add_header("Range", range);
         }
 
-        let mut result = sign_and_execute(&self.dispatcher,
+        let mut result = new_sign_and_execute(&self.dispatcher,
                                           &mut request,
+                                          operation,
                                           try!(self.credentials_provider.credentials()));
+
         let status = result.status;
 
         match status {
@@ -1403,7 +1412,10 @@ impl<P, D> S3Client<P, D>
     }
 
     /// Deletes a given object from the bucket.
-    pub fn delete_object(&self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, S3Error> {
+    pub fn delete_object(&self,
+                         input: &DeleteObjectRequest,
+                         operation: Option<&mut Operation>)
+                          -> Result<DeleteObjectOutput, S3Error> {
         let path: String;
         if let Some(ref version_id) = input.version_id {
             if self.endpoint.signature == Signature::V2 {
@@ -1433,8 +1445,9 @@ impl<P, D> S3Client<P, D>
           request.set_params(params);
         }
 
-        let result = sign_and_execute(&self.dispatcher,
+        let result = new_sign_and_execute(&self.dispatcher,
                                       &mut request,
+                                      operation,
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
 
@@ -1814,7 +1827,10 @@ impl<P, D> S3Client<P, D>
     ///
     /// AWS S3 recommends any PUT/LIST/DELETE operations that exceed 100 per second should open
     /// a support ticket to increase the rate. See the link above more details.
-    pub fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, S3Error> {
+    pub fn put_object(&self,
+                      input: &PutObjectRequest,
+                      operation: Option<&mut Operation>)
+                      -> Result<PutObjectOutput, S3Error> {
         let path: String;
         if input.key.starts_with("/") {
           path = input.key.clone();
@@ -1874,8 +1890,9 @@ impl<P, D> S3Client<P, D>
         request.set_hostname(Some(hostname));
         request.set_payload(input.body);
 
-        let mut result = sign_and_execute(&self.dispatcher,
+        let mut result = new_sign_and_execute(&self.dispatcher,
                                           &mut request,
+                                          operation,
                                           try!(self.credentials_provider.credentials()));
         let status = result.status;
 
@@ -2044,14 +2061,72 @@ fn extract_s3_temporary_endpoint_from_xml<T: Peek + Next>(stack: &mut T) -> Resu
     Err(S3Error::new("Couldn't find redirect location for S3 bucket"))
 }
 
-// Internal method that calls the hyper dispatcher to send the URL request.
-fn sign_and_execute<D>(dispatcher: &D, signed_request: &mut SignedRequest, creds: AwsCredentials)
+fn sign_and_execute<D>(dispatcher: &D,
+                       signed_request: &mut SignedRequest,
+                       creds: AwsCredentials)
     -> HttpResponse
     where D: DispatchSignedRequest,
 {
     signed_request.sign(&creds);
 
     let response = dispatcher.dispatch(signed_request).expect("Error dispatching request");
+
+    if response.status == 307 {
+        debug!("Got a redirect response, resending request.");
+        // extract location from response, modify request and re-sign and resend.
+        let new_hostname = extract_s3_redirect_location(response).unwrap();
+        signed_request.set_hostname(Some(new_hostname.to_string()));
+
+        // This does a lot of appending and not clearing/creation, so we'll have to do that ourselves:
+        signed_request.sign(&creds);
+        return dispatcher.dispatch(signed_request).unwrap();
+    }
+
+    response
+}
+
+// Internal method that calls the hyper dispatcher to send the URL request.
+fn new_sign_and_execute<D>(dispatcher: &D,
+                       signed_request: &mut SignedRequest,
+                       operation: Option<&mut Operation>,
+                       creds: AwsCredentials)
+    -> HttpResponse
+    where D: DispatchSignedRequest,
+{
+    signed_request.sign(&creds);
+    let response: HttpResponse;
+
+    // NOTE: May want to move to request.rs in dispatcher method instead of here. That would be
+    // the lowest level before hyper library. We can actually pull in our own version of hyper
+    // since this is a binary and then add time options at the tcp level to measure first byte
+    // for latency but we're only interested in throughput and not latency.
+    // Latency - Duration from start to first byte.
+    // Throughput - Total number of full requests / total time.
+    //
+    if let Some(op) = operation {
+        op.method = signed_request.method.clone();
+        op.request = format!("{}{}{}",
+                     signed_request.endpoint.clone().endpoint.unwrap().into_string(),
+                     signed_request.bucket,
+                     signed_request.path);
+        op.endpoint = signed_request.endpoint.clone().endpoint.unwrap().into_string();
+        if op.method.to_lowercase() == "put" {
+            op.payload_size = signed_request.payload.unwrap().len() as u64;
+        }
+        op.start_time = Some(SteadyTime::now());
+
+        response = dispatcher.dispatch(signed_request).expect("Error dispatching request");
+
+        op.end_time = Some(SteadyTime::now());
+        op.duration = Some(op.end_time.unwrap() - op.start_time.unwrap());
+        if op.method.to_lowercase() != "put" {
+            op.payload_size = response.body.len() as u64;
+        }
+        op.success = if response.status < 400 {true} else {false}; //Do more here later...
+        op.code = response.status;
+    } else {
+        response = dispatcher.dispatch(signed_request).expect("Error dispatching request");
+    }
 
     if response.status == 307 {
         debug!("Got a redirect response, resending request.");

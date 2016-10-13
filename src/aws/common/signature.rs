@@ -55,20 +55,20 @@ use aws::s3::endpoint::Endpoint;
 /// the Amazon Signature Version 4 signing process
 /// version - represents the Signature version. The default is 4 but it can also be set to 2 for older environments.
 #[derive(Debug)]
-// #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+// #[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
 pub struct SignedRequest<'a> {
-    method: String,
-    service: String,
-    region: Region,
-    path: String,
-    headers: BTreeMap<String, Vec<Vec<u8>>>,
-    params: Params,
-    bucket: String,
-    hostname: Option<String>,
-    payload: Option<&'a [u8]>,
-    content_type: Option<String>,
-    canonical_query_string: String,
-    canonical_uri: String,
+    pub method: String,
+    pub service: String,
+    pub region: Region,
+    pub path: String,
+    pub headers: BTreeMap<String, Vec<Vec<u8>>>,
+    pub params: Params,
+    pub bucket: String,
+    pub hostname: Option<String>,
+    pub payload: Option<&'a [u8]>,
+    pub content_type: Option<String>,
+    pub canonical_query_string: String,
+    pub canonical_uri: String,
     pub endpoint: &'a Endpoint, /* signature: Signature,
                                  * ssl: bool, */
 }
@@ -296,7 +296,7 @@ impl<'a> SignedRequest<'a> {
         self.update_header("Date", &date);
 
         self.canonical_query_string = build_canonical_query_string(&self.params);
-        
+
         // self.canonical_uri = canonical_uri(&self.path);
         // let canonical_headers = canonical_headers_v2(&self.headers);
         // let canonical_resources = canonical_resources_v2(&self.bucket, &self.path);

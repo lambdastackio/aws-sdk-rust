@@ -31,7 +31,7 @@ use hyper::Error as HyperError;
 use hyper::header::Headers;
 use hyper::method::Method;
 
-use log::LogLevel::Debug;
+//use log::LogLevel::Debug;
 
 use aws::common::signature::SignedRequest;
 
@@ -85,7 +85,9 @@ pub trait DispatchSignedRequest {
 }
 
 impl DispatchSignedRequest for Client {
-    fn dispatch(&self, request: &SignedRequest) -> Result<HttpResponse, HttpDispatchError> {
+    fn dispatch(&self,
+                request: &SignedRequest
+               ) -> Result<HttpResponse, HttpDispatchError> {
         let hyper_method = match request.method().as_ref() {
             "POST" => Method::Post,
             "PUT" => Method::Put,
@@ -114,7 +116,7 @@ if request.ssl() {
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }
-
+/*
         if log_enabled!(Debug) {
             let payload = request.payload().map(|mut payload_bytes| {
                 let mut payload_string = String::new();
@@ -132,7 +134,7 @@ if request.ssl() {
                 debug!("{}:{}", h.name(), h.value_string());
             }
         }
-
+*/
         // SENDS
         let mut hyper_response = match request.payload() {
             None => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send()),
@@ -144,11 +146,11 @@ if request.ssl() {
 
         let mut body = String::new();
         try!(hyper_response.read_to_string(&mut body));
-
+/*
         if log_enabled!(Debug) {
             debug!("Response body:\n{}", body);
         }
-
+*/
         let mut headers: HashMap<String, String> = HashMap::new();
 
         for header in hyper_response.headers.iter() {

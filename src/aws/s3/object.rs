@@ -952,7 +952,7 @@ pub struct PutObjectRequest<'a> {
 }
 
 //#[derive(Debug, Default)]
-#[derive(Debug, Default, RustcDecodable, RustcEncodable)]
+#[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
 pub struct GetObjectRequest {
     /// Sets the Content-Encoding header of the response.
     pub response_content_encoding: Option<ResponseContentEncoding>,
