@@ -20,8 +20,8 @@ use std::collections::HashMap;
 use std::str::FromStr;
 use std::str;
 use std::env;
+use std::time::{Instant, SystemTime};
 
-use time::SteadyTime;
 use hyper::client::{Client, RedirectPolicy};
 use url::Url;
 use xml::reader::EventReader;
@@ -2104,6 +2104,7 @@ fn new_sign_and_execute<D>(dispatcher: &D,
     // Throughput - Total number of full requests / total time.
     //
     if let Some(op) = operation {
+        op.object = format!("{}", signed_request.path);
         op.method = signed_request.method.clone();
         op.request = format!("{}{}{}",
                      signed_request.endpoint.clone().endpoint.unwrap().into_string(),
@@ -2113,12 +2114,13 @@ fn new_sign_and_execute<D>(dispatcher: &D,
         if op.method.to_lowercase() == "put" {
             op.payload_size = signed_request.payload.unwrap().len() as u64;
         }
-        op.start_time = Some(SteadyTime::now());
+        op.time = Some(SystemTime::now());
+        let now = Instant::now();
 
-        response = dispatcher.dispatch(signed_request).expect("Error dispatching request");
+        response = dispatcher.dispatch(signed_request).expect("Error dispatching timed request");
 
-        op.end_time = Some(SteadyTime::now());
-        op.duration = Some(op.end_time.unwrap() - op.start_time.unwrap());
+        //op.end_time = Some(SteadyTime::now());
+        op.duration = Some(now.elapsed());
         if op.method.to_lowercase() != "put" {
             op.payload_size = response.body.len() as u64;
         }

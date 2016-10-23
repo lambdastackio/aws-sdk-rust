@@ -22,8 +22,7 @@
 
 use std::str::FromStr;
 use std::str;
-
-use time::{Duration, SteadyTime};
+use std::time::{Duration, SystemTime};
 
 use aws::common::xmlutil::*;
 use aws::common::params::*;
@@ -188,6 +187,8 @@ pub struct Owner {
 ///
 #[derive(Debug, Default, Clone)]
 pub struct Operation {
+    /// Time of operation execution
+    pub time: Option<SystemTime>,
     /// Request (endpoint + path)
     pub request: String,
     /// Endpoint URL
@@ -201,11 +202,13 @@ pub struct Operation {
     /// Size of payload
     pub payload_size: u64,
     /// System time of beginning of actual operation (not time spent on condition logic, etc)
-    pub start_time: Option<SteadyTime>,
+    //pub start_time: Option<SteadyTime>,
     /// System time of end of actual operation (not time spent on condition logic, etc)
-    pub end_time: Option<SteadyTime>,
+    //pub end_time: Option<SteadyTime>,
     /// Duration of operation
     pub duration: Option<Duration>,
+    /// Object Name
+    pub object: String,
 }
 
 // Impls below...

@@ -19,12 +19,12 @@ Works only for S3. For a full AWS SDK look at the rusoto crate.
 
 [dependencies]
 lsio = "0.1"
-chrono = "0.2.21"
-httparse = "1.1.2"
+chrono = "0.2"
+httparse = "1"
 hyper = "0.9"
 log = "0.3.6"
 openssl = "0.7.9"
-regex = "0.1.65"
+regex = "0.1"
 rustc-serialize = "0.3"
 # Credentials use serde
 serde = "0.8"
