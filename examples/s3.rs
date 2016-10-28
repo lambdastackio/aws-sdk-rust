@@ -158,7 +158,7 @@ fn main() {
     put_object.key = "mytest.txt".to_string();
     put_object.body = Some(b"this is a test.");
 
-    match client.put_object(&put_object) {
+    match client.put_object(&put_object, None) {
         Ok(output) => println_color!(term::color::GREEN, "{:#?}", output),
         Err(e) => println_color!(term::color::RED, "{:#?}", e),
     }
@@ -170,7 +170,7 @@ fn main() {
     get_object.bucket = bucket_name.to_string();
     get_object.key = "mytest.txt".to_string();
 
-    match client.get_object(&get_object) {
+    match client.get_object(&get_object, None) {
         Ok(output) => println_color!(term::color::GREEN, "\n\n{:#?}\n\n", str::from_utf8(&output.body).unwrap()),
         Err(e) => println_color!(term::color::RED, "{:#?}", e),
     }
@@ -468,7 +468,7 @@ fn main() {
     del_object.bucket = bucket_name.to_string();
     del_object.key = "mytest.txt".to_string();
 
-    match client.delete_object(&del_object) {
+    match client.delete_object(&del_object, None) {
         Ok(output) => println_color!(term::color::GREEN, "{:#?}", output),
         Err(e) => println_color!(term::color::RED, "{:#?}", e),
     }
