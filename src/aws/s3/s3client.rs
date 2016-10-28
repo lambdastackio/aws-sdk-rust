@@ -20,11 +20,12 @@ use std::collections::HashMap;
 use std::str::FromStr;
 use std::str;
 use std::env;
-use std::time::{Instant, SystemTime};
+use std::time::Instant; //, SystemTime};
 
 use hyper::client::{Client, RedirectPolicy};
 use url::Url;
 use xml::reader::EventReader;
+use chrono::{self, UTC};
 
 use aws::common::credentials::{AwsCredentials, AwsCredentialsProvider};
 use aws::common::region::Region;
@@ -2114,13 +2115,16 @@ fn new_sign_and_execute<D>(dispatcher: &D,
         if op.method.to_lowercase() == "put" {
             op.payload_size = signed_request.payload.unwrap().len() as u64;
         }
-        op.time = Some(SystemTime::now());
+
+        let start_time = UTC::now();
         let now = Instant::now();
 
         response = dispatcher.dispatch(signed_request).expect("Error dispatching timed request");
 
-        //op.end_time = Some(SteadyTime::now());
         op.duration = Some(now.elapsed());
+        op.end_time = Some(start_time + chrono::Duration::from_std(op.duration.unwrap()).unwrap());
+        op.start_time = Some(start_time);
+
         if op.method.to_lowercase() != "put" {
             op.payload_size = response.body.len() as u64;
         }
