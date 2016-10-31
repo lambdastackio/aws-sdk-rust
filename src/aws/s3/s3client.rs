@@ -45,9 +45,10 @@ use aws::s3::acl::*;
 /// Returns a valid hyper client. If proxies are passed in then a proxy version of the client is returned.
 /// If None is passed then in then the default Client is returned.
 ///
-pub fn http_client(proxy: Option<Url>) -> Client {
+pub fn http_client(proxy: Option<Url>, endpoint: Url) -> Client {
     let mut proxy_url: String = String::new();
     let mut proxy_port: u16 = 0;
+    let endpoint_domain = endpoint.host_str().unwrap();
 
     let is_proxy = match proxy {
         Some(url) => {
@@ -81,7 +82,23 @@ pub fn http_client(proxy: Option<Url>) -> Client {
     };
 
     match is_proxy {
-        true => Client::with_http_proxy(proxy_url, proxy_port),
+        true => {
+            let mut is_proxy = true;
+
+            match env::var("no_proxy") {
+                Ok(domain_list) => {
+                    if domain_list.contains(endpoint_domain) {
+                        is_proxy = false;
+                    }
+                },
+                _ => {},
+            }
+
+            match is_proxy {
+                true => Client::with_http_proxy(proxy_url, proxy_port),
+                _ => Client::new(),
+            }
+        },
         _ => Client::new(),
     }
 }
@@ -111,7 +128,7 @@ impl<P> S3Client<P, Client>
     ///
     pub fn new(credentials_provider: P, endpoint: Endpoint) -> Self {
         // Hyper client
-        let mut client = http_client(endpoint.proxy.clone());
+        let mut client = http_client(endpoint.proxy.clone(), endpoint.endpoint.clone().unwrap());
 
         client.set_redirect_policy(RedirectPolicy::FollowNone);
         S3Client::with_request_dispatcher(client, credentials_provider, endpoint)
