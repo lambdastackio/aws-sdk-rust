@@ -793,20 +793,20 @@
 <span class='doccomment'>/// the Amazon Signature Version 4 signing process</span>
 <span class='doccomment'>/// version - represents the Signature version. The default is 4 but it can also be set to 2 for older environments.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
-<span class='comment'>// #[derive(Debug, Default, RustcDecodable, RustcEncodable)]</span>
+<span class='comment'>// #[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>SignedRequest</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-    <span class='ident'>method</span>: <span class='ident'>String</span>,
-    <span class='ident'>service</span>: <span class='ident'>String</span>,
-    <span class='ident'>region</span>: <span class='ident'>Region</span>,
-    <span class='ident'>path</span>: <span class='ident'>String</span>,
-    <span class='ident'>headers</span>: <span class='ident'>BTreeMap</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span>,
-    <span class='ident'>params</span>: <span class='ident'>Params</span>,
-    <span class='ident'>bucket</span>: <span class='ident'>String</span>,
-    <span class='ident'>hostname</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
-    <span class='ident'>payload</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>u8</span>]<span class='op'>&gt;</span>,
-    <span class='ident'>content_type</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
-    <span class='ident'>canonical_query_string</span>: <span class='ident'>String</span>,
-    <span class='ident'>canonical_uri</span>: <span class='ident'>String</span>,
+    <span class='kw'>pub</span> <span class='ident'>method</span>: <span class='ident'>String</span>,
+    <span class='kw'>pub</span> <span class='ident'>service</span>: <span class='ident'>String</span>,
+    <span class='kw'>pub</span> <span class='ident'>region</span>: <span class='ident'>Region</span>,
+    <span class='kw'>pub</span> <span class='ident'>path</span>: <span class='ident'>String</span>,
+    <span class='kw'>pub</span> <span class='ident'>headers</span>: <span class='ident'>BTreeMap</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;&gt;</span><span class='op'>&gt;</span>,
+    <span class='kw'>pub</span> <span class='ident'>params</span>: <span class='ident'>Params</span>,
+    <span class='kw'>pub</span> <span class='ident'>bucket</span>: <span class='ident'>String</span>,
+    <span class='kw'>pub</span> <span class='ident'>hostname</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
+    <span class='kw'>pub</span> <span class='ident'>payload</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> [<span class='ident'>u8</span>]<span class='op'>&gt;</span>,
+    <span class='kw'>pub</span> <span class='ident'>content_type</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
+    <span class='kw'>pub</span> <span class='ident'>canonical_query_string</span>: <span class='ident'>String</span>,
+    <span class='kw'>pub</span> <span class='ident'>canonical_uri</span>: <span class='ident'>String</span>,
     <span class='kw'>pub</span> <span class='ident'>endpoint</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>Endpoint</span>, <span class='comment'>/* signature: Signature,
                                  * ssl: bool, */</span>
 }
@@ -1034,7 +1034,7 @@
         <span class='self'>self</span>.<span class='ident'>update_header</span>(<span class='string'>&quot;Date&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>date</span>);
 
         <span class='self'>self</span>.<span class='ident'>canonical_query_string</span> <span class='op'>=</span> <span class='ident'>build_canonical_query_string</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>params</span>);
-        
+
         <span class='comment'>// self.canonical_uri = canonical_uri(&amp;self.path);</span>
         <span class='comment'>// let canonical_headers = canonical_headers_v2(&amp;self.headers);</span>
         <span class='comment'>// let canonical_resources = canonical_resources_v2(&amp;self.bucket, &amp;self.path);</span>
@@ -1486,11 +1486,9 @@
     <script>
         window.rootPath = "../../../../../";
         window.currentCrate = "aws_sdk_rust";
-        window.playgroundUrl = "";
     </script>
     <script src="../../../../../jquery.js"></script>
     <script src="../../../../../main.js"></script>
-    
     <script defer src="../../../../../search-index.js"></script>
 </body>
 </html>

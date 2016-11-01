@@ -529,6 +529,38 @@
 <span id="485">485</span>
 <span id="486">486</span>
 <span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
 </pre><pre class='rust '>
 <span class='comment'>/*
  Copyright 2016 LambdaStack All rights reserved.
@@ -554,6 +586,8 @@
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>::<span class='ident'>FromStr</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>time</span>::<span class='ident'>Duration</span>; <span class='comment'>//, SystemTime};</span>
+<span class='kw'>use</span> <span class='ident'>chrono</span>::{<span class='ident'>UTC</span>, <span class='ident'>DateTime</span>};
 
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>xmlutil</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>params</span>::<span class='op'>*</span>;
@@ -710,6 +744,36 @@
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Owner</span> {
     <span class='kw'>pub</span> <span class='ident'>display_name</span>: <span class='ident'>DisplayName</span>,
     <span class='kw'>pub</span> <span class='ident'>id</span>: <span class='ident'>ID</span>,
+}
+
+<span class='doccomment'>/// Allows for duration tracking of operations. You should not track time of this app running but</span>
+<span class='doccomment'>/// of each operation and then the summation of the durations plus latency etc.</span>
+<span class='doccomment'>/// The endpoint etc are Strings instead of Url so it easy to Clone.</span>
+<span class='doccomment'>///</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>Clone</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Operation</span> {
+    <span class='doccomment'>/// Time of operation execution</span>
+    <span class='comment'>//pub time: Option&lt;SystemTime&gt;,</span>
+    <span class='doccomment'>/// Request (endpoint + path)</span>
+    <span class='kw'>pub</span> <span class='ident'>request</span>: <span class='ident'>String</span>,
+    <span class='doccomment'>/// Endpoint URL</span>
+    <span class='kw'>pub</span> <span class='ident'>endpoint</span>: <span class='ident'>String</span>,
+    <span class='doccomment'>/// GET, PUT, DELETE...</span>
+    <span class='kw'>pub</span> <span class='ident'>method</span>: <span class='ident'>String</span>,
+    <span class='doccomment'>/// If the operation succeeded or not</span>
+    <span class='kw'>pub</span> <span class='ident'>success</span>: <span class='ident'>bool</span>,
+    <span class='doccomment'>/// HTTP return code</span>
+    <span class='kw'>pub</span> <span class='ident'>code</span>: <span class='ident'>u16</span>,
+    <span class='doccomment'>/// Size of payload</span>
+    <span class='kw'>pub</span> <span class='ident'>payload_size</span>: <span class='ident'>u64</span>,
+    <span class='doccomment'>/// System time of beginning of actual operation (not time spent on condition logic, etc)</span>
+    <span class='kw'>pub</span> <span class='ident'>start_time</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>DateTime</span><span class='op'>&lt;</span><span class='ident'>UTC</span><span class='op'>&gt;&gt;</span>,
+    <span class='doccomment'>/// System time of end of actual operation (not time spent on condition logic, etc)</span>
+    <span class='kw'>pub</span> <span class='ident'>end_time</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>DateTime</span><span class='op'>&lt;</span><span class='ident'>UTC</span><span class='op'>&gt;&gt;</span>,
+    <span class='doccomment'>/// Duration of operation</span>
+    <span class='kw'>pub</span> <span class='ident'>duration</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Duration</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Object Name</span>
+    <span class='kw'>pub</span> <span class='ident'>object</span>: <span class='ident'>String</span>,
 }
 
 <span class='comment'>// Impls below...</span>
@@ -1074,11 +1138,9 @@
     <script>
         window.rootPath = "../../../../../";
         window.currentCrate = "aws_sdk_rust";
-        window.playgroundUrl = "";
     </script>
     <script src="../../../../../jquery.js"></script>
     <script src="../../../../../main.js"></script>
-    
     <script defer src="../../../../../search-index.js"></script>
 </body>
 </html>

@@ -2144,6 +2144,118 @@
 <span id="2100">2100</span>
 <span id="2101">2101</span>
 <span id="2102">2102</span>
+<span id="2103">2103</span>
+<span id="2104">2104</span>
+<span id="2105">2105</span>
+<span id="2106">2106</span>
+<span id="2107">2107</span>
+<span id="2108">2108</span>
+<span id="2109">2109</span>
+<span id="2110">2110</span>
+<span id="2111">2111</span>
+<span id="2112">2112</span>
+<span id="2113">2113</span>
+<span id="2114">2114</span>
+<span id="2115">2115</span>
+<span id="2116">2116</span>
+<span id="2117">2117</span>
+<span id="2118">2118</span>
+<span id="2119">2119</span>
+<span id="2120">2120</span>
+<span id="2121">2121</span>
+<span id="2122">2122</span>
+<span id="2123">2123</span>
+<span id="2124">2124</span>
+<span id="2125">2125</span>
+<span id="2126">2126</span>
+<span id="2127">2127</span>
+<span id="2128">2128</span>
+<span id="2129">2129</span>
+<span id="2130">2130</span>
+<span id="2131">2131</span>
+<span id="2132">2132</span>
+<span id="2133">2133</span>
+<span id="2134">2134</span>
+<span id="2135">2135</span>
+<span id="2136">2136</span>
+<span id="2137">2137</span>
+<span id="2138">2138</span>
+<span id="2139">2139</span>
+<span id="2140">2140</span>
+<span id="2141">2141</span>
+<span id="2142">2142</span>
+<span id="2143">2143</span>
+<span id="2144">2144</span>
+<span id="2145">2145</span>
+<span id="2146">2146</span>
+<span id="2147">2147</span>
+<span id="2148">2148</span>
+<span id="2149">2149</span>
+<span id="2150">2150</span>
+<span id="2151">2151</span>
+<span id="2152">2152</span>
+<span id="2153">2153</span>
+<span id="2154">2154</span>
+<span id="2155">2155</span>
+<span id="2156">2156</span>
+<span id="2157">2157</span>
+<span id="2158">2158</span>
+<span id="2159">2159</span>
+<span id="2160">2160</span>
+<span id="2161">2161</span>
+<span id="2162">2162</span>
+<span id="2163">2163</span>
+<span id="2164">2164</span>
+<span id="2165">2165</span>
+<span id="2166">2166</span>
+<span id="2167">2167</span>
+<span id="2168">2168</span>
+<span id="2169">2169</span>
+<span id="2170">2170</span>
+<span id="2171">2171</span>
+<span id="2172">2172</span>
+<span id="2173">2173</span>
+<span id="2174">2174</span>
+<span id="2175">2175</span>
+<span id="2176">2176</span>
+<span id="2177">2177</span>
+<span id="2178">2178</span>
+<span id="2179">2179</span>
+<span id="2180">2180</span>
+<span id="2181">2181</span>
+<span id="2182">2182</span>
+<span id="2183">2183</span>
+<span id="2184">2184</span>
+<span id="2185">2185</span>
+<span id="2186">2186</span>
+<span id="2187">2187</span>
+<span id="2188">2188</span>
+<span id="2189">2189</span>
+<span id="2190">2190</span>
+<span id="2191">2191</span>
+<span id="2192">2192</span>
+<span id="2193">2193</span>
+<span id="2194">2194</span>
+<span id="2195">2195</span>
+<span id="2196">2196</span>
+<span id="2197">2197</span>
+<span id="2198">2198</span>
+<span id="2199">2199</span>
+<span id="2200">2200</span>
+<span id="2201">2201</span>
+<span id="2202">2202</span>
+<span id="2203">2203</span>
+<span id="2204">2204</span>
+<span id="2205">2205</span>
+<span id="2206">2206</span>
+<span id="2207">2207</span>
+<span id="2208">2208</span>
+<span id="2209">2209</span>
+<span id="2210">2210</span>
+<span id="2211">2211</span>
+<span id="2212">2212</span>
+<span id="2213">2213</span>
+<span id="2214">2214</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -2167,10 +2279,12 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>::<span class='ident'>FromStr</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>str</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>env</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>time</span>::<span class='ident'>Instant</span>; <span class='comment'>//, SystemTime};</span>
 
 <span class='kw'>use</span> <span class='ident'>hyper</span>::<span class='ident'>client</span>::{<span class='ident'>Client</span>, <span class='ident'>RedirectPolicy</span>};
 <span class='kw'>use</span> <span class='ident'>url</span>::<span class='ident'>Url</span>;
 <span class='kw'>use</span> <span class='ident'>xml</span>::<span class='ident'>reader</span>::<span class='ident'>EventReader</span>;
+<span class='kw'>use</span> <span class='ident'>chrono</span>::{<span class='self'>self</span>, <span class='ident'>UTC</span>};
 
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>credentials</span>::{<span class='ident'>AwsCredentials</span>, <span class='ident'>AwsCredentialsProvider</span>};
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>region</span>::<span class='ident'>Region</span>;
@@ -2178,6 +2292,7 @@
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>params</span>::{<span class='ident'>Params</span>, <span class='ident'>ServiceParams</span>};
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>signature</span>::<span class='ident'>SignedRequest</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>request</span>::{<span class='ident'>DispatchSignedRequest</span>, <span class='ident'>HttpResponse</span>};
+<span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>common</span>::<span class='ident'>common</span>::<span class='ident'>Operation</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>errors</span>::<span class='ident'>s3</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>errors</span>::<span class='ident'>aws</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>endpoint</span>::<span class='op'>*</span>;
@@ -2189,9 +2304,10 @@
 <span class='doccomment'>/// Returns a valid hyper client. If proxies are passed in then a proxy version of the client is returned.</span>
 <span class='doccomment'>/// If None is passed then in then the default Client is returned.</span>
 <span class='doccomment'>///</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>http_client</span>(<span class='ident'>proxy</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>Client</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>http_client</span>(<span class='ident'>proxy</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>, <span class='ident'>endpoint</span>: <span class='ident'>Url</span>) <span class='op'>-&gt;</span> <span class='ident'>Client</span> {
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>proxy_url</span>: <span class='ident'>String</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>new</span>();
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>proxy_port</span>: <span class='ident'>u16</span> <span class='op'>=</span> <span class='number'>0</span>;
+    <span class='kw'>let</span> <span class='ident'>endpoint_domain</span> <span class='op'>=</span> <span class='ident'>endpoint</span>.<span class='ident'>host_str</span>().<span class='ident'>unwrap</span>();
 
     <span class='kw'>let</span> <span class='ident'>is_proxy</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>proxy</span> {
         <span class='prelude-val'>Some</span>(<span class='ident'>url</span>) <span class='op'>=&gt;</span> {
@@ -2203,10 +2319,14 @@
             <span class='comment'>// Check envrionment var http_proxy</span>
             <span class='kw'>match</span> <span class='ident'>env</span>::<span class='ident'>var</span>(<span class='string'>&quot;http_proxy&quot;</span>) {
                 <span class='prelude-val'>Ok</span>(<span class='ident'>url</span>) <span class='op'>=&gt;</span> {
-                    <span class='kw'>let</span> <span class='ident'>url</span> <span class='op'>=</span> <span class='ident'>Url</span>::<span class='ident'>parse</span>(<span class='kw-2'>&amp;</span><span class='ident'>url</span>).<span class='ident'>unwrap</span>();
-                    <span class='ident'>proxy_url</span> <span class='op'>=</span> <span class='ident'>url</span>.<span class='ident'>host_str</span>().<span class='ident'>unwrap_or</span>(<span class='string'>&quot;&quot;</span>).<span class='ident'>to_string</span>();
-                    <span class='ident'>proxy_port</span> <span class='op'>=</span> <span class='ident'>url</span>.<span class='ident'>port_or_known_default</span>().<span class='ident'>unwrap</span>();
-                    <span class='bool-val'>true</span>
+                    <span class='kw'>match</span> <span class='ident'>Url</span>::<span class='ident'>parse</span>(<span class='kw-2'>&amp;</span><span class='ident'>url</span>) {
+                        <span class='prelude-val'>Ok</span>(<span class='ident'>url</span>) <span class='op'>=&gt;</span> {
+                            <span class='ident'>proxy_url</span> <span class='op'>=</span> <span class='ident'>url</span>.<span class='ident'>host_str</span>().<span class='ident'>unwrap</span>().<span class='ident'>to_string</span>();
+                            <span class='ident'>proxy_port</span> <span class='op'>=</span> <span class='ident'>url</span>.<span class='ident'>port_or_known_default</span>().<span class='ident'>unwrap</span>();
+                            <span class='bool-val'>true</span>
+                        },
+                        <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='bool-val'>false</span>,
+                    }
                 },
                 _ <span class='op'>=&gt;</span> {
                     <span class='kw'>match</span> <span class='ident'>env</span>::<span class='ident'>var</span>(<span class='string'>&quot;HTTP_PROXY&quot;</span>) {
@@ -2225,7 +2345,23 @@
     };
 
     <span class='kw'>match</span> <span class='ident'>is_proxy</span> {
-        <span class='bool-val'>true</span> <span class='op'>=&gt;</span> <span class='ident'>Client</span>::<span class='ident'>with_http_proxy</span>(<span class='ident'>proxy_url</span>, <span class='ident'>proxy_port</span>),
+        <span class='bool-val'>true</span> <span class='op'>=&gt;</span> {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>is_proxy</span> <span class='op'>=</span> <span class='bool-val'>true</span>;
+
+            <span class='kw'>match</span> <span class='ident'>env</span>::<span class='ident'>var</span>(<span class='string'>&quot;no_proxy&quot;</span>) {
+                <span class='prelude-val'>Ok</span>(<span class='ident'>domain_list</span>) <span class='op'>=&gt;</span> {
+                    <span class='kw'>if</span> <span class='ident'>domain_list</span>.<span class='ident'>contains</span>(<span class='ident'>endpoint_domain</span>) {
+                        <span class='ident'>is_proxy</span> <span class='op'>=</span> <span class='bool-val'>false</span>;
+                    }
+                },
+                _ <span class='op'>=&gt;</span> {},
+            }
+
+            <span class='kw'>match</span> <span class='ident'>is_proxy</span> {
+                <span class='bool-val'>true</span> <span class='op'>=&gt;</span> <span class='ident'>Client</span>::<span class='ident'>with_http_proxy</span>(<span class='ident'>proxy_url</span>, <span class='ident'>proxy_port</span>),
+                _ <span class='op'>=&gt;</span> <span class='ident'>Client</span>::<span class='ident'>new</span>(),
+            }
+        },
         _ <span class='op'>=&gt;</span> <span class='ident'>Client</span>::<span class='ident'>new</span>(),
     }
 }
@@ -2255,7 +2391,7 @@
     <span class='doccomment'>///</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>credentials_provider</span>: <span class='ident'>P</span>, <span class='ident'>endpoint</span>: <span class='ident'>Endpoint</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
         <span class='comment'>// Hyper client</span>
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>client</span> <span class='op'>=</span> <span class='ident'>http_client</span>(<span class='ident'>endpoint</span>.<span class='ident'>proxy</span>.<span class='ident'>clone</span>());
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>client</span> <span class='op'>=</span> <span class='ident'>http_client</span>(<span class='ident'>endpoint</span>.<span class='ident'>proxy</span>.<span class='ident'>clone</span>(), <span class='ident'>endpoint</span>.<span class='ident'>endpoint</span>.<span class='ident'>clone</span>().<span class='ident'>unwrap</span>());
 
         <span class='ident'>client</span>.<span class='ident'>set_redirect_policy</span>(<span class='ident'>RedirectPolicy</span>::<span class='ident'>FollowNone</span>);
         <span class='ident'>S3Client</span>::<span class='ident'>with_request_dispatcher</span>(<span class='ident'>client</span>, <span class='ident'>credentials_provider</span>, <span class='ident'>endpoint</span>)
@@ -3149,7 +3285,9 @@
     <span class='doccomment'>/// Returns some or all (up to 1000) of the objects in a bucket. You can use the</span>
     <span class='doccomment'>/// request parameters as selection criteria to return a subset of the objects in</span>
     <span class='doccomment'>/// a bucket.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list_objects</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>ListObjectsRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>ListObjectsOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list_objects</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>:
+                        <span class='kw-2'>&amp;</span><span class='ident'>ListObjectsRequest</span>)
+                        <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>ListObjectsOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;GET&quot;</span>,
                                              <span class='string'>&quot;s3&quot;</span>,
                                              <span class='self'>self</span>.<span class='ident'>region</span>,
@@ -3232,7 +3370,10 @@
     <span class='doccomment'>/// AWS S3 recommends any GET operations that exceed 300 per second should open</span>
     <span class='doccomment'>/// a support ticket to increase the rate. See the link above more details.</span>
     <span class='doccomment'>///</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>GetObjectRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>GetObjectOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>,
+                      <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>GetObjectRequest</span>,
+                      <span class='ident'>operation</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Operation</span><span class='op'>&gt;</span>)
+                      <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>GetObjectOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;GET&quot;</span>,
                                              <span class='string'>&quot;s3&quot;</span>,
                                              <span class='self'>self</span>.<span class='ident'>region</span>,
@@ -3247,14 +3388,19 @@
         <span class='comment'>// params.put(&quot;Action&quot;, &quot;GetObject&quot;);</span>
         <span class='comment'>// GetObjectRequestWriter::write_params(&amp;mut params, &quot;&quot;, input);</span>
         <span class='comment'>// request.set_params(params);</span>
+        <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>range</span>) <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>range</span> {
+            <span class='ident'>request</span>.<span class='ident'>add_header</span>(<span class='string'>&quot;Range&quot;</span>, <span class='ident'>range</span>);
+        }
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>new_sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
                                           <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
+                                          <span class='ident'>operation</span>,
                                           <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
+
         <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
 
         <span class='kw'>match</span> <span class='ident'>status</span> {
-            <span class='number'>200</span> <span class='op'>=&gt;</span> {
+            <span class='number'>200</span>...<span class='number'>206</span> <span class='op'>=&gt;</span> {
                 <span class='kw'>let</span> <span class='ident'>s3_object</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>S3Client</span>::<span class='op'>&lt;</span><span class='ident'>P</span>, <span class='ident'>D</span><span class='op'>&gt;</span>::<span class='ident'>get_object_from_response</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>result</span>));
 
                 <span class='prelude-val'>Ok</span>(<span class='ident'>s3_object</span>)
@@ -3547,13 +3693,21 @@
     }
 
     <span class='doccomment'>/// Deletes a given object from the bucket.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>delete_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>DeleteObjectRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>DeleteObjectOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>delete_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>,
+                         <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>DeleteObjectRequest</span>,
+                         <span class='ident'>operation</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Operation</span><span class='op'>&gt;</span>)
+                          <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>DeleteObjectOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>path</span>: <span class='ident'>String</span>;
         <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>version_id</span>) <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>version_id</span> {
-            <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}?versionId={}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>, <span class='ident'>version_id</span>);
+            <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>endpoint</span>.<span class='ident'>signature</span> <span class='op'>==</span> <span class='ident'>Signature</span>::<span class='ident'>V2</span> {
+              <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}?versionId={}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>, <span class='ident'>version_id</span>);
+            } <span class='kw'>else</span> {
+              <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>);
+            }
         } <span class='kw'>else</span> {
             <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>, <span class='ident'>input</span>.<span class='ident'>key</span>);
         }
+
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;DELETE&quot;</span>,
                                              <span class='string'>&quot;s3&quot;</span>,
                                              <span class='self'>self</span>.<span class='ident'>region</span>,
@@ -3566,12 +3720,15 @@
 
         <span class='comment'>// Params &amp; Writers create x-amz headers and resources that are extracted and formatted</span>
         <span class='comment'>// correctly during the signing phase.</span>
-        <span class='comment'>// let mut params = Params::new();</span>
-        <span class='comment'>// DeleteObjectRequestWriter::write_params(&amp;mut params, &quot;&quot;, input);</span>
-        <span class='comment'>// request.set_params(params);</span>
+        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>endpoint</span>.<span class='ident'>signature</span> <span class='op'>!=</span> <span class='ident'>Signature</span>::<span class='ident'>V2</span> {
+          <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>Params</span>::<span class='ident'>new</span>();
+          <span class='ident'>DeleteObjectRequestWriter</span>::<span class='ident'>write_params</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>params</span>, <span class='string'>&quot;&quot;</span>, <span class='ident'>input</span>);
+          <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+        }
 
-        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
+        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>new_sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
                                       <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
+                                      <span class='ident'>operation</span>,
                                       <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
         <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
 
@@ -3951,7 +4108,10 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// AWS S3 recommends any PUT/LIST/DELETE operations that exceed 100 per second should open</span>
     <span class='doccomment'>/// a support ticket to increase the rate. See the link above more details.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>put_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>PutObjectRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>PutObjectOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>put_object</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>,
+                      <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>PutObjectRequest</span>,
+                      <span class='ident'>operation</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Operation</span><span class='op'>&gt;</span>)
+                      <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>PutObjectOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>path</span>: <span class='ident'>String</span>;
         <span class='kw'>if</span> <span class='ident'>input</span>.<span class='ident'>key</span>.<span class='ident'>starts_with</span>(<span class='string'>&quot;/&quot;</span>) {
           <span class='ident'>path</span> <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>key</span>.<span class='ident'>clone</span>();
@@ -4011,8 +4171,9 @@
         <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>hostname</span>));
         <span class='ident'>request</span>.<span class='ident'>set_payload</span>(<span class='ident'>input</span>.<span class='ident'>body</span>);
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>new_sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
                                           <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
+                                          <span class='ident'>operation</span>,
                                           <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
         <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
 
@@ -4181,14 +4342,77 @@
     <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>new</span>(<span class='string'>&quot;Couldn&#39;t find redirect location for S3 bucket&quot;</span>))
 }
 
-<span class='comment'>// Internal method that calls the hyper dispatcher to send the URL request.</span>
-<span class='kw'>fn</span> <span class='ident'>sign_and_execute</span><span class='op'>&lt;</span><span class='ident'>D</span><span class='op'>&gt;</span>(<span class='ident'>dispatcher</span>: <span class='kw-2'>&amp;</span><span class='ident'>D</span>, <span class='ident'>signed_request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>SignedRequest</span>, <span class='ident'>creds</span>: <span class='ident'>AwsCredentials</span>)
+<span class='kw'>fn</span> <span class='ident'>sign_and_execute</span><span class='op'>&lt;</span><span class='ident'>D</span><span class='op'>&gt;</span>(<span class='ident'>dispatcher</span>: <span class='kw-2'>&amp;</span><span class='ident'>D</span>,
+                       <span class='ident'>signed_request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>SignedRequest</span>,
+                       <span class='ident'>creds</span>: <span class='ident'>AwsCredentials</span>)
     <span class='op'>-&gt;</span> <span class='ident'>HttpResponse</span>
     <span class='kw'>where</span> <span class='ident'>D</span>: <span class='ident'>DispatchSignedRequest</span>,
 {
     <span class='ident'>signed_request</span>.<span class='ident'>sign</span>(<span class='kw-2'>&amp;</span><span class='ident'>creds</span>);
 
     <span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>dispatcher</span>.<span class='ident'>dispatch</span>(<span class='ident'>signed_request</span>).<span class='ident'>expect</span>(<span class='string'>&quot;Error dispatching request&quot;</span>);
+
+    <span class='kw'>if</span> <span class='ident'>response</span>.<span class='ident'>status</span> <span class='op'>==</span> <span class='number'>307</span> {
+        <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;Got a redirect response, resending request.&quot;</span>);
+        <span class='comment'>// extract location from response, modify request and re-sign and resend.</span>
+        <span class='kw'>let</span> <span class='ident'>new_hostname</span> <span class='op'>=</span> <span class='ident'>extract_s3_redirect_location</span>(<span class='ident'>response</span>).<span class='ident'>unwrap</span>();
+        <span class='ident'>signed_request</span>.<span class='ident'>set_hostname</span>(<span class='prelude-val'>Some</span>(<span class='ident'>new_hostname</span>.<span class='ident'>to_string</span>()));
+
+        <span class='comment'>// This does a lot of appending and not clearing/creation, so we&#39;ll have to do that ourselves:</span>
+        <span class='ident'>signed_request</span>.<span class='ident'>sign</span>(<span class='kw-2'>&amp;</span><span class='ident'>creds</span>);
+        <span class='kw'>return</span> <span class='ident'>dispatcher</span>.<span class='ident'>dispatch</span>(<span class='ident'>signed_request</span>).<span class='ident'>unwrap</span>();
+    }
+
+    <span class='ident'>response</span>
+}
+
+<span class='comment'>// Internal method that calls the hyper dispatcher to send the URL request.</span>
+<span class='kw'>fn</span> <span class='ident'>new_sign_and_execute</span><span class='op'>&lt;</span><span class='ident'>D</span><span class='op'>&gt;</span>(<span class='ident'>dispatcher</span>: <span class='kw-2'>&amp;</span><span class='ident'>D</span>,
+                       <span class='ident'>signed_request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>SignedRequest</span>,
+                       <span class='ident'>operation</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Operation</span><span class='op'>&gt;</span>,
+                       <span class='ident'>creds</span>: <span class='ident'>AwsCredentials</span>)
+    <span class='op'>-&gt;</span> <span class='ident'>HttpResponse</span>
+    <span class='kw'>where</span> <span class='ident'>D</span>: <span class='ident'>DispatchSignedRequest</span>,
+{
+    <span class='ident'>signed_request</span>.<span class='ident'>sign</span>(<span class='kw-2'>&amp;</span><span class='ident'>creds</span>);
+    <span class='kw'>let</span> <span class='ident'>response</span>: <span class='ident'>HttpResponse</span>;
+
+    <span class='comment'>// NOTE: May want to move to request.rs in dispatcher method instead of here. That would be</span>
+    <span class='comment'>// the lowest level before hyper library. We can actually pull in our own version of hyper</span>
+    <span class='comment'>// since this is a binary and then add time options at the tcp level to measure first byte</span>
+    <span class='comment'>// for latency but we&#39;re only interested in throughput and not latency.</span>
+    <span class='comment'>// Latency - Duration from start to first byte.</span>
+    <span class='comment'>// Throughput - Total number of full requests / total time.</span>
+    <span class='comment'>//</span>
+    <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>op</span>) <span class='op'>=</span> <span class='ident'>operation</span> {
+        <span class='ident'>op</span>.<span class='ident'>object</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>signed_request</span>.<span class='ident'>path</span>);
+        <span class='ident'>op</span>.<span class='ident'>method</span> <span class='op'>=</span> <span class='ident'>signed_request</span>.<span class='ident'>method</span>.<span class='ident'>clone</span>();
+        <span class='ident'>op</span>.<span class='ident'>request</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}{}{}&quot;</span>,
+                     <span class='ident'>signed_request</span>.<span class='ident'>endpoint</span>.<span class='ident'>clone</span>().<span class='ident'>endpoint</span>.<span class='ident'>unwrap</span>().<span class='ident'>into_string</span>(),
+                     <span class='ident'>signed_request</span>.<span class='ident'>bucket</span>,
+                     <span class='ident'>signed_request</span>.<span class='ident'>path</span>);
+        <span class='ident'>op</span>.<span class='ident'>endpoint</span> <span class='op'>=</span> <span class='ident'>signed_request</span>.<span class='ident'>endpoint</span>.<span class='ident'>clone</span>().<span class='ident'>endpoint</span>.<span class='ident'>unwrap</span>().<span class='ident'>into_string</span>();
+        <span class='kw'>if</span> <span class='ident'>op</span>.<span class='ident'>method</span>.<span class='ident'>to_lowercase</span>() <span class='op'>==</span> <span class='string'>&quot;put&quot;</span> {
+            <span class='ident'>op</span>.<span class='ident'>payload_size</span> <span class='op'>=</span> <span class='ident'>signed_request</span>.<span class='ident'>payload</span>.<span class='ident'>unwrap</span>().<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>u64</span>;
+        }
+
+        <span class='kw'>let</span> <span class='ident'>start_time</span> <span class='op'>=</span> <span class='ident'>UTC</span>::<span class='ident'>now</span>();
+        <span class='kw'>let</span> <span class='ident'>now</span> <span class='op'>=</span> <span class='ident'>Instant</span>::<span class='ident'>now</span>();
+
+        <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>dispatcher</span>.<span class='ident'>dispatch</span>(<span class='ident'>signed_request</span>).<span class='ident'>expect</span>(<span class='string'>&quot;Error dispatching timed request&quot;</span>);
+
+        <span class='ident'>op</span>.<span class='ident'>duration</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>now</span>.<span class='ident'>elapsed</span>());
+        <span class='ident'>op</span>.<span class='ident'>end_time</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>start_time</span> <span class='op'>+</span> <span class='ident'>chrono</span>::<span class='ident'>Duration</span>::<span class='ident'>from_std</span>(<span class='ident'>op</span>.<span class='ident'>duration</span>.<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>());
+        <span class='ident'>op</span>.<span class='ident'>start_time</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>start_time</span>);
+
+        <span class='kw'>if</span> <span class='ident'>op</span>.<span class='ident'>method</span>.<span class='ident'>to_lowercase</span>() <span class='op'>!=</span> <span class='string'>&quot;put&quot;</span> {
+            <span class='ident'>op</span>.<span class='ident'>payload_size</span> <span class='op'>=</span> <span class='ident'>response</span>.<span class='ident'>body</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>u64</span>;
+        }
+        <span class='ident'>op</span>.<span class='ident'>success</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ident'>response</span>.<span class='ident'>status</span> <span class='op'>&lt;</span> <span class='number'>400</span> {<span class='bool-val'>true</span>} <span class='kw'>else</span> {<span class='bool-val'>false</span>}; <span class='comment'>//Do more here later...</span>
+        <span class='ident'>op</span>.<span class='ident'>code</span> <span class='op'>=</span> <span class='ident'>response</span>.<span class='ident'>status</span>;
+    } <span class='kw'>else</span> {
+        <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>dispatcher</span>.<span class='ident'>dispatch</span>(<span class='ident'>signed_request</span>).<span class='ident'>expect</span>(<span class='string'>&quot;Error dispatching request&quot;</span>);
+    }
 
     <span class='kw'>if</span> <span class='ident'>response</span>.<span class='ident'>status</span> <span class='op'>==</span> <span class='number'>307</span> {
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;Got a redirect response, resending request.&quot;</span>);
@@ -4304,11 +4528,9 @@
     <script>
         window.rootPath = "../../../../../";
         window.currentCrate = "aws_sdk_rust";
-        window.playgroundUrl = "";
     </script>
     <script src="../../../../../jquery.js"></script>
     <script src="../../../../../main.js"></script>
-    
     <script defer src="../../../../../search-index.js"></script>
 </body>
 </html>

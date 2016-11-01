@@ -60,10 +60,14 @@ pub fn http_client(proxy: Option<Url>, endpoint: Url) -> Client {
             // Check envrionment var http_proxy
             match env::var("http_proxy") {
                 Ok(url) => {
-                    let url = Url::parse(&url).unwrap();
-                    proxy_url = url.host_str().unwrap_or("").to_string();
-                    proxy_port = url.port_or_known_default().unwrap();
-                    true
+                    match Url::parse(&url) {
+                        Ok(url) => {
+                            proxy_url = url.host_str().unwrap().to_string();
+                            proxy_port = url.port_or_known_default().unwrap();
+                            true
+                        },
+                        Err(e) => false,
+                    }
                 },
                 _ => {
                     match env::var("HTTP_PROXY") {

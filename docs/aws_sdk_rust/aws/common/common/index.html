@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-18' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/common.rs.html#17-487' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-18' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/common.rs.html#17-519' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p><code>common</code> contains the type, struct, enum and impls that are common accross most requests
 such as buckets, objects etc.
 Library Documentation</p>
@@ -195,6 +195,15 @@ such as buckets, objects etc.</p>
                                   title='aws_sdk_rust::aws::common::common::MaxKeysWriter'>MaxKeysWriter</a></td>
                            <td class='docblock-short'>
                                 <p>Write <code>MaxKeys</code> contents to a <code>SignedRequest</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Operation.html'
+                                  title='aws_sdk_rust::aws::common::common::Operation'>Operation</a></td>
+                           <td class='docblock-short'>
+                                <p>Allows for duration tracking of operations. You should not track time of this app running but
+of each operation and then the summation of the durations plus latency etc.
+The endpoint etc are Strings instead of Url so it easy to Clone.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -505,11 +514,9 @@ such as buckets, objects etc.</p>
     <script>
         window.rootPath = "../../../../";
         window.currentCrate = "aws_sdk_rust";
-        window.playgroundUrl = "";
     </script>
     <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
-    
     <script defer src="../../../../search-index.js"></script>
 </body>
 </html>
