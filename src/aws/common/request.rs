@@ -31,8 +31,6 @@ use hyper::Error as HyperError;
 use hyper::header::Headers;
 use hyper::method::Method;
 
-//use log::LogLevel::Debug;
-
 use aws::common::signature::SignedRequest;
 
 /// Wraps the Hyper Response that comes back from AWS S3.
@@ -45,6 +43,9 @@ pub struct HttpResponse {
     pub status: u16,
     /// XML payload
     pub body: String,
+    pub body_buffer: Vec<u8>, //&'a[u8],
+    // used by the get_body function to return the correct slice...
+    pub is_body: bool,
     /// Unsorted list of header attributes
     pub headers: HashMap<String, String>,
 }
@@ -87,7 +88,7 @@ pub trait DispatchSignedRequest {
 impl DispatchSignedRequest for Client {
     fn dispatch(&self,
                 request: &SignedRequest
-               ) -> Result<HttpResponse, HttpDispatchError> {
+            ) -> Result<HttpResponse, HttpDispatchError> {
         let hyper_method = match request.method().as_ref() {
             "POST" => Method::Post,
             "PUT" => Method::Put,
@@ -96,19 +97,13 @@ impl DispatchSignedRequest for Client {
             "HEAD" => Method::Head,
             v @ _ => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) }),
         };
+
         // translate the headers map to a format Hyper likes
         let mut hyper_headers = Headers::new();
         for h in request.headers().iter() {
             hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
         }
 
-/*
-if request.ssl() {
-    "https"
-} else {
-    "http"
-},
-*/
         let mut final_uri = format!("{}://{}{}",
                                     request.endpoint_scheme(),
                                     request.hostname(),
@@ -116,25 +111,7 @@ if request.ssl() {
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }
-/*
-        if log_enabled!(Debug) {
-            let payload = request.payload().map(|mut payload_bytes| {
-                let mut payload_string = String::new();
 
-                payload_bytes.read_to_string(&mut payload_string)
-                    .map(|_| payload_string)
-                    .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
-            });
-
-            debug!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\nHeaders:\n",
-                   hyper_method,
-                   final_uri,
-                   payload);
-            for h in hyper_headers.iter() {
-                debug!("{}:{}", h.name(), h.value_string());
-            }
-        }
-*/
         // SENDS
         let mut hyper_response = match request.payload() {
             None => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send()),
@@ -144,22 +121,47 @@ if request.ssl() {
                                                             .send()),
         };
 
-        let mut body = String::new();
-        try!(hyper_response.read_to_string(&mut body));
-/*
-        if log_enabled!(Debug) {
-            debug!("Response body:\n{}", body);
-        }
-*/
         let mut headers: HashMap<String, String> = HashMap::new();
-
         for header in hyper_response.headers.iter() {
             headers.insert(header.name().to_string(), header.value_string());
         }
 
+        // The initial way was to string but UTF8 errors occured on certain object types so switched
+        let mut is_body = true;
+
+        // NB: Should be a better way to do this for compressed or binary files but works.
+        let mut buffer: Vec<u8> = Vec::new();
+        let body:String;
+        let size: usize;
+
+        match hyper_response.read_to_end(&mut buffer) {
+            Ok(len) => {size = len},
+            _ => {size = 0 as usize},
+        }
+
+        if size > 0 {
+            match String::from_utf8(buffer.clone()) {
+                Ok(buf) => {
+                    body = buf;
+                    buffer = Vec::new();
+                },
+                _ => {
+                    body = String::new();
+                    is_body = false;
+                },
+            }
+        } else {
+            body = String::new();
+        }
+
+        // The HttpResponse also contains a body_buffer for large binaries mainly. Body is used
+        // most often. Typically, on get_object cares.
+        // Some bodies are XML and some are binary. Body is for String and body_buffer is for binary.
         Ok(HttpResponse {
             status: hyper_response.status.to_u16(),
             body: body,
+            body_buffer: buffer,
+            is_body: is_body,
             headers: headers,
         })
     }

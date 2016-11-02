@@ -146,6 +146,14 @@
 <span id="102">102</span>
 <span id="103">103</span>
 <span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -197,6 +205,12 @@
     <span class='doccomment'>/// `User-Agent`. It lives in `Endpoint` since you may want a different `User-Agent` for</span>
     <span class='doccomment'>/// `Endpoint`. This value is an Option&lt;String&gt; which can be None.</span>
     <span class='kw'>pub</span> <span class='ident'>user_agent</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// `is_bucket_virtual` defautls to `true` but can be overridden for those cases where the</span>
+    <span class='doccomment'>/// older style is required. This is useful in situations where you may be testing on one</span>
+    <span class='doccomment'>/// load balancer and running something like Ceph RGW with virtual buckets enabled but the</span>
+    <span class='doccomment'>/// new load balancer and VIP range are unable to represent a virtual bucket due to configs</span>
+    <span class='doccomment'>/// in Ceph RGW DNS.</span>
+    <span class='kw'>pub</span> <span class='ident'>is_bucket_virtual</span>: <span class='ident'>bool</span>,
 }
 
 <span class='doccomment'>/// Required to specify which type of API Signature to use. AWS defaults to using V4 by default.</span>
@@ -214,13 +228,15 @@
                <span class='ident'>signature</span>: <span class='ident'>Signature</span>,
                <span class='ident'>endpoint</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>,
                <span class='ident'>proxy</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Url</span><span class='op'>&gt;</span>,
-               <span class='ident'>user_agent</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+               <span class='ident'>user_agent</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
+               <span class='ident'>is_bucket_virtual</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>bool</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
         <span class='ident'>Endpoint</span> {
             <span class='ident'>region</span>: <span class='ident'>region</span>,
             <span class='ident'>signature</span>: <span class='ident'>signature</span>,
             <span class='ident'>endpoint</span>: <span class='ident'>default_endpoint</span>(<span class='ident'>region</span>, <span class='ident'>endpoint</span>),
             <span class='ident'>proxy</span>: <span class='ident'>proxy</span>,
             <span class='ident'>user_agent</span>: <span class='ident'>user_agent</span>,
+            <span class='ident'>is_bucket_virtual</span>: <span class='ident'>is_bucket_virtual</span>.<span class='ident'>unwrap_or</span>(<span class='bool-val'>true</span>),
         }
     }
 

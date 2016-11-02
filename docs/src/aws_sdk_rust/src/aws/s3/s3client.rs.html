@@ -2256,6 +2256,8 @@
 <span id="2212">2212</span>
 <span id="2213">2213</span>
 <span id="2214">2214</span>
+<span id="2215">2215</span>
+<span id="2216">2216</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -3613,7 +3615,9 @@
             <span class='ident'>ssekms_key_id</span>: <span class='ident'>ssekms_key_id</span>,
             <span class='ident'>content_disposition</span>: <span class='ident'>content_disposition</span>,
             <span class='ident'>metadata</span>: <span class='ident'>HashMap</span>::<span class='ident'>new</span>(),
+            <span class='ident'>is_body</span>: <span class='ident'>response</span>.<span class='ident'>is_body</span>,
             <span class='ident'>body</span>: <span class='ident'>response</span>.<span class='ident'>body</span>.<span class='ident'>clone</span>().<span class='ident'>into_bytes</span>(),
+            <span class='ident'>body_buffer</span>: <span class='ident'>response</span>.<span class='ident'>body_buffer</span>.<span class='ident'>clone</span>(),
             <span class='ident'>website_redirect_location</span>: <span class='ident'>website_redirect_location</span>,
             <span class='ident'>expires</span>: <span class='ident'>expires</span>,
             <span class='ident'>cache_control</span>: <span class='ident'>cache_control</span>,

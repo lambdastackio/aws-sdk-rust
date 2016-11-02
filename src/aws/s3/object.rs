@@ -509,6 +509,9 @@ pub struct GetObjectOutput {
     pub metadata: Metadata,
     /// Object data.
     pub body: Body,
+    pub body_buffer: Vec<u8>,
+    // Used only for get_body function to return the correct slice of data
+    pub is_body: bool,
     pub accept_ranges: AcceptRanges,
     /// If the bucket is configured as a website, redirects requests for this object
     /// to another object in the same bucket or to an external URL. Amazon S3 stores
@@ -3849,6 +3852,16 @@ impl DeleteObjectsOutputWriter {
         DeletedObjectsWriter::write_params(params, &(prefix.to_string() + "DeletedObject"), &obj.deleted);
         ErrorsWriter::write_params(params, &(prefix.to_string() + "Error"), &obj.errors);
         RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
+    }
+}
+
+impl GetObjectOutput {
+    pub fn get_body(&self) -> &[u8] {
+        if self.is_body {
+            return &self.body;
+        }
+
+        &self.body_buffer
     }
 }
 

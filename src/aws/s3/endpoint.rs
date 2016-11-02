@@ -48,6 +48,12 @@ pub struct Endpoint {
     /// `User-Agent`. It lives in `Endpoint` since you may want a different `User-Agent` for
     /// `Endpoint`. This value is an Option<String> which can be None.
     pub user_agent: Option<String>,
+    /// `is_bucket_virtual` defautls to `true` but can be overridden for those cases where the
+    /// older style is required. This is useful in situations where you may be testing on one
+    /// load balancer and running something like Ceph RGW with virtual buckets enabled but the
+    /// new load balancer and VIP range are unable to represent a virtual bucket due to configs
+    /// in Ceph RGW DNS.
+    pub is_bucket_virtual: bool,
 }
 
 /// Required to specify which type of API Signature to use. AWS defaults to using V4 by default.
@@ -65,13 +71,15 @@ impl Endpoint {
                signature: Signature,
                endpoint: Option<Url>,
                proxy: Option<Url>,
-               user_agent: Option<String>) -> Self {
+               user_agent: Option<String>,
+               is_bucket_virtual: Option<bool>) -> Self {
         Endpoint {
             region: region,
             signature: signature,
             endpoint: default_endpoint(region, endpoint),
             proxy: proxy,
             user_agent: user_agent,
+            is_bucket_virtual: is_bucket_virtual.unwrap_or(true),
         }
     }
 

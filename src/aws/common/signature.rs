@@ -111,7 +111,10 @@ impl<'a> SignedRequest<'a> {
     /// Use this for adding an actual endpoint such as s3.us-east-1.amazon.com or one of your choice.
     /// hostname in this context means the FQDN less the bucket name if using Virtual Buckets.
     pub fn set_hostname(&mut self, hostname: Option<String>) {
-        self.hostname = hostname;
+        // Don't set the host if the override of the virtual bucket is enabled.
+        //if self.endpoint.is_bucket_virtual {
+            self.hostname = hostname;
+        //}
     }
 
     // NOTE: This pulls from default service types like S3 etc. Only use this if use AWS directly.
@@ -261,9 +264,14 @@ impl<'a> SignedRequest<'a> {
     /// Called by `Requests` and determines which signature function to use.
     pub fn sign(&mut self, creds: &AwsCredentials) {
         // NOTE: Check the bucket and path
-        if self.bucket.contains(".") && !self.path.contains(&format!("/{}/", self.bucket)) {
-            self.path = format!("/{}{}", self.bucket, self.path);
-        }
+        if self.endpoint.is_bucket_virtual {
+            if self.bucket.contains(".") && !self.path.contains(&format!("/{}/", self.bucket)) {
+                self.path = format!("/{}{}", self.bucket, self.path);
+            }
+        } else if !self.path.contains(&format!("/{}/", self.bucket)) {
+            self.path = format!("{}{}{}", if self.bucket.len() > 0 {"/"} else {""}, self.bucket, self.path);
+        } // Leave untouched if none of the above match
+
         match self.endpoint.signature {
             Signature::V2 => self.sign_v2(&creds),
             Signature::V4 => self.sign_v4(&creds),
@@ -330,7 +338,7 @@ impl<'a> SignedRequest<'a> {
                                      content_type,
                                      date_str,
                                      canonical_headers_v2(&self.headers),
-                                     canonical_resources_v2(&self.bucket, &self.path));
+                                     canonical_resources_v2(&self.bucket, &self.path, self.endpoint.is_bucket_virtual));
 
         match self.payload {
             None => {
@@ -638,8 +646,8 @@ fn canonical_headers_v2(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
 }
 
 // NOTE: If bucket contains '.' it is already formatted in path so just encode it.
-fn canonical_resources_v2(bucket: &str, path: &str) -> String {
-    if bucket.to_string().contains(".") {
+fn canonical_resources_v2(bucket: &str, path: &str, is_bucket_virtual: bool) -> String {
+    if bucket.to_string().contains(".") || !is_bucket_virtual {
         encode_uri(path)
     } else {
         match bucket {
