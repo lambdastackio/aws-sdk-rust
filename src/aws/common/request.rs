@@ -104,13 +104,22 @@ impl DispatchSignedRequest for Client {
             hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
         }
 
-        let mut final_uri = format!("{}://{}{}",
+        let epp = request.endpoint().clone().endpoint.unwrap().port();
+        let port_str = match epp {
+            Some(port) => format!(":{}", port),
+            _ => "".to_string(),
+        };
+
+        let mut final_uri = format!("{}://{}{}{}",
                                     request.endpoint_scheme(),
                                     request.hostname(),
+                                    port_str,
                                     request.path());
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }
+
+        println!("{:?}", final_uri);
 
         // SENDS
         let mut hyper_response = match request.payload() {
