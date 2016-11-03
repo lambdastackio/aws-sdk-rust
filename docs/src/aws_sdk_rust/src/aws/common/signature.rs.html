@@ -743,6 +743,13 @@
 <span id="699">699</span>
 <span id="700">700</span>
 <span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -796,6 +803,7 @@
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>endpoint</span>::<span class='ident'>Endpoint</span>;
 
 <span class='comment'>// const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;</span>
+<span class='kw'>static</span> <span class='ident'>DEFAULT_USER_AGENT</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span> <span class='op'>=</span> <span class='macro'>concat</span><span class='macro'>!</span>(<span class='macro'>env</span><span class='macro'>!</span>(<span class='string'>&quot;CARGO_PKG_NAME&quot;</span>), <span class='string'>&quot;/&quot;</span>, <span class='macro'>env</span><span class='macro'>!</span>(<span class='string'>&quot;CARGO_PKG_VERSION&quot;</span>));
 
 <span class='doccomment'>/// A data structure for all the elements of an HTTP request that are involved in</span>
 <span class='doccomment'>/// the Amazon Signature Version 4 signing process</span>
@@ -1039,6 +1047,9 @@
             <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;application/octet-stream&quot;</span>),
         };
 
+        <span class='kw'>let</span> <span class='ident'>ep</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>endpoint</span>().<span class='ident'>clone</span>().<span class='ident'>user_agent</span>.<span class='ident'>unwrap_or</span>(<span class='ident'>DEFAULT_USER_AGENT</span>.<span class='ident'>to_string</span>());
+        <span class='self'>self</span>.<span class='ident'>update_header</span>(<span class='string'>&quot;User-Agent&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>ep</span>);
+
         <span class='self'>self</span>.<span class='ident'>update_header</span>(<span class='string'>&quot;Content-Type&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>ct</span>);
 
         <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>token</span>) <span class='op'>=</span> <span class='op'>*</span><span class='ident'>creds</span>.<span class='ident'>token</span>() {
@@ -1120,6 +1131,9 @@
         <span class='comment'>// a 307 redirect we end up with Three Stooges in the headers with duplicate values.</span>
         <span class='self'>self</span>.<span class='ident'>remove_header</span>(<span class='string'>&quot;host&quot;</span>);
         <span class='self'>self</span>.<span class='ident'>add_header</span>(<span class='string'>&quot;host&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>hostname</span>);
+
+        <span class='kw'>let</span> <span class='ident'>ep</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>endpoint</span>().<span class='ident'>clone</span>().<span class='ident'>user_agent</span>.<span class='ident'>unwrap_or</span>(<span class='ident'>DEFAULT_USER_AGENT</span>.<span class='ident'>to_string</span>());
+        <span class='self'>self</span>.<span class='ident'>update_header</span>(<span class='string'>&quot;User-Agent&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>ep</span>);
 
         <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>token</span>) <span class='op'>=</span> <span class='op'>*</span><span class='ident'>creds</span>.<span class='ident'>token</span>() {
             <span class='self'>self</span>.<span class='ident'>remove_header</span>(<span class='string'>&quot;X-Amz-Security-Token&quot;</span>);

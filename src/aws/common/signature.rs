@@ -50,6 +50,7 @@ use aws::s3::endpoint::Signature;
 use aws::s3::endpoint::Endpoint;
 
 // const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
+static DEFAULT_USER_AGENT: &'static str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
@@ -293,6 +294,9 @@ impl<'a> SignedRequest<'a> {
             None => String::from("application/octet-stream"),
         };
 
+        let ep = self.endpoint().clone().user_agent.unwrap_or(DEFAULT_USER_AGENT.to_string());
+        self.update_header("User-Agent", &ep);
+
         self.update_header("Content-Type", &ct);
 
         if let Some(ref token) = *creds.token() {
@@ -374,6 +378,9 @@ impl<'a> SignedRequest<'a> {
         // a 307 redirect we end up with Three Stooges in the headers with duplicate values.
         self.remove_header("host");
         self.add_header("host", &hostname);
+
+        let ep = self.endpoint().clone().user_agent.unwrap_or(DEFAULT_USER_AGENT.to_string());
+        self.update_header("User-Agent", &ep);
 
         if let Some(ref token) = *creds.token() {
             self.remove_header("X-Amz-Security-Token");
