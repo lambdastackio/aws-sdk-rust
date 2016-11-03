@@ -560,8 +560,9 @@ fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     signed
 }
 
+// NOTE: Don't add user-agent since it's part of the signature calc for V4
 fn skipped_headers(header: &str) -> bool {
-    ["authorization", "content-length", "content-type", "user-agent"].contains(&header)
+    ["authorization", "content-length", "content-type"].contains(&header)
 }
 
 fn build_canonical_query_string(params: &Params) -> String {
