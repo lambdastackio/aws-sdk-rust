@@ -41,6 +41,7 @@ use aws::s3::writeparse::*;
 use aws::s3::bucket::*;
 use aws::s3::object::*;
 use aws::s3::acl::*;
+use aws::s3::admin::*;
 
 /// Returns a valid hyper client. If proxies are passed in then a proxy version of the client is returned.
 /// If None is passed then in then the default Client is returned.
@@ -2027,6 +2028,59 @@ impl<P, D> S3Client<P, D>
             },
         }
     }
+
+    // NB: This section is only for Ceph RGW Admin. It may be moved into it's own library later.
+    //
+    pub fn admin_stats(&self, input: &AdminRequest) -> Result<AdminOutput, S3Error> {
+        // If AdminRequest Endpoint exists it overrides self.endpoint
+        //let endpoint: Endpoint = match input.endpoint {
+        //    None => self.endpoint.clone(),
+        //    Some(ep) => ep.clone(),
+        //};
+
+        let input = input.clone();
+
+        // Just default to json if not plain
+        let format = match input.format {
+            Some(AdminOutputType::Plain) => "plain",
+            _ => "json",
+        };
+
+        // NOTE NOTE NOTE
+        // Change this to a generic admin function that takes an enum of admin type and formats params accordingly after this initial test
+
+
+        let mut request = SignedRequest::new("GET",
+                                             "s3",
+                                             self.region,
+                                             &input.bucket.unwrap_or("".to_string()),
+                                             &format!("/{}/bucket?format={}{}",
+                                                      input.admin.unwrap_or("admin".to_string()),
+                                                      format,
+                                                      input.params.unwrap_or("".to_string())),
+                                             &self.endpoint);
+
+        //let hostname = self.hostname(Some(&input.bucket));
+        //request.set_hostname(Some(hostname));
+
+        let result = sign_and_execute(&self.dispatcher,
+                                      &mut request,
+                                      try!(self.credentials_provider.credentials()));
+        let status = result.status;
+
+        match status {
+            200 => {
+                let mut admin_output = AdminOutput::default();
+                admin_output.payload = Some(result.body);
+                admin_output.format = input.format.clone();
+                Ok(admin_output)
+            },
+            _ => {
+                Err(S3Error::new("Error bucket does not exists or error in retrieving"))
+            },
+        }
+    }
+
 
     // Internal hostname method - Checks for buckets names with '.' in it.
     fn hostname(&self, bucket: Option<&BucketName>) -> String {
