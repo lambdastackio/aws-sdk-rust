@@ -196,7 +196,7 @@ impl<P, D> S3Client<P, D>
             200 => {
                 match result.headers.get("Location") {
                     Some(ref value) => Ok(CreateBucketOutput { location: value.to_string() }),
-                    None => Err(S3Error::new("Something went wrong when creating a bucket.")),
+                    None => Ok(CreateBucketOutput { location: "".to_string() }),
                 }
             },
             _ => {

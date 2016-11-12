@@ -1,6 +1,6 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.33"
+version = "0.1.34"
 authors = ["Chris Jones"]
 license = "Apache-2.0"
 readme = "README.md"
