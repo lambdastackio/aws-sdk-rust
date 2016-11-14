@@ -17,7 +17,7 @@ use aws::common::params::*;
 use aws::s3::endpoint::*;
 
 /// Enum of output format (JSON or XML)
-#[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
+#[derive(Debug, Clone, PartialEq, RustcDecodable, RustcEncodable)]
 pub enum AdminOutputType {
     Json,
     Xml,
@@ -45,10 +45,10 @@ pub struct AdminRequest {
     pub format: Option<AdminOutputType>,
 }
 
-#[derive(Debug, Clone, Default, RustcDecodable, RustcEncodable)]
+#[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub struct AdminOutput {
     /// Payload of output
-    pub payload: Option<String>,
+    pub payload: String,
     /// Output format (JSON or XML). Default is JSON
-    pub format: Option<AdminOutputType>,
+    pub format: AdminOutputType,
 }

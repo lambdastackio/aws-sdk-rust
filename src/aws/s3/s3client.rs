@@ -2044,9 +2044,17 @@ impl<P, D> S3Client<P, D>
         let input = input.clone();
 
         // Just default to json if not plain
+        let output_format: AdminOutputType;
+
         let format = match input.format {
-            Some(AdminOutputType::Xml) => "xml",
-            _ => "json",
+            Some(AdminOutputType::Xml) => {
+                output_format = AdminOutputType::Xml;
+                "xml"
+            },
+            _ => {
+                output_format = AdminOutputType::Json;
+                "json"
+            },
         };
 
         // NB: Don't need bucket being passed in normal manner since we don't want bucket being
@@ -2063,8 +2071,8 @@ impl<P, D> S3Client<P, D>
         if !params.contains_key("format") {
             params.put("format", format);
         }
-        request.set_params(params);
 
+        request.set_params(params);
         request.set_hostname(self.endpoint.hostname());
 
         let result = sign_and_execute(&self.dispatcher,
@@ -2074,9 +2082,10 @@ impl<P, D> S3Client<P, D>
 
         match status {
             200 => {
-                let mut admin_output = AdminOutput::default();
-                admin_output.payload = Some(result.body);
-                admin_output.format = input.format.clone();
+                let mut admin_output = AdminOutput{
+                    payload: result.body,
+                    format: output_format,
+                };
                 Ok(admin_output)
             },
             _ => {
