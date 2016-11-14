@@ -23,6 +23,7 @@ pub enum AdminOutputType {
     Xml,
 }
 
+/// Admin request for Ceph RGW Admin
 #[derive(Debug, Clone, Default)]
 pub struct AdminRequest {
     /// Specify the path using the default 'admin'. For example, admin/bucket etc.
@@ -45,10 +46,58 @@ pub struct AdminRequest {
     pub format: Option<AdminOutputType>,
 }
 
+/// Default output of all admin functions
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub struct AdminOutput {
     /// Payload of output
     pub payload: String,
     /// Output format (JSON or XML). Default is JSON
     pub format: AdminOutputType,
+}
+
+/// Ceph RGW Users
+#[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
+pub struct AdminUsers {
+    /// Vec of users
+    pub users: Vec<String>,
+}
+
+/// Ceph RGW Buckets
+#[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
+pub struct AdminBuckets {
+    /// Vec of buckets
+    pub buckets: Vec<String>,
+}
+
+/// Ceph RGW Usage
+#[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
+pub struct AdminUsage {
+    /// Usage
+    pub usage: String,
+}
+
+/// Ceph RGW Bucket Quota
+#[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
+pub struct AdminBucketQuota {
+    /// Quota
+    pub enabled: bool,
+    pub max_size_kb: i64,
+    pub max_objects: i64,
+}
+
+/// Ceph RGW Bucket Metadata
+#[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
+pub struct AdminBucketMetadata {
+    pub bucket: String,
+    pub pool: String,
+    pub index_pool: String,
+    pub id: String,
+    pub marker: String,
+    pub owner: String,
+    pub ver: String,
+    pub master_ver: String,
+    pub mtime: String, // Could be time
+    pub max_marker: String,
+    pub usage: AdminUsage,
+    pub bucket_quota: AdminBucketQuota,
 }
