@@ -13,37 +13,42 @@
 // limitations under the License.
 //
 
-// Portions borrowed from the rusoto project. See README.md
-//
-
-#![allow(unused_variables)]
-#![allow(unused_mut)]
-
+use aws::common::params::*;
 use aws::s3::endpoint::*;
 
+/// Enum of output format (JSON or XML)
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub enum AdminOutputType {
     Json,
-    Plain,
     Xml,
-    None,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct AdminRequest {
-    pub admin: Option<String>,
-    pub bucket: Option<String>,
-    pub object: Option<String>,
-    pub params: Option<String>,
-    pub endpoint: Option<Endpoint>,
+    /// Specify the path using the default 'admin'. For example, admin/bucket etc.
+    pub admin_path: Option<String>,
+    /// User's ID
     pub uid: Option<String>,
+    /// Name of bucket
+    pub bucket: Option<String>,
+    /// Name of Object
+    pub object: Option<String>,
+    /// Parameters used in the query string
+    pub params: Params,
+    /// Endpoint that can override the default
+    pub endpoint: Option<Endpoint>,
+    /// Access key ID
     pub access_key: Option<String>,
+    /// Secret key ID
     pub secret_key: Option<String>,
+    /// Output format (JSON or XML). Default is JSON
     pub format: Option<AdminOutputType>,
 }
 
 #[derive(Debug, Clone, Default, RustcDecodable, RustcEncodable)]
 pub struct AdminOutput {
+    /// Payload of output
     pub payload: Option<String>,
+    /// Output format (JSON or XML). Default is JSON
     pub format: Option<AdminOutputType>,
 }

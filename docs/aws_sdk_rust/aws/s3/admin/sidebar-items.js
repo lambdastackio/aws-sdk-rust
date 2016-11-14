@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["AdminOutputType","Enum of output format (JSON or XML)"]],"struct":[["AdminOutput",""],["AdminRequest",""]]});

@@ -2031,7 +2031,10 @@ impl<P, D> S3Client<P, D>
 
     // NB: This section is only for Ceph RGW Admin. It may be moved into it's own library later.
     //
-    pub fn admin_stats(&self, input: &AdminRequest) -> Result<AdminOutput, S3Error> {
+    /// This method is for Ceph RGW Admin requests only. It performs the base Admin operations
+    /// found in radosgw-admin but from a library.
+    ///
+    pub fn admin(&self, input: &AdminRequest) -> Result<AdminOutput, S3Error> {
         // If AdminRequest Endpoint exists it overrides self.endpoint
         //let endpoint: Endpoint = match input.endpoint {
         //    None => self.endpoint.clone(),
@@ -2042,26 +2045,27 @@ impl<P, D> S3Client<P, D>
 
         // Just default to json if not plain
         let format = match input.format {
-            Some(AdminOutputType::Plain) => "plain",
+            Some(AdminOutputType::Xml) => "xml",
             _ => "json",
         };
 
-        // NOTE NOTE NOTE
-        // Change this to a generic admin function that takes an enum of admin type and formats params accordingly after this initial test
-
-
+        // NB: Don't need bucket being passed in normal manner since we don't want bucket being
+        // part of uri.
         let mut request = SignedRequest::new("GET",
                                              "s3",
                                              self.region,
-                                             &input.bucket.unwrap_or("".to_string()),
-                                             &format!("/{}/bucket?format={}{}",
-                                                      input.admin.unwrap_or("admin".to_string()),
-                                                      format,
-                                                      input.params.unwrap_or("".to_string())),
+                                             "",
+                                             &format!("/{}",
+                                                      input.admin_path.unwrap_or("".to_string())),
                                              &self.endpoint);
 
-        //let hostname = self.hostname(Some(&input.bucket));
-        //request.set_hostname(Some(hostname));
+        let mut params = input.params.clone();
+        if !params.contains_key("format") {
+            params.put("format", format);
+        }
+        request.set_params(params);
+
+        request.set_hostname(self.endpoint.hostname());
 
         let result = sign_and_execute(&self.dispatcher,
                                       &mut request,
@@ -2076,7 +2080,7 @@ impl<P, D> S3Client<P, D>
                 Ok(admin_output)
             },
             _ => {
-                Err(S3Error::new("Error bucket does not exists or error in retrieving"))
+                Err(S3Error::new("Admin error"))
             },
         }
     }

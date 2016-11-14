@@ -2258,6 +2258,64 @@
 <span id="2214">2214</span>
 <span id="2215">2215</span>
 <span id="2216">2216</span>
+<span id="2217">2217</span>
+<span id="2218">2218</span>
+<span id="2219">2219</span>
+<span id="2220">2220</span>
+<span id="2221">2221</span>
+<span id="2222">2222</span>
+<span id="2223">2223</span>
+<span id="2224">2224</span>
+<span id="2225">2225</span>
+<span id="2226">2226</span>
+<span id="2227">2227</span>
+<span id="2228">2228</span>
+<span id="2229">2229</span>
+<span id="2230">2230</span>
+<span id="2231">2231</span>
+<span id="2232">2232</span>
+<span id="2233">2233</span>
+<span id="2234">2234</span>
+<span id="2235">2235</span>
+<span id="2236">2236</span>
+<span id="2237">2237</span>
+<span id="2238">2238</span>
+<span id="2239">2239</span>
+<span id="2240">2240</span>
+<span id="2241">2241</span>
+<span id="2242">2242</span>
+<span id="2243">2243</span>
+<span id="2244">2244</span>
+<span id="2245">2245</span>
+<span id="2246">2246</span>
+<span id="2247">2247</span>
+<span id="2248">2248</span>
+<span id="2249">2249</span>
+<span id="2250">2250</span>
+<span id="2251">2251</span>
+<span id="2252">2252</span>
+<span id="2253">2253</span>
+<span id="2254">2254</span>
+<span id="2255">2255</span>
+<span id="2256">2256</span>
+<span id="2257">2257</span>
+<span id="2258">2258</span>
+<span id="2259">2259</span>
+<span id="2260">2260</span>
+<span id="2261">2261</span>
+<span id="2262">2262</span>
+<span id="2263">2263</span>
+<span id="2264">2264</span>
+<span id="2265">2265</span>
+<span id="2266">2266</span>
+<span id="2267">2267</span>
+<span id="2268">2268</span>
+<span id="2269">2269</span>
+<span id="2270">2270</span>
+<span id="2271">2271</span>
+<span id="2272">2272</span>
+<span id="2273">2273</span>
+<span id="2274">2274</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
 <span class='comment'>//</span>
@@ -2302,6 +2360,7 @@
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>bucket</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>object</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>acl</span>::<span class='op'>*</span>;
+<span class='kw'>use</span> <span class='ident'>aws</span>::<span class='ident'>s3</span>::<span class='ident'>admin</span>::<span class='op'>*</span>;
 
 <span class='doccomment'>/// Returns a valid hyper client. If proxies are passed in then a proxy version of the client is returned.</span>
 <span class='doccomment'>/// If None is passed then in then the default Client is returned.</span>
@@ -2456,7 +2515,7 @@
             <span class='number'>200</span> <span class='op'>=&gt;</span> {
                 <span class='kw'>match</span> <span class='ident'>result</span>.<span class='ident'>headers</span>.<span class='ident'>get</span>(<span class='string'>&quot;Location&quot;</span>) {
                     <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>value</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>CreateBucketOutput</span> { <span class='ident'>location</span>: <span class='ident'>value</span>.<span class='ident'>to_string</span>() }),
-                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>new</span>(<span class='string'>&quot;Something went wrong when creating a bucket.&quot;</span>)),
+                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>CreateBucketOutput</span> { <span class='ident'>location</span>: <span class='string'>&quot;&quot;</span>.<span class='ident'>to_string</span>() }),
                 }
             },
             _ <span class='op'>=&gt;</span> {
@@ -4288,6 +4347,63 @@
             },
         }
     }
+
+    <span class='comment'>// NB: This section is only for Ceph RGW Admin. It may be moved into it&#39;s own library later.</span>
+    <span class='comment'>//</span>
+    <span class='doccomment'>/// This method is for Ceph RGW Admin requests only. It performs the base Admin operations</span>
+    <span class='doccomment'>/// found in radosgw-admin but from a library.</span>
+    <span class='doccomment'>///</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>admin</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>input</span>: <span class='kw-2'>&amp;</span><span class='ident'>AdminRequest</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>AdminOutput</span>, <span class='ident'>S3Error</span><span class='op'>&gt;</span> {
+        <span class='comment'>// If AdminRequest Endpoint exists it overrides self.endpoint</span>
+        <span class='comment'>//let endpoint: Endpoint = match input.endpoint {</span>
+        <span class='comment'>//    None =&gt; self.endpoint.clone(),</span>
+        <span class='comment'>//    Some(ep) =&gt; ep.clone(),</span>
+        <span class='comment'>//};</span>
+
+        <span class='kw'>let</span> <span class='ident'>input</span> <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>clone</span>();
+
+        <span class='comment'>// Just default to json if not plain</span>
+        <span class='kw'>let</span> <span class='ident'>format</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>input</span>.<span class='ident'>format</span> {
+            <span class='prelude-val'>Some</span>(<span class='ident'>AdminOutputType</span>::<span class='ident'>Xml</span>) <span class='op'>=&gt;</span> <span class='string'>&quot;xml&quot;</span>,
+            _ <span class='op'>=&gt;</span> <span class='string'>&quot;json&quot;</span>,
+        };
+
+        <span class='comment'>// NB: Don&#39;t need bucket being passed in normal manner since we don&#39;t want bucket being</span>
+        <span class='comment'>// part of uri.</span>
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>SignedRequest</span>::<span class='ident'>new</span>(<span class='string'>&quot;GET&quot;</span>,
+                                             <span class='string'>&quot;s3&quot;</span>,
+                                             <span class='self'>self</span>.<span class='ident'>region</span>,
+                                             <span class='string'>&quot;&quot;</span>,
+                                             <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;/{}&quot;</span>,
+                                                      <span class='ident'>input</span>.<span class='ident'>admin_path</span>.<span class='ident'>unwrap_or</span>(<span class='string'>&quot;&quot;</span>.<span class='ident'>to_string</span>())),
+                                             <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>endpoint</span>);
+
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>params</span>.<span class='ident'>clone</span>();
+        <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>params</span>.<span class='ident'>contains_key</span>(<span class='string'>&quot;format&quot;</span>) {
+            <span class='ident'>params</span>.<span class='ident'>put</span>(<span class='string'>&quot;format&quot;</span>, <span class='ident'>format</span>);
+        }
+        <span class='ident'>request</span>.<span class='ident'>set_params</span>(<span class='ident'>params</span>);
+
+        <span class='ident'>request</span>.<span class='ident'>set_hostname</span>(<span class='self'>self</span>.<span class='ident'>endpoint</span>.<span class='ident'>hostname</span>());
+
+        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>sign_and_execute</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>dispatcher</span>,
+                                      <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>request</span>,
+                                      <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>credentials_provider</span>.<span class='ident'>credentials</span>()));
+        <span class='kw'>let</span> <span class='ident'>status</span> <span class='op'>=</span> <span class='ident'>result</span>.<span class='ident'>status</span>;
+
+        <span class='kw'>match</span> <span class='ident'>status</span> {
+            <span class='number'>200</span> <span class='op'>=&gt;</span> {
+                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>admin_output</span> <span class='op'>=</span> <span class='ident'>AdminOutput</span>::<span class='ident'>default</span>();
+                <span class='ident'>admin_output</span>.<span class='ident'>payload</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>result</span>.<span class='ident'>body</span>);
+                <span class='ident'>admin_output</span>.<span class='ident'>format</span> <span class='op'>=</span> <span class='ident'>input</span>.<span class='ident'>format</span>.<span class='ident'>clone</span>();
+                <span class='prelude-val'>Ok</span>(<span class='ident'>admin_output</span>)
+            },
+            _ <span class='op'>=&gt;</span> {
+                <span class='prelude-val'>Err</span>(<span class='ident'>S3Error</span>::<span class='ident'>new</span>(<span class='string'>&quot;Admin error&quot;</span>))
+            },
+        }
+    }
+
 
     <span class='comment'>// Internal hostname method - Checks for buckets names with &#39;.&#39; in it.</span>
     <span class='kw'>fn</span> <span class='ident'>hostname</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>bucket</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>BucketName</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
