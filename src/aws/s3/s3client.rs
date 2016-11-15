@@ -2059,7 +2059,12 @@ impl<P, D> S3Client<P, D>
 
         // NB: Don't need bucket being passed in normal manner since we don't want bucket being
         // part of uri.
-        let mut request = SignedRequest::new("GET",
+        let method = match input.method {
+            Some(method) => method.to_uppercase(),
+            _ => "GET".to_string(),
+        };
+
+        let mut request = SignedRequest::new(&method,
                                              "s3",
                                              self.region,
                                              "",

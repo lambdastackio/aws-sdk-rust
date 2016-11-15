@@ -26,6 +26,8 @@ pub enum AdminOutputType {
 /// Admin request for Ceph RGW Admin
 #[derive(Debug, Clone, Default)]
 pub struct AdminRequest {
+    /// Defaults to GET
+    pub method: Option<String>,
     /// Specify the path using the default 'admin'. For example, admin/bucket etc.
     pub admin_path: Option<String>,
     /// User's ID
