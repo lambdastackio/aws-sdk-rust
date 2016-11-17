@@ -2077,6 +2077,7 @@ impl<P, D> S3Client<P, D>
             params.put("format", format);
         }
 
+        request.set_path_options(input.path_options);
         request.set_params(params);
         request.set_hostname(self.endpoint.hostname());
 
@@ -2094,7 +2095,7 @@ impl<P, D> S3Client<P, D>
                 Ok(admin_output)
             },
             _ => {
-                Err(S3Error::new("Admin error"))
+                Err(S3Error::new(format!("Admin error: {}", status)))
             },
         }
     }

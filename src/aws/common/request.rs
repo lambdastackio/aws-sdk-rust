@@ -116,8 +116,13 @@ impl DispatchSignedRequest for Client {
                                     port_str,
                                     request.path());
         if !request.canonical_query_string().is_empty() {
-            final_uri = final_uri + &format!("?{}", request.canonical_query_string());
+            let uri = final_uri.clone();
+            final_uri = final_uri + &format!("{}{}", if uri.contains("?") {""} else {"?"}, request.canonical_query_string());
+            final_uri = final_uri.replace("?", &request.path_options().unwrap_or("?".to_string()));
+        } else {
+            final_uri = final_uri + &format!("{}", request.path_options().unwrap_or("".to_string()));
         }
+
 
         // SENDS
         let mut hyper_response = match request.payload() {

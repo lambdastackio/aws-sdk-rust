@@ -68,10 +68,10 @@ pub struct SignedRequest<'a> {
     pub hostname: Option<String>,
     pub payload: Option<&'a [u8]>,
     pub content_type: Option<String>,
+    pub path_options: Option<String>,
     pub canonical_query_string: String,
     pub canonical_uri: String,
-    pub endpoint: &'a Endpoint, /* signature: Signature,
-                                 * ssl: bool, */
+    pub endpoint: &'a Endpoint,
 }
 
 impl<'a> SignedRequest<'a> {
@@ -89,10 +89,10 @@ impl<'a> SignedRequest<'a> {
             hostname: None,
             payload: None,
             content_type: None,
+            path_options: None,
             canonical_query_string: String::new(),
             canonical_uri: String::new(),
-            endpoint: endpoint, /* signature: signature.clone(),
-                                 * ssl: true, */
+            endpoint: endpoint,
         }
     }
 
@@ -100,10 +100,6 @@ impl<'a> SignedRequest<'a> {
         self.content_type = Some(content_type);
     }
 
-    /// Allows for overriding inital `Signature` used when struct was created.
-    // pub fn set_signature(&mut self, signature: Signature) {
-    //    self.signature = signature;
-    // }
     /// Allows for overriding inital bucket name used when struct was created.
     pub fn set_bucket(&mut self, bucket: &str) {
         self.bucket = bucket.to_string();
@@ -112,10 +108,13 @@ impl<'a> SignedRequest<'a> {
     /// Use this for adding an actual endpoint such as s3.us-east-1.amazon.com or one of your choice.
     /// hostname in this context means the FQDN less the bucket name if using Virtual Buckets.
     pub fn set_hostname(&mut self, hostname: Option<String>) {
-        // Don't set the host if the override of the virtual bucket is enabled.
-        //if self.endpoint.is_bucket_virtual {
-            self.hostname = hostname;
-        //}
+        self.hostname = hostname;
+    }
+
+    /// Sets the path_options which allows you to prepend a query path option to the normal
+    /// query path string but not have it included in the signature. Only certain third party products use this.
+    pub fn set_path_options(&mut self, path_options: Option<String>) {
+        self.path_options = path_options;
     }
 
     // NOTE: This pulls from default service types like S3 etc. Only use this if use AWS directly.
@@ -133,18 +132,6 @@ impl<'a> SignedRequest<'a> {
         self.params = params;
     }
 
-    /// Sets the `ssl` flag used for formatting the default `Endpoint`.
-    /// Mainly used with proxies and inside firewalls where certificates may not be used
-    /// (non AWS environments).
-    /// Default is `true`.
-    // pub fn set_ssl(&mut self, ssl: bool) {
-    //    self.ssl = ssl;
-    // }
-    /// Returns the `ssl` bool flag. Mainly used for inside firewalls where proxies are used.
-    /// Default is `true`.
-    // pub fn ssl(&self) -> bool {
-    //    self.ssl
-    // }
     /// Returns the `bucket` name.
     pub fn bucket(&self) -> &str {
         &self.bucket
@@ -154,11 +141,6 @@ impl<'a> SignedRequest<'a> {
     pub fn method(&self) -> &str {
         &self.method
     }
-
-    /// Returns the `Signature` enum value: V2 or V4.
-    // pub fn signature(&self) -> &Signature {
-    //    &self.signature
-    // }
 
     pub fn endpoint(&self) -> &Endpoint {
         &self.endpoint
@@ -202,6 +184,12 @@ impl<'a> SignedRequest<'a> {
             Some(ref h) => h.to_string(),
             None => build_hostname(&self.service, self.region),
         }
+    }
+
+    /// Returns the path_options which allows you to prepend a query path option to the normal
+    /// query path string but not have it included in the signature. Only certain third party products use this.
+    pub fn path_options(&self) -> Option<String> {
+        self.path_options.clone()
     }
 
     /// If the header key exists in headers, set it to blank/unoccupied:

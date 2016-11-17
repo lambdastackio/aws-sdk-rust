@@ -30,6 +30,9 @@ pub struct AdminRequest {
     pub method: Option<String>,
     /// Specify the path using the default 'admin'. For example, admin/bucket etc.
     pub admin_path: Option<String>,
+    /// Allows for speacial path option that does NOT have a value but only a key like
+    /// ```admin/user?quota``` where you would admin/user in admin_path and quota in path_options.
+    pub path_options: Option<String>,
     /// User's ID
     pub uid: Option<String>,
     /// Name of bucket
