@@ -123,7 +123,6 @@ impl DispatchSignedRequest for Client {
             final_uri = final_uri + &format!("{}", request.path_options().unwrap_or("".to_string()));
         }
 
-
         // SENDS
         let mut hyper_response = match request.payload() {
             None => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send()),

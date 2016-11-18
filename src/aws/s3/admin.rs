@@ -82,12 +82,20 @@ pub struct AdminUsage {
 }
 
 /// Ceph RGW Bucket Quota
-#[derive(Debug, Default, Clone, RustcDecodable, RustcEncodable)]
+#[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub struct AdminBucketQuota {
-    /// Quota
+    /// Quota enabled
     pub enabled: bool,
+    /// Default -1 which indicates no quota for bucket sizes
     pub max_size_kb: i64,
+    /// Default -1 which indicates no quota for number of total objects
     pub max_objects: i64,
+}
+
+impl Default for AdminBucketQuota {
+    fn default() -> AdminBucketQuota {
+        AdminBucketQuota{ enabled: false, max_size_kb: -1, max_objects: -1 }
+    }
 }
 
 /// Ceph RGW Bucket Metadata
