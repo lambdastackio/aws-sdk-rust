@@ -54,6 +54,8 @@ pub struct AdminRequest {
 /// Default output of all admin functions
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
 pub struct AdminOutput {
+    /// Status code from the restful server
+    pub code: u16,
     /// Payload of output
     pub payload: String,
     /// Output format (JSON or XML). Default is JSON
@@ -83,7 +85,7 @@ pub struct AdminUsage {
 
 /// Ceph RGW Bucket Quota
 #[derive(Debug, Clone, RustcDecodable, RustcEncodable)]
-pub struct AdminBucketQuota {
+pub struct AdminQuota {
     /// Quota enabled
     pub enabled: bool,
     /// Default -1 which indicates no quota for bucket sizes
@@ -92,9 +94,9 @@ pub struct AdminBucketQuota {
     pub max_objects: i64,
 }
 
-impl Default for AdminBucketQuota {
-    fn default() -> AdminBucketQuota {
-        AdminBucketQuota{ enabled: false, max_size_kb: -1, max_objects: -1 }
+impl Default for AdminQuota {
+    fn default() -> AdminQuota {
+        AdminQuota{ enabled: false, max_size_kb: -1, max_objects: -1 }
     }
 }
 
@@ -112,5 +114,5 @@ pub struct AdminBucketMetadata {
     pub mtime: String, // Could be time
     pub max_marker: String,
     pub usage: AdminUsage,
-    pub bucket_quota: AdminBucketQuota,
+    pub bucket_quota: AdminQuota,
 }

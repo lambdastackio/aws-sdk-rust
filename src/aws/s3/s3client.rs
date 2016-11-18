@@ -2088,8 +2088,15 @@ impl<P, D> S3Client<P, D>
 
         match status {
             200 => {
+                let body: String;
+                if result.body.is_empty() {
+                    body = "{}".to_string();
+                } else {
+                    body = result.body;
+                }
                 let mut admin_output = AdminOutput{
-                    payload: result.body,
+                    code: status as u16,
+                    payload: body,
                     format: output_format,
                 };
                 Ok(admin_output)
