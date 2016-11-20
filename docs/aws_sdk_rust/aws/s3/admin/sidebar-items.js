@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["AdminOutputType","Enum of output format (JSON or XML)"]],"struct":[["AdminOutput",""],["AdminRequest",""]]});
+initSidebarItems({"enum":[["AdminOutputType","Enum of output format (JSON or XML)"]],"struct":[["AdminBucketMetadata","Ceph RGW Bucket Metadata"],["AdminBuckets","Ceph RGW Buckets"],["AdminOutput","Default output of all admin functions"],["AdminQuota","Ceph RGW Bucket Quota"],["AdminRequest","Admin request for Ceph RGW Admin"],["AdminUsage","Ceph RGW Usage"],["AdminUsers","Ceph RGW Users"]]});

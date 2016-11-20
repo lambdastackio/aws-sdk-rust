@@ -2113,7 +2113,7 @@ impl<P, D> S3Client<P, D>
         match bucket {
             Some(b) => {
                 // NOTE: If the bucket name contains '.' then it must follow path vs virtual bucket
-                if b.contains(".") {
+                if b.contains(".") || !self.endpoint.is_bucket_virtual {
                     format!("{}", self.endpoint.hostname().unwrap())
                 } else {
                     format!("{}.{}", b, self.endpoint.hostname().unwrap())
