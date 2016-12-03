@@ -1,4 +1,6 @@
 # AWS SDK for Rust
+![aws-sdk-rust](https://img.shields.io/crates/v/aws-sdk-rust.svg)
+
 [Documentation](https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws/index.html)
 
 AWS SDK with initial emphasis on S3. Supports both V2 and V4 authentication signatures. Allows for custom app config, environment variables, standard /.aws/credentials and future Iam credentials. No environmental assumptions or opinions are made on how your access to AWS should be handled.
