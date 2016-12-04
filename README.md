@@ -1,5 +1,5 @@
 # AWS SDK for Rust
-![aws-sdk-rust](https://img.shields.io/crates/v/aws-sdk-rust.svg)
+![aws-sdk-rust](https://img.shields.io/crates/v/aws-sdk-rust.svg) [![Crates.io](https://img.shields.io/crates/d/aws-sdk-rust.svg)]() [![Crates.io](https://img.shields.io/crates/l/aws-sdk-rust.svg)]()
 
 [Documentation](https://lambdastackio.github.io/aws-sdk-rust/aws_sdk_rust/aws/index.html)
 
