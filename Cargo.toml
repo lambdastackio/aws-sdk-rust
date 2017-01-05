@@ -1,6 +1,6 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.38"
+version = "0.1.39"
 authors = ["Chris Jones"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -14,7 +14,7 @@ Important Enhancements:
 2) Works from behind proxies
 3) Returned data can be in Rust structs, JSON or XML
 
-Works only for S3. For a full AWS SDK look at the rusoto crate.
+Works only for S3. Other AWS Storage features are coming soon!
 """
 
 [dependencies]
