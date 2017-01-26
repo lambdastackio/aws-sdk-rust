@@ -18,12 +18,13 @@ Works only for S3. Other AWS Storage features are coming soon!
 """
 
 [dependencies]
-lsio = "0.1"
+lsio = "0.1, >=0.1.16"
 chrono = "0.2"
 httparse = "1"
-hyper = "0.9"
+hyper = "0.10"
+hyper-openssl = "0.2"
 log = "0.3.6"
-openssl = "0.7"
+openssl = "0.9"
 regex = "0.1"
 rustc-serialize = "0.3"
 # Credentials use serde
