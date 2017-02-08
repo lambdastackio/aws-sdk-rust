@@ -21,9 +21,10 @@ Works only for S3. Other AWS Storage features are coming soon!
 lsio = "0.1"
 chrono = "0.2"
 httparse = "1"
-hyper = "0.9"
+hyper = "0.10.4"
 log = "0.3.6"
-openssl = "0.7"
+openssl = "0.9"
+openssl-sys = "0.9"
 regex = "0.1"
 rustc-serialize = "0.3"
 # Credentials use serde

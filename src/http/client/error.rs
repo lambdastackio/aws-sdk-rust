@@ -43,7 +43,7 @@ pub enum Error {
     /// Occurs when an improper http or https proxy value is given.
     InvalidProxyValue(String),
     IO(io::Error),
-    SslError(ssl::error::SslError),
+    SslError(ssl::Error),
     /// When an error occurs attempting to parse a string into a URL.
     UrlParseError(url::ParseError),
 }
@@ -87,8 +87,8 @@ impl From<io::Error> for Error {
     }
 }
 
-impl From<ssl::error::SslError> for Error {
-    fn from(err: ssl::error::SslError) -> Error {
+impl From<ssl::Error> for Error {
+    fn from(err: ssl::Error) -> Error {
         Error::SslError(err)
     }
 }
