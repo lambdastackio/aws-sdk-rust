@@ -35,6 +35,7 @@ extern crate httparse;
 
 #[macro_use]
 extern crate hyper;
+extern crate hyper_openssl;
 
 // Only aws crate is documented, not the dependents.
 pub mod aws;
