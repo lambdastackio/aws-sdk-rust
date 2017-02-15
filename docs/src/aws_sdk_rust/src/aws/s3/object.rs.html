@@ -4735,6 +4735,11 @@
 <span id="4691">4691</span>
 <span id="4692">4692</span>
 <span id="4693">4693</span>
+<span id="4694">4694</span>
+<span id="4695">4695</span>
+<span id="4696">4696</span>
+<span id="4697">4697</span>
+<span id="4698">4698</span>
 </pre><pre class='rust '>
 <span class='comment'>//</span>
 <span class='comment'>// Copyright 2016 LambdaStack All rights reserved.</span>
@@ -5955,6 +5960,11 @@
     <span class='kw'>pub</span> <span class='ident'>id</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>ID</span><span class='op'>&gt;</span>,
 }
 
+<span class='doccomment'>/// Prefix becomes important when wanting to list objects in a given order but you may be using a</span>
+<span class='doccomment'>/// hex hash prefix to add randomness to the the indexing. For example:</span>
+<span class='doccomment'>/// prefixes such [0-f][0-f][0-f][0-f]&lt;whatever date&gt; could be used to do a 4 character hex hash</span>
+<span class='doccomment'>/// that prefixes your object key which also included a date. This prefix would allow for sort correctly.</span>
+<span class='doccomment'>/// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>Default</span>, <span class='ident'>RustcDecodable</span>, <span class='ident'>RustcEncodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ListObjectsRequest</span> {
     <span class='doccomment'>/// Required. Name of bucket.</span>
