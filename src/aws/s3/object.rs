@@ -1217,6 +1217,11 @@ pub struct ReplicationRule {
     pub id: Option<ID>,
 }
 
+/// Prefix becomes important when wanting to list objects in a given order but you may be using a
+/// hex hash prefix to add randomness to the the indexing. For example:
+/// prefixes such [0-f][0-f][0-f][0-f]<whatever date> could be used to do a 4 character hex hash
+/// that prefixes your object key which also included a date. This prefix would allow for sort correctly.
+/// http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html
 #[derive(Debug, Default, RustcDecodable, RustcEncodable)]
 pub struct ListObjectsRequest {
     /// Required. Name of bucket.
