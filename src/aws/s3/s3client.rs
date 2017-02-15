@@ -22,7 +22,9 @@ use std::str;
 use std::env;
 use std::time::Instant; //, SystemTime};
 
-use hyper::client::{Client, RedirectPolicy};
+use hyper::client::{Client, ProxyConfig, RedirectPolicy};
+use hyper::net::HttpsConnector;
+use hyper_openssl::OpensslClient;
 use url::Url;
 use xml::reader::EventReader;
 use chrono::{self, UTC};
@@ -49,12 +51,14 @@ use aws::s3::admin::*;
 pub fn http_client(proxy: Option<Url>, endpoint: Url) -> Client {
     let mut proxy_url: String = String::new();
     let mut proxy_port: u16 = 0;
+    let mut proxy_is_https: bool = false;
     let endpoint_domain = endpoint.host_str().unwrap();
 
     let is_proxy = match proxy {
         Some(url) => {
             proxy_url = url.host_str().unwrap_or("").to_string();
             proxy_port = url.port_or_known_default().unwrap();
+            proxy_is_https = url.scheme() == "https";
             true
         },
         None => {
@@ -65,6 +69,7 @@ pub fn http_client(proxy: Option<Url>, endpoint: Url) -> Client {
                         Ok(url) => {
                             proxy_url = url.host_str().unwrap().to_string();
                             proxy_port = url.port_or_known_default().unwrap();
+                            proxy_is_https = url.scheme() == "https";
                             true
                         },
                         Err(e) => false,
@@ -76,6 +81,7 @@ pub fn http_client(proxy: Option<Url>, endpoint: Url) -> Client {
                             let url = Url::parse(&url).unwrap();
                             proxy_url = url.host_str().unwrap_or("").to_string();
                             proxy_port = url.port_or_known_default().unwrap();
+                            proxy_is_https = url.scheme() == "https";
                             true
                         },
                         _ => false,
@@ -100,12 +106,32 @@ pub fn http_client(proxy: Option<Url>, endpoint: Url) -> Client {
             }
 
             match is_proxy {
-                true => Client::with_http_proxy(proxy_url, proxy_port),
-                _ => Client::new(),
+                true => {
+                    match proxy_is_https {
+                        true => {
+                            let ssl = OpensslClient::new().unwrap();
+                            let connector = HttpsConnector::new(ssl.clone());
+                            let proxy_config = ProxyConfig::new("https", proxy_url, proxy_port, connector, ssl);
+                            Client::with_proxy_config(proxy_config)
+                        },
+                        false => Client::with_http_proxy(proxy_url, proxy_port),
+                    }
+                },
+                _ => {
+                    hyper_ssl_client()
+                },
             }
         },
-        _ => Client::new(),
+        _ => {
+            hyper_ssl_client()
+        },
     }
+}
+
+fn hyper_ssl_client() -> Client {
+    let ssl = OpensslClient::new().unwrap();
+    let connector = HttpsConnector::new(ssl);
+    Client::with_connector(connector)
 }
 
 /// S3Client - Base client all

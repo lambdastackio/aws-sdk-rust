@@ -33,10 +33,10 @@ use std::collections::btree_map::Entry;
 use std::str;
 use std::io::prelude::*;
 
-use openssl::crypto::hash::Type::{SHA1, SHA256};
-use openssl::crypto::hash::hash;
-use openssl::crypto::hmac::hmac;
-use openssl::crypto::hmac::HMAC;
+use openssl::sign::Signer;
+use openssl::hash::MessageDigest;
+use openssl::pkey::PKey;
+use openssl::hash::hash;
 use rustc_serialize::hex::ToHex;
 use rustc_serialize::base64::{STANDARD, ToBase64};
 use time::Tm;
@@ -348,9 +348,10 @@ impl<'a> SignedRequest<'a> {
         // println!("===================");
 
         let signature = {
-            let mut hmac = HMAC::new(SHA1, creds.aws_secret_access_key().as_bytes());
+            let hmac_pkey = PKey::hmac(creds.aws_secret_access_key().as_bytes()).unwrap();
+            let mut hmac = Signer::new(MessageDigest::sha1(), &hmac_pkey).unwrap();
             let _ = hmac.write_all(string_to_sign.as_bytes());
-            hmac.finish().to_base64(STANDARD)
+            hmac.finish().unwrap().to_base64(STANDARD)
         };
 
         self.update_header("Authorization", &format!("AWS {}:{}", creds.aws_access_key_id(), signature));
@@ -467,16 +468,32 @@ impl<'a> SignedRequest<'a> {
 
 // V4 Signature related - Begin
 fn signature(string_to_sign: &str, signing_key: Vec<u8>) -> String {
-    hmac(SHA256, &signing_key, string_to_sign.as_bytes()).to_hex().to_string()
+    let hmac_pkey = PKey::hmac(&signing_key).unwrap();
+    let mut hmac = Signer::new(MessageDigest::sha256(), &hmac_pkey).unwrap();
+    hmac.write_all(string_to_sign.as_bytes()).unwrap();
+    hmac.finish().unwrap().to_hex().to_string()
 }
 
 fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> Vec<u8> {
-    let k_date = hmac(SHA256,
-                      format!("AWS4{}", secret).as_bytes(),
-                      date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
-    let k_region = hmac(SHA256, &k_date, region.as_bytes());
-    let k_service = hmac(SHA256, &k_region, service.as_bytes());
-    hmac(SHA256, &k_service, b"aws4_request")
+    let hmac_pkey = PKey::hmac(format!("AWS4{}", secret).as_bytes()).unwrap();
+    let mut hmac = Signer::new(MessageDigest::sha256(), &hmac_pkey).unwrap();
+    hmac.write_all(date.strftime("%Y%m%d").unwrap().to_string().as_bytes()).unwrap();
+    let k_date = hmac.finish().unwrap();
+
+    let hmac_pkey = PKey::hmac(&k_date).unwrap();
+    let mut hmac = Signer::new(MessageDigest::sha256(), &hmac_pkey).unwrap();
+    hmac.write_all(region.as_bytes()).unwrap();
+    let k_region = hmac.finish().unwrap();
+
+    let hmac_pkey = PKey::hmac(&k_region).unwrap();
+    let mut hmac = Signer::new(MessageDigest::sha256(), &hmac_pkey).unwrap();
+    hmac.write_all(service.as_bytes()).unwrap();
+    let k_service = hmac.finish().unwrap();
+
+    let hmac_pkey = PKey::hmac(&k_service).unwrap();
+    let mut hmac = Signer::new(MessageDigest::sha256(), &hmac_pkey).unwrap();
+    hmac.write_all(b"aws4_request").unwrap();
+    hmac.finish().unwrap()
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
@@ -582,12 +599,12 @@ fn byte_serialize(input: &str) -> String {
 }
 
 fn to_hexdigest_from_string(val: &str) -> String {
-    let h = hash(SHA256, val.as_bytes());
+    let h = hash(MessageDigest::sha256(), val.as_bytes()).unwrap();
     h.to_hex().to_string()
 }
 
 fn to_hexdigest_from_bytes(val: &[u8]) -> String {
-    let h = hash(SHA256, val);
+    let h = hash(MessageDigest::sha256(), val).unwrap();
     h.to_hex().to_string()
 }
 
