@@ -1,6 +1,6 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.40"
+version = "0.1.41"
 authors = ["Chris Jones"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -39,8 +39,5 @@ xml-rs = "0.1"
 term = "0.4"
 md5 = "0.3"
 
-# This section is here because there is a main.rs that used as an example.
-[[bin]]
-doc = false
-name = "s3"
-path = "examples/s3.rs"
+# Run the example like. It will pull in term and md5 at that time since they are only used for the example:
+# cargo run --example s3
