@@ -33,9 +33,11 @@ serde_json = "0.8"
 time = "0.1"
 url = "1.2"
 xml-rs = "0.1"
+
+[dev-dependencies]
 # NOTE: term is only used for the example
 term = "0.4"
-md5 = "0.2"
+md5 = "0.3"
 
 # This section is here because there is a main.rs that used as an example.
 [[bin]]
