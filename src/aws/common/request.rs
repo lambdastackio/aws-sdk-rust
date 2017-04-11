@@ -114,7 +114,7 @@ impl DispatchSignedRequest for Client {
                                     request.endpoint_scheme(),
                                     request.hostname(),
                                     port_str,
-                                    request.path());
+                                    request.canonical_uri());
         if !request.canonical_query_string().is_empty() {
             let uri = final_uri.clone();
             final_uri = final_uri + &format!("{}{}", if uri.contains("?") {""} else {"?"}, request.canonical_query_string());

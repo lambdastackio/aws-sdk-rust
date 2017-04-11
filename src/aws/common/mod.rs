@@ -20,6 +20,8 @@
 pub mod common;
 /// `credentials` contains the type, struct, enum and impls that are credentials related.
 pub mod credentials;
+/// Functions needed for percent-encoding
+pub mod encode;
 /// `region` contains the type, struct, enum and impls for Region related functions.
 pub mod region;
 /// `xmlutil` contains the type, struct, enum and impls that are common XML parsing and writing.
