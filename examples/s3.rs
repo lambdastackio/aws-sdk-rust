@@ -193,7 +193,7 @@ fn main() {
     // This is the first thing that needs to be done. Initiate the request and get the uploadid.
     // Generate a test file of 8MB in size...
     let test_abort: bool = false;
-    let file_size: u16 = 8;
+    let file_size: u16 = 8; // MiB
     // NOTE: .gitignore has this file name as an ignore. If you change this file name then change .gitignore if you also want to issue a PR.
     let file_name: &str = "test.multipart.upload.file";
     // NOTE: The temp file will be removed after the test. If you want to keep the file then set this to false.
@@ -211,7 +211,9 @@ fn main() {
             create_multipart_upload_output = Some(output);
             // Only for *nix based systems - the following command
             if file_create {
-                let result = run_cli(format!("dd if=/dev/zero ibs={}m count=1 of={}", file_size, file_name.to_string()));
+                let cmd = format!("dd if=/dev/zero ibs={}M count=1 of={}", file_size * 1048576, file_name.to_string());
+                let result = run_cli(cmd.clone()).unwrap();
+                assert!(result.status.success(), "command exited with an error: {:?}", cmd)
             }
         },
         Err(e) => println_color!(term::color::RED, "{:#?}", e),
