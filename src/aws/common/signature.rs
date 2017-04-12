@@ -43,7 +43,7 @@ use time::Tm;
 use time::now_utc;
 
 use aws::common::credentials::AwsCredentials;
-use aws::common::encode::{encode_uri, encode_uri_object_key};
+use aws::common::encode::encode_uri;
 use aws::common::params::Params;
 use aws::common::region::Region;
 use aws::s3::endpoint::Signature;
@@ -299,7 +299,7 @@ impl<'a> SignedRequest<'a> {
 
         // self.canonical_uri = canonical_uri(&self.path);
         // let canonical_headers = canonical_headers_v2(&self.headers);
-        // let canonical_resources = canonical_resources_v2(&self.bucket, &self.path);
+        // let canonical_resources = canonical_resources_v2(&self.bucket, &self.path, self.endpoint.is_bucket_virtual);
         // println!("----sign_v2----------");
         // println!("bucket {:#?}", self.bucket);
         // println!("hostname {:#?}", hostname);
@@ -535,7 +535,7 @@ fn canonical_values(values: &[Vec<u8>]) -> String {
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
-        _ => encode_uri_object_key(path),
+        _ => path.to_owned(),
     }
 }
 
@@ -647,19 +647,19 @@ fn canonical_headers_v2(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
 // NOTE: If bucket contains '.' it is already formatted in path so just encode it.
 fn canonical_resources_v2(bucket: &str, path: &str, is_bucket_virtual: bool) -> String {
     if bucket.to_string().contains(".") || !is_bucket_virtual {
-        encode_uri_object_key(path)
+        path.to_string()
     } else {
         match bucket {
             "" => {
                 match path {
                     "" => "/".to_string(),
-                    _ => encode_uri_object_key(path),  // This assumes / as leading char
+                    _ => path.to_string(),  // This assumes / as leading char
                 }
             },
             _ => {
                 match path {
                     "" => format!("/{}/", bucket),
-                    _ => encode_uri_object_key(&format!("/{}{}", bucket, path)),  // This assumes path with leading / char
+                    _ => format!("/{}{}", bucket, path),  // This assumes path with leading / char
                 }
             },
         }
