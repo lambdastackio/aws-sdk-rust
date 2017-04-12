@@ -30,6 +30,7 @@ use xml::reader::EventReader;
 use chrono::{self, UTC};
 
 use aws::common::credentials::{AwsCredentials, AwsCredentialsProvider};
+use aws::common::encode::{encode_uri, encode_uri_object_key};
 use aws::common::region::Region;
 use aws::common::xmlutil::*;
 use aws::common::params::{Params, ServiceParams};
@@ -1101,7 +1102,7 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}", input.key),
+                                             &format!("/{}", encode_uri_object_key(&input.key)),
                                              &self.endpoint);
 
         let hostname = self.hostname(Some(&input.bucket));
@@ -1146,7 +1147,7 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}", input.key),
+                                             &format!("/{}", encode_uri_object_key(&input.key)),
                                              &self.endpoint);
 
         let hostname = self.hostname(Some(&input.bucket));
@@ -1186,11 +1187,12 @@ impl<P, D> S3Client<P, D>
 
     /// Returns the access control list (ACL) of an object.
     pub fn get_object_acl(&self, input: &GetObjectAclRequest) -> Result<AccessControlPolicy, S3Error> {
+        let encoded_key = encode_uri_object_key(&input.key);
         let mut path: String;
         if self.endpoint.signature == Signature::V2 {
-            path = format!("/{}?acl", input.key);
+            path = format!("/{}?acl", encoded_key);
         } else {
-            path = format!("/{}", input.key);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new("GET",
@@ -1407,7 +1409,7 @@ impl<P, D> S3Client<P, D>
                                              "s3",
                                              self.region,
                                              &input.bucket,
-                                             &format!("/{}", input.key),
+                                             &format!("/{}", encode_uri_object_key(&input.key)),
                                              &self.endpoint);
         // let mut params = Params::new();
         // params.put("Action", "CopyObject");
@@ -1467,15 +1469,16 @@ impl<P, D> S3Client<P, D>
                          input: &DeleteObjectRequest,
                          operation: Option<&mut Operation>)
                           -> Result<DeleteObjectOutput, S3Error> {
+        let encoded_key = encode_uri_object_key(&input.key);
         let path: String;
         if let Some(ref version_id) = input.version_id {
             if self.endpoint.signature == Signature::V2 {
-              path = format!("/{}?versionId={}", input.key, version_id);
+              path = format!("/{}?versionId={}", encoded_key, encode_uri(version_id));
             } else {
-              path = format!("/{}", input.key);
+              path = format!("/{}", encoded_key);
             }
         } else {
-            path = format!("/{}", input.key);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new("DELETE",
@@ -1531,15 +1534,15 @@ impl<P, D> S3Client<P, D>
     pub fn multipart_upload_create(&self,
                                    input: &MultipartUploadCreateRequest)
                                    -> Result<MultipartUploadCreateOutput, S3Error> {
-        let object_name = &input.key;
+        let encoded_key = encode_uri_object_key(&input.key);
         let path: String;
 
         // NOTE: Need to change these signature items in the signature code instead of in this code set
 
         if self.endpoint.signature == Signature::V2 {
-            path = format!("/{}?uploads", object_name);
+            path = format!("/{}?uploads", encoded_key);
         } else {
-            path = format!("/{}", object_name);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new("POST",
@@ -1584,15 +1587,15 @@ impl<P, D> S3Client<P, D>
     /// the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3
     /// frees up the parts storage and stops charging you for the parts storage.
     pub fn multipart_upload_part(&self, input: &MultipartUploadPartRequest) -> Result<String, S3Error> {
-        let object_name = &input.key;
+        let encoded_key = encode_uri_object_key(&input.key);
         let upload_id = &input.upload_id;
         let part_number = &input.part_number;
         let path: String;
 
         if self.endpoint.signature == Signature::V2 {
-            path = format!("/{}?partNumber={}&uploadId={}", object_name, part_number, upload_id);
+            path = format!("/{}?partNumber={}&uploadId={}", encoded_key, part_number, encode_uri(upload_id));
         } else {
-            path = format!("/{}", object_name);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new("PUT",
@@ -1645,14 +1648,14 @@ impl<P, D> S3Client<P, D>
     pub fn multipart_upload_complete(&self,
                                      input: &MultipartUploadCompleteRequest)
                                      -> Result<MultipartUploadCompleteOutput, S3Error> {
-        let object_name = &input.key;
+        let encoded_key = encode_uri_object_key(&input.key);
         let upload_id = &input.upload_id;
         let path: String;
 
         if self.endpoint.signature == Signature::V2 {
-            path = format!("/{}?uploadId={}", object_name, upload_id);
+            path = format!("/{}?uploadId={}", encoded_key, encode_uri(upload_id));
         } else {
-            path = format!("/{}", object_name);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new("POST",
@@ -1732,14 +1735,14 @@ impl<P, D> S3Client<P, D>
 
     /// Lists the parts that have been uploaded for a specific multipart upload.
     pub fn multipart_upload_list_parts(&self, input: &MultipartUploadListPartsRequest) -> Result<MultipartUploadListPartsOutput, S3Error> {
-        let object_name = &input.key;
+        let encoded_key = encode_uri_object_key(&input.key);
         let upload_id = &input.upload_id;
         let path: String;
 
         if self.endpoint.signature == Signature::V2 {
-            path = format!("/{}?uploadId={}", object_name, upload_id);
+            path = format!("/{}?uploadId={}", encoded_key, encode_uri(upload_id));
         } else {
-            path = format!("/{}", object_name);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new(
@@ -1783,14 +1786,14 @@ impl<P, D> S3Client<P, D>
     /// list is empty.
     pub fn multipart_upload_abort(&self, input: &MultipartUploadAbortRequest)
                             -> Result<MultipartUploadAbortOutput, S3Error> {
-        let object_name = &input.key;
+        let encoded_key = encode_uri_object_key(&input.key);
         let upload_id = &input.upload_id;
         let path: String;
 
         if self.endpoint.signature == Signature::V2 {
-            path = format!("/{}?uploadId={}", object_name, upload_id);
+            path = format!("/{}?uploadId={}", encoded_key, encode_uri(upload_id));
         } else {
-            path = format!("/{}", object_name);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new(
@@ -1829,11 +1832,12 @@ impl<P, D> S3Client<P, D>
 
     /// Restores an archived copy of an object back into Amazon S3
     pub fn restore_object(&self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, S3Error> {
+        let encoded_key = encode_uri_object_key(&input.key);
         let mut path: String;
         if self.endpoint.signature == Signature::V2 {
-            path = format!("/{}?restore", input.key);
+            path = format!("/{}?restore", encoded_key);
         } else {
-            path = format!("/{}", input.key);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new("POST",
@@ -1882,11 +1886,12 @@ impl<P, D> S3Client<P, D>
                       input: &PutObjectRequest,
                       operation: Option<&mut Operation>)
                       -> Result<PutObjectOutput, S3Error> {
+        let encoded_key = encode_uri_object_key(&input.key);
         let path: String;
         if input.key.starts_with("/") {
-          path = input.key.clone();
+          path = encoded_key;
         } else {
-          path = format!("/{}", input.key);
+          path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new("PUT",
@@ -1967,11 +1972,12 @@ impl<P, D> S3Client<P, D>
     /// uses the acl subresource to set the access control list (ACL) permissions for
     /// an object that already exists in a bucket
     pub fn put_object_acl(&self, input: &PutObjectAclRequest) -> Result<(), S3Error> {
+        let encoded_key = encode_uri_object_key(&input.key);
         let mut path: String;
         if self.endpoint.signature == Signature::V2 {
-            path = format!("/{}?acl", input.key);
+            path = format!("/{}?acl", encoded_key);
         } else {
-            path = format!("/{}", input.key);
+            path = format!("/{}", encoded_key);
         }
 
         let mut request = SignedRequest::new("PUT",

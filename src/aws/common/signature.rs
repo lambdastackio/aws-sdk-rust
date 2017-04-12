@@ -41,9 +41,9 @@ use rustc_serialize::hex::ToHex;
 use rustc_serialize::base64::{STANDARD, ToBase64};
 use time::Tm;
 use time::now_utc;
-use url::percent_encoding::{DEFAULT_ENCODE_SET, QUERY_ENCODE_SET, utf8_percent_encode};
 
 use aws::common::credentials::AwsCredentials;
+use aws::common::encode::encode_uri;
 use aws::common::params::Params;
 use aws::common::region::Region;
 use aws::s3::endpoint::Signature;
@@ -299,7 +299,7 @@ impl<'a> SignedRequest<'a> {
 
         // self.canonical_uri = canonical_uri(&self.path);
         // let canonical_headers = canonical_headers_v2(&self.headers);
-        // let canonical_resources = canonical_resources_v2(&self.bucket, &self.path);
+        // let canonical_resources = canonical_resources_v2(&self.bucket, &self.path, self.endpoint.is_bucket_virtual);
         // println!("----sign_v2----------");
         // println!("bucket {:#?}", self.bucket);
         // println!("hostname {:#?}", hostname);
@@ -535,7 +535,7 @@ fn canonical_values(values: &[Vec<u8>]) -> String {
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
-        _ => encode_uri(path),
+        _ => path.to_owned(),
     }
 }
 
@@ -580,27 +580,17 @@ fn build_canonical_query_string(params: &Params) -> String {
         if !output.is_empty() {
             output.push_str("&");
         }
-        output.push_str(&byte_serialize(item.0));
+        output.push_str(&encode_uri(item.0));
         output.push_str("=");
-        output.push_str(&byte_serialize(item.1));
+        output.push_str(&encode_uri(item.1));
     }
 
     output
 }
 
 #[inline]
-fn encode_uri(uri: &str) -> String {
-    utf8_percent_encode(uri, QUERY_ENCODE_SET).collect::<String>()
-}
-
-#[inline]
-fn byte_serialize(input: &str) -> String {
-    utf8_percent_encode(input, DEFAULT_ENCODE_SET).collect::<String>()
-}
-
 fn to_hexdigest_from_string(val: &str) -> String {
-    let h = hash(MessageDigest::sha256(), val.as_bytes()).unwrap();
-    h.to_hex().to_string()
+    to_hexdigest_from_bytes(&val.as_bytes())
 }
 
 fn to_hexdigest_from_bytes(val: &[u8]) -> String {
@@ -645,12 +635,8 @@ fn canonical_headers_v2(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
         if skipped_headers(item.0) {
             continue;
         } else {
-            match item.0.to_ascii_lowercase().find("x-amz-") {
-                None => {},
-                _ => canonical.push_str(format!("{}:{}\n",
-                                                item.0.to_ascii_lowercase(),
-                                                canonical_values(item.1))
-                    .as_ref()),
+            if item.0.contains("x-amz-") {
+                canonical.push_str(format!("{}:{}\n", item.0, canonical_values(item.1)).as_ref());
             };
         }
     }
@@ -661,19 +647,19 @@ fn canonical_headers_v2(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
 // NOTE: If bucket contains '.' it is already formatted in path so just encode it.
 fn canonical_resources_v2(bucket: &str, path: &str, is_bucket_virtual: bool) -> String {
     if bucket.to_string().contains(".") || !is_bucket_virtual {
-        encode_uri(path)
+        path.to_string()
     } else {
         match bucket {
             "" => {
                 match path {
                     "" => "/".to_string(),
-                    _ => encode_uri(path),  // This assumes / as leading char
+                    _ => path.to_string(),  // This assumes / as leading char
                 }
             },
             _ => {
                 match path {
                     "" => format!("/{}/", bucket),
-                    _ => encode_uri(&format!("/{}{}", bucket, path)),  // This assumes path with leading / char
+                    _ => format!("/{}{}", bucket, path),  // This assumes path with leading / char
                 }
             },
         }
