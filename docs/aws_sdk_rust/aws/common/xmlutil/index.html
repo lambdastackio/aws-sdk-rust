@@ -9,6 +9,7 @@
 
     <title>aws_sdk_rust::aws::common::xmlutil - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
     
@@ -16,7 +17,7 @@
     <link rel="shortcut icon" href="https://lambdastackio.github.io/static/images/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc mod">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -28,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../../../../aws_sdk_rust/index.html'><img src='https://lambdastackio.github.io/static/images/lambdastack-200x200.png' alt='logo' width='100'></a>
-        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a></p><script>window.sidebarCurrent = {name: 'xmlutil', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        <p class='location'>Module xmlutil</p><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a></p><script>window.sidebarCurrent = {name: 'xmlutil', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,12 +43,12 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a>::<wbr><a class='mod' href=''>xmlutil</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a>::<wbr><a class="mod" href=''>xmlutil</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-547' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/xmlutil.rs.html#19-360' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../../../src/aws_sdk_rust/aws/common/xmlutil.rs.html#19-460' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p><code>xmlutil</code> contains the type, struct, enum and impls that are common XML parsing and writing.
 Library Documentation</p>
 
@@ -58,116 +59,103 @@ Also provides a method of supplying an XML stack from a file for testing purpose
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.XmlParseError.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::XmlParseError'>XmlParseError</a></td>
+                           <td><a class="struct" href="struct.XmlParseError.html"
+                                  title='struct aws_sdk_rust::aws::common::xmlutil::XmlParseError'>XmlParseError</a></td>
                            <td class='docblock-short'>
                                 <p>generic Error for XML parsing</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.XmlResponse.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::XmlResponse'>XmlResponse</a></td>
+                           <td><a class="struct" href="struct.XmlResponse.html"
+                                  title='struct aws_sdk_rust::aws::common::xmlutil::XmlResponse'>XmlResponse</a></td>
                            <td class='docblock-short'>
                                 <p>Wraps the Hyper Response type for AWS S3. AWS S3 uses XML instead of JSON.</p>
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.Next.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::Next'>Next</a></td>
+                           <td><a class="trait" href="trait.Next.html"
+                                  title='trait aws_sdk_rust::aws::common::xmlutil::Next'>Next</a></td>
                            <td class='docblock-short'>
                                 <p>Move to the next part of the XML stack</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.Peek.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::Peek'>Peek</a></td>
+                           <td><a class="trait" href="trait.Peek.html"
+                                  title='trait aws_sdk_rust::aws::common::xmlutil::Peek'>Peek</a></td>
                            <td class='docblock-short'>
                                 <p>Peek at next items in the XML stack</p>
                            </td>
                        </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.characters.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::characters'>characters</a></td>
+                           <td><a class="fn" href="fn.characters.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::characters'>characters</a></td>
                            <td class='docblock-short'>
                                 <p>return some XML Characters</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.end_element.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::end_element'>end_element</a></td>
+                           <td><a class="fn" href="fn.end_element.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::end_element'>end_element</a></td>
                            <td class='docblock-short'>
                                 <p>consume an <code>EndElement</code> with a specific name or throw an <code>XmlParseError</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.end_element_skip.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::end_element_skip'>end_element_skip</a></td>
+                           <td><a class="fn" href="fn.end_element_skip.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::end_element_skip'>end_element_skip</a></td>
                            <td class='docblock-short'>
                                 <p>consume an <code>EndElement</code> with a specific name or throw an <code>XmlParseError</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.indent.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::indent'>indent</a></td>
+                           <td><a class="fn" href="fn.indent.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::indent'>indent</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.optional_string_field.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::optional_string_field'>optional_string_field</a></td>
+                           <td><a class="fn" href="fn.optional_string_field.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::optional_string_field'>optional_string_field</a></td>
                            <td class='docblock-short'>
                                 <p>parse Some(String) if the next tag has the right name, otherwise None</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.peek_at_name.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::peek_at_name'>peek_at_name</a></td>
+                           <td><a class="fn" href="fn.peek_at_name.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::peek_at_name'>peek_at_name</a></td>
                            <td class='docblock-short'>
-                                <p>get the name of the current element in the stack.  throw a parse error if it&#39;s not a <code>StartElement</code></p>
+                                <p>takes a peek to see if the next element is the end_element
+get the name of the current element in the stack.  throw a parse error if it&#39;s not a <code>StartElement</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.peek_is_end_element.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::peek_is_end_element'>peek_is_end_element</a></td>
-                           <td class='docblock-short'>
-                                <p>takes a peek to see if the next element is the end_element</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.pretty_print_xml.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::pretty_print_xml'>pretty_print_xml</a></td>
-                           <td class='docblock-short'>
-                                
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.skip_tree.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::skip_tree'>skip_tree</a></td>
+                           <td><a class="fn" href="fn.skip_tree.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::skip_tree'>skip_tree</a></td>
                            <td class='docblock-short'>
                                 <p>skip a tag and all its children</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.start_element.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::start_element'>start_element</a></td>
+                           <td><a class="fn" href="fn.start_element.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::start_element'>start_element</a></td>
                            <td class='docblock-short'>
                                 <p>consume a <code>StartElement</code> with a specific name or throw an <code>XmlParseError</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.string_field.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::string_field'>string_field</a></td>
+                           <td><a class="fn" href="fn.string_field.html"
+                                  title='fn aws_sdk_rust::aws::common::xmlutil::string_field'>string_field</a></td>
                            <td class='docblock-short'>
                                 <p>return a string field with the right name or throw a parse error</p>
                            </td>
                        </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='type' href='type.XmlStack.html'
-                                  title='aws_sdk_rust::aws::common::xmlutil::XmlStack'>XmlStack</a></td>
+                           <td><a class="type" href="type.XmlStack.html"
+                                  title='type aws_sdk_rust::aws::common::xmlutil::XmlStack'>XmlStack</a></td>
                            <td class='docblock-short'>
                                 <p>syntactic sugar for the XML event stack we pass around</p>
                            </td>
@@ -228,7 +216,6 @@ Also provides a method of supplying an XML stack from a file for testing purpose
         window.rootPath = "../../../../";
         window.currentCrate = "aws_sdk_rust";
     </script>
-    <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     <script defer src="../../../../search-index.js"></script>
 </body>

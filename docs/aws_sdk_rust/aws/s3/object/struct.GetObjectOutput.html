@@ -9,6 +9,7 @@
 
     <title>aws_sdk_rust::aws::s3::object::GetObjectOutput - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
     
@@ -16,7 +17,7 @@
     <link rel="shortcut icon" href="https://lambdastackio.github.io/static/images/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc struct">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -28,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../../../../aws_sdk_rust/index.html'><img src='https://lambdastackio.github.io/static/images/lambdastack-200x200.png' alt='logo' width='100'></a>
-        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>object</a></p><script>window.sidebarCurrent = {name: 'GetObjectOutput', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct GetObjectOutput</p><div class="block items"><ul><li><a href="#fields">Fields</a></li><li><a href="#methods">Methods</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>object</a></p><script>window.sidebarCurrent = {name: 'GetObjectOutput', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,179 +43,179 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>object</a>::<wbr><a class='struct' href=''>GetObjectOutput</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>object</a>::<wbr><a class="struct" href=''>GetObjectOutput</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-9777' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#488-559' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/object.rs.html#488-559' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct GetObjectOutput {
-    pub last_modified: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.LastModified.html' title='aws_sdk_rust::aws::s3::writeparse::LastModified'>LastModified</a>,
-    pub content_range: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.ContentRange.html' title='aws_sdk_rust::aws::s3::header::ContentRange'>ContentRange</a>,
-    pub request_charged: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.RequestCharged.html' title='aws_sdk_rust::aws::s3::writeparse::RequestCharged'>RequestCharged</a>,
-    pub content_encoding: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentEncoding.html' title='aws_sdk_rust::aws::s3::writeparse::ContentEncoding'>ContentEncoding</a>,
-    pub replication_status: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ReplicationStatus.html' title='aws_sdk_rust::aws::s3::writeparse::ReplicationStatus'>ReplicationStatus</a>,
-    pub storage_class: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.StorageClass.html' title='aws_sdk_rust::aws::s3::writeparse::StorageClass'>StorageClass</a>,
-    pub server_side_encryption: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ServerSideEncryption.html' title='aws_sdk_rust::aws::s3::writeparse::ServerSideEncryption'>ServerSideEncryption</a>,
-    pub ssekms_key_id: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.SSEKMSKeyId.html' title='aws_sdk_rust::aws::s3::writeparse::SSEKMSKeyId'>SSEKMSKeyId</a>,
-    pub content_disposition: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentDisposition.html' title='aws_sdk_rust::aws::s3::writeparse::ContentDisposition'>ContentDisposition</a>,
-    pub metadata: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Metadata.html' title='aws_sdk_rust::aws::s3::writeparse::Metadata'>Metadata</a>,
-    pub body: <a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.Body.html' title='aws_sdk_rust::aws::common::common::Body'>Body</a>,
-    pub body_buffer: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;,
-    pub is_body: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
-    pub accept_ranges: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.AcceptRanges.html' title='aws_sdk_rust::aws::s3::header::AcceptRanges'>AcceptRanges</a>,
-    pub website_redirect_location: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.WebsiteRedirectLocation.html' title='aws_sdk_rust::aws::s3::writeparse::WebsiteRedirectLocation'>WebsiteRedirectLocation</a>,
-    pub expires: <a class='type' href='../../../../aws_sdk_rust/aws/s3/object/type.Expires.html' title='aws_sdk_rust::aws::s3::object::Expires'>Expires</a>,
-    pub delete_marker: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.DeleteMarker.html' title='aws_sdk_rust::aws::s3::writeparse::DeleteMarker'>DeleteMarker</a>,
-    pub cache_control: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.CacheControl.html' title='aws_sdk_rust::aws::s3::writeparse::CacheControl'>CacheControl</a>,
-    pub content_length: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentLength.html' title='aws_sdk_rust::aws::s3::writeparse::ContentLength'>ContentLength</a>,
-    pub expiration: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Expiration.html' title='aws_sdk_rust::aws::s3::writeparse::Expiration'>Expiration</a>,
-    pub missing_meta: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.MissingMeta.html' title='aws_sdk_rust::aws::s3::writeparse::MissingMeta'>MissingMeta</a>,
-    pub restore: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Restore.html' title='aws_sdk_rust::aws::s3::writeparse::Restore'>Restore</a>,
-    pub sse_customer_algorithm: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.SSECustomerAlgorithm.html' title='aws_sdk_rust::aws::s3::writeparse::SSECustomerAlgorithm'>SSECustomerAlgorithm</a>,
-    pub content_type: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.ContentType.html' title='aws_sdk_rust::aws::s3::header::ContentType'>ContentType</a>,
-    pub content_language: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentLanguage.html' title='aws_sdk_rust::aws::s3::writeparse::ContentLanguage'>ContentLanguage</a>,
-    pub version_id: <a class='type' href='../../../../aws_sdk_rust/aws/s3/object/type.ObjectVersionId.html' title='aws_sdk_rust::aws::s3::object::ObjectVersionId'>ObjectVersionId</a>,
-    pub e_tag: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.ETag.html' title='aws_sdk_rust::aws::s3::header::ETag'>ETag</a>,
-    pub sse_customer_key_md5: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.SSECustomerKeyMD5.html' title='aws_sdk_rust::aws::s3::writeparse::SSECustomerKeyMD5'>SSECustomerKeyMD5</a>,
-}</pre><h2 class='fields'>Fields</h2><span id='structfield.last_modified' class='structfield'>
+    pub last_modified: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.LastModified.html" title="type aws_sdk_rust::aws::s3::writeparse::LastModified">LastModified</a>,
+    pub content_range: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.ContentRange.html" title="type aws_sdk_rust::aws::s3::header::ContentRange">ContentRange</a>,
+    pub request_charged: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.RequestCharged.html" title="type aws_sdk_rust::aws::s3::writeparse::RequestCharged">RequestCharged</a>,
+    pub content_encoding: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentEncoding.html" title="type aws_sdk_rust::aws::s3::writeparse::ContentEncoding">ContentEncoding</a>,
+    pub replication_status: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ReplicationStatus.html" title="type aws_sdk_rust::aws::s3::writeparse::ReplicationStatus">ReplicationStatus</a>,
+    pub storage_class: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.StorageClass.html" title="type aws_sdk_rust::aws::s3::writeparse::StorageClass">StorageClass</a>,
+    pub server_side_encryption: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ServerSideEncryption.html" title="type aws_sdk_rust::aws::s3::writeparse::ServerSideEncryption">ServerSideEncryption</a>,
+    pub ssekms_key_id: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.SSEKMSKeyId.html" title="type aws_sdk_rust::aws::s3::writeparse::SSEKMSKeyId">SSEKMSKeyId</a>,
+    pub content_disposition: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentDisposition.html" title="type aws_sdk_rust::aws::s3::writeparse::ContentDisposition">ContentDisposition</a>,
+    pub metadata: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.Metadata.html" title="type aws_sdk_rust::aws::s3::writeparse::Metadata">Metadata</a>,
+    pub body: <a class="type" href="../../../../aws_sdk_rust/aws/common/common/type.Body.html" title="type aws_sdk_rust::aws::common::common::Body">Body</a>,
+    pub body_buffer: <a class="struct" href="https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html" title="struct collections::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;,
+    pub is_body: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+    pub accept_ranges: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.AcceptRanges.html" title="type aws_sdk_rust::aws::s3::header::AcceptRanges">AcceptRanges</a>,
+    pub website_redirect_location: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.WebsiteRedirectLocation.html" title="type aws_sdk_rust::aws::s3::writeparse::WebsiteRedirectLocation">WebsiteRedirectLocation</a>,
+    pub expires: <a class="type" href="../../../../aws_sdk_rust/aws/s3/object/type.Expires.html" title="type aws_sdk_rust::aws::s3::object::Expires">Expires</a>,
+    pub delete_marker: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.DeleteMarker.html" title="type aws_sdk_rust::aws::s3::writeparse::DeleteMarker">DeleteMarker</a>,
+    pub cache_control: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.CacheControl.html" title="type aws_sdk_rust::aws::s3::writeparse::CacheControl">CacheControl</a>,
+    pub content_length: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentLength.html" title="type aws_sdk_rust::aws::s3::writeparse::ContentLength">ContentLength</a>,
+    pub expiration: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.Expiration.html" title="type aws_sdk_rust::aws::s3::writeparse::Expiration">Expiration</a>,
+    pub missing_meta: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.MissingMeta.html" title="type aws_sdk_rust::aws::s3::writeparse::MissingMeta">MissingMeta</a>,
+    pub restore: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.Restore.html" title="type aws_sdk_rust::aws::s3::writeparse::Restore">Restore</a>,
+    pub sse_customer_algorithm: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.SSECustomerAlgorithm.html" title="type aws_sdk_rust::aws::s3::writeparse::SSECustomerAlgorithm">SSECustomerAlgorithm</a>,
+    pub content_type: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.ContentType.html" title="type aws_sdk_rust::aws::s3::header::ContentType">ContentType</a>,
+    pub content_language: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentLanguage.html" title="type aws_sdk_rust::aws::s3::writeparse::ContentLanguage">ContentLanguage</a>,
+    pub version_id: <a class="type" href="../../../../aws_sdk_rust/aws/s3/object/type.ObjectVersionId.html" title="type aws_sdk_rust::aws::s3::object::ObjectVersionId">ObjectVersionId</a>,
+    pub e_tag: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.ETag.html" title="type aws_sdk_rust::aws::s3::header::ETag">ETag</a>,
+    pub sse_customer_key_md5: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.SSECustomerKeyMD5.html" title="type aws_sdk_rust::aws::s3::writeparse::SSECustomerKeyMD5">SSECustomerKeyMD5</a>,
+}</pre><h2 id='fields' class='fields'>Fields</h2><span id='structfield.last_modified' class="structfield">
                            <span id='last_modified.v' class='invisible'>
-                           <code>last_modified: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.LastModified.html' title='aws_sdk_rust::aws::s3::writeparse::LastModified'>LastModified</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Last modified date of the object</p>
-</div><span id='structfield.content_range' class='structfield'>
+                           <code>last_modified: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.LastModified.html" title="type aws_sdk_rust::aws::s3::writeparse::LastModified">LastModified</a></code>
+                           </span></span><div class='docblock'><p>Last modified date of the object</p>
+</div><span id='structfield.content_range' class="structfield">
                            <span id='content_range.v' class='invisible'>
-                           <code>content_range: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.ContentRange.html' title='aws_sdk_rust::aws::s3::header::ContentRange'>ContentRange</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>The portion of the object returned in the response.</p>
-</div><span id='structfield.request_charged' class='structfield'>
+                           <code>content_range: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.ContentRange.html" title="type aws_sdk_rust::aws::s3::header::ContentRange">ContentRange</a></code>
+                           </span></span><div class='docblock'><p>The portion of the object returned in the response.</p>
+</div><span id='structfield.request_charged' class="structfield">
                            <span id='request_charged.v' class='invisible'>
-                           <code>request_charged: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.RequestCharged.html' title='aws_sdk_rust::aws::s3::writeparse::RequestCharged'>RequestCharged</a></code>
-                           </span></span><span class='stab '></span><span id='structfield.content_encoding' class='structfield'>
+                           <code>request_charged: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.RequestCharged.html" title="type aws_sdk_rust::aws::s3::writeparse::RequestCharged">RequestCharged</a></code>
+                           </span></span><span id='structfield.content_encoding' class="structfield">
                            <span id='content_encoding.v' class='invisible'>
-                           <code>content_encoding: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentEncoding.html' title='aws_sdk_rust::aws::s3::writeparse::ContentEncoding'>ContentEncoding</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Specifies what content encodings have been applied to the object and thus what
+                           <code>content_encoding: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentEncoding.html" title="type aws_sdk_rust::aws::s3::writeparse::ContentEncoding">ContentEncoding</a></code>
+                           </span></span><div class='docblock'><p>Specifies what content encodings have been applied to the object and thus what
 decoding mechanisms must be applied to obtain the media-type referenced by the
 Content-Type header field.</p>
-</div><span id='structfield.replication_status' class='structfield'>
+</div><span id='structfield.replication_status' class="structfield">
                            <span id='replication_status.v' class='invisible'>
-                           <code>replication_status: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ReplicationStatus.html' title='aws_sdk_rust::aws::s3::writeparse::ReplicationStatus'>ReplicationStatus</a></code>
-                           </span></span><span class='stab '></span><span id='structfield.storage_class' class='structfield'>
+                           <code>replication_status: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ReplicationStatus.html" title="type aws_sdk_rust::aws::s3::writeparse::ReplicationStatus">ReplicationStatus</a></code>
+                           </span></span><span id='structfield.storage_class' class="structfield">
                            <span id='storage_class.v' class='invisible'>
-                           <code>storage_class: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.StorageClass.html' title='aws_sdk_rust::aws::s3::writeparse::StorageClass'>StorageClass</a></code>
-                           </span></span><span class='stab '></span><span id='structfield.server_side_encryption' class='structfield'>
+                           <code>storage_class: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.StorageClass.html" title="type aws_sdk_rust::aws::s3::writeparse::StorageClass">StorageClass</a></code>
+                           </span></span><span id='structfield.server_side_encryption' class="structfield">
                            <span id='server_side_encryption.v' class='invisible'>
-                           <code>server_side_encryption: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ServerSideEncryption.html' title='aws_sdk_rust::aws::s3::writeparse::ServerSideEncryption'>ServerSideEncryption</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>The Server-side encryption algorithm used when storing this object in S3
+                           <code>server_side_encryption: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ServerSideEncryption.html" title="type aws_sdk_rust::aws::s3::writeparse::ServerSideEncryption">ServerSideEncryption</a></code>
+                           </span></span><div class='docblock'><p>The Server-side encryption algorithm used when storing this object in S3
 (e.g., AES256, aws:kms).</p>
-</div><span id='structfield.ssekms_key_id' class='structfield'>
+</div><span id='structfield.ssekms_key_id' class="structfield">
                            <span id='ssekms_key_id.v' class='invisible'>
-                           <code>ssekms_key_id: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.SSEKMSKeyId.html' title='aws_sdk_rust::aws::s3::writeparse::SSEKMSKeyId'>SSEKMSKeyId</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>If present, specifies the ID of the AWS Key Management Service (KMS) master
+                           <code>ssekms_key_id: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.SSEKMSKeyId.html" title="type aws_sdk_rust::aws::s3::writeparse::SSEKMSKeyId">SSEKMSKeyId</a></code>
+                           </span></span><div class='docblock'><p>If present, specifies the ID of the AWS Key Management Service (KMS) master
 encryption key that was used for the object.</p>
-</div><span id='structfield.content_disposition' class='structfield'>
+</div><span id='structfield.content_disposition' class="structfield">
                            <span id='content_disposition.v' class='invisible'>
-                           <code>content_disposition: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentDisposition.html' title='aws_sdk_rust::aws::s3::writeparse::ContentDisposition'>ContentDisposition</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Specifies presentational information for the object.</p>
-</div><span id='structfield.metadata' class='structfield'>
+                           <code>content_disposition: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentDisposition.html" title="type aws_sdk_rust::aws::s3::writeparse::ContentDisposition">ContentDisposition</a></code>
+                           </span></span><div class='docblock'><p>Specifies presentational information for the object.</p>
+</div><span id='structfield.metadata' class="structfield">
                            <span id='metadata.v' class='invisible'>
-                           <code>metadata: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Metadata.html' title='aws_sdk_rust::aws::s3::writeparse::Metadata'>Metadata</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>A map of metadata to store with the object in S3.</p>
-</div><span id='structfield.body' class='structfield'>
+                           <code>metadata: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.Metadata.html" title="type aws_sdk_rust::aws::s3::writeparse::Metadata">Metadata</a></code>
+                           </span></span><div class='docblock'><p>A map of metadata to store with the object in S3.</p>
+</div><span id='structfield.body' class="structfield">
                            <span id='body.v' class='invisible'>
-                           <code>body: <a class='type' href='../../../../aws_sdk_rust/aws/common/common/type.Body.html' title='aws_sdk_rust::aws::common::common::Body'>Body</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Object data.</p>
-</div><span id='structfield.body_buffer' class='structfield'>
+                           <code>body: <a class="type" href="../../../../aws_sdk_rust/aws/common/common/type.Body.html" title="type aws_sdk_rust::aws::common::common::Body">Body</a></code>
+                           </span></span><div class='docblock'><p>Object data.</p>
+</div><span id='structfield.body_buffer' class="structfield">
                            <span id='body_buffer.v' class='invisible'>
-                           <code>body_buffer: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;</code>
-                           </span></span><span class='stab '></span><span id='structfield.is_body' class='structfield'>
+                           <code>body_buffer: <a class="struct" href="https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html" title="struct collections::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;</code>
+                           </span></span><span id='structfield.is_body' class="structfield">
                            <span id='is_body.v' class='invisible'>
-                           <code>is_body: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code>
-                           </span></span><span class='stab '></span><span id='structfield.accept_ranges' class='structfield'>
+                           <code>is_body: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code>
+                           </span></span><span id='structfield.accept_ranges' class="structfield">
                            <span id='accept_ranges.v' class='invisible'>
-                           <code>accept_ranges: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.AcceptRanges.html' title='aws_sdk_rust::aws::s3::header::AcceptRanges'>AcceptRanges</a></code>
-                           </span></span><span class='stab '></span><span id='structfield.website_redirect_location' class='structfield'>
+                           <code>accept_ranges: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.AcceptRanges.html" title="type aws_sdk_rust::aws::s3::header::AcceptRanges">AcceptRanges</a></code>
+                           </span></span><span id='structfield.website_redirect_location' class="structfield">
                            <span id='website_redirect_location.v' class='invisible'>
-                           <code>website_redirect_location: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.WebsiteRedirectLocation.html' title='aws_sdk_rust::aws::s3::writeparse::WebsiteRedirectLocation'>WebsiteRedirectLocation</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>If the bucket is configured as a website, redirects requests for this object
+                           <code>website_redirect_location: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.WebsiteRedirectLocation.html" title="type aws_sdk_rust::aws::s3::writeparse::WebsiteRedirectLocation">WebsiteRedirectLocation</a></code>
+                           </span></span><div class='docblock'><p>If the bucket is configured as a website, redirects requests for this object
 to another object in the same bucket or to an external URL. Amazon S3 stores
 the value of this header in the object metadata.</p>
-</div><span id='structfield.expires' class='structfield'>
+</div><span id='structfield.expires' class="structfield">
                            <span id='expires.v' class='invisible'>
-                           <code>expires: <a class='type' href='../../../../aws_sdk_rust/aws/s3/object/type.Expires.html' title='aws_sdk_rust::aws::s3::object::Expires'>Expires</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>The date and time at which the object is no longer cacheable.</p>
-</div><span id='structfield.delete_marker' class='structfield'>
+                           <code>expires: <a class="type" href="../../../../aws_sdk_rust/aws/s3/object/type.Expires.html" title="type aws_sdk_rust::aws::s3::object::Expires">Expires</a></code>
+                           </span></span><div class='docblock'><p>The date and time at which the object is no longer cacheable.</p>
+</div><span id='structfield.delete_marker' class="structfield">
                            <span id='delete_marker.v' class='invisible'>
-                           <code>delete_marker: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.DeleteMarker.html' title='aws_sdk_rust::aws::s3::writeparse::DeleteMarker'>DeleteMarker</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Specifies whether the object retrieved was (true) or was not (false) a Delete
+                           <code>delete_marker: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.DeleteMarker.html" title="type aws_sdk_rust::aws::s3::writeparse::DeleteMarker">DeleteMarker</a></code>
+                           </span></span><div class='docblock'><p>Specifies whether the object retrieved was (true) or was not (false) a Delete
 Marker. If false, this response header does not appear in the response.</p>
-</div><span id='structfield.cache_control' class='structfield'>
+</div><span id='structfield.cache_control' class="structfield">
                            <span id='cache_control.v' class='invisible'>
-                           <code>cache_control: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.CacheControl.html' title='aws_sdk_rust::aws::s3::writeparse::CacheControl'>CacheControl</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Specifies caching behavior along the request/reply chain.</p>
-</div><span id='structfield.content_length' class='structfield'>
+                           <code>cache_control: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.CacheControl.html" title="type aws_sdk_rust::aws::s3::writeparse::CacheControl">CacheControl</a></code>
+                           </span></span><div class='docblock'><p>Specifies caching behavior along the request/reply chain.</p>
+</div><span id='structfield.content_length' class="structfield">
                            <span id='content_length.v' class='invisible'>
-                           <code>content_length: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentLength.html' title='aws_sdk_rust::aws::s3::writeparse::ContentLength'>ContentLength</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Size of the body in bytes.</p>
-</div><span id='structfield.expiration' class='structfield'>
+                           <code>content_length: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentLength.html" title="type aws_sdk_rust::aws::s3::writeparse::ContentLength">ContentLength</a></code>
+                           </span></span><div class='docblock'><p>Size of the body in bytes.</p>
+</div><span id='structfield.expiration' class="structfield">
                            <span id='expiration.v' class='invisible'>
-                           <code>expiration: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Expiration.html' title='aws_sdk_rust::aws::s3::writeparse::Expiration'>Expiration</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>If the object expiration is configured (see PUT Bucket lifecycle), the
+                           <code>expiration: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.Expiration.html" title="type aws_sdk_rust::aws::s3::writeparse::Expiration">Expiration</a></code>
+                           </span></span><div class='docblock'><p>If the object expiration is configured (see PUT Bucket lifecycle), the
 response includes this header. It includes the expiry-date and rule-id key
 value pairs providing object expiration information. The value of the rule-id
 is URL encoded.</p>
-</div><span id='structfield.missing_meta' class='structfield'>
+</div><span id='structfield.missing_meta' class="structfield">
                            <span id='missing_meta.v' class='invisible'>
-                           <code>missing_meta: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.MissingMeta.html' title='aws_sdk_rust::aws::s3::writeparse::MissingMeta'>MissingMeta</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>This is set to the number of metadata entries not returned in x-amz-meta
+                           <code>missing_meta: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.MissingMeta.html" title="type aws_sdk_rust::aws::s3::writeparse::MissingMeta">MissingMeta</a></code>
+                           </span></span><div class='docblock'><p>This is set to the number of metadata entries not returned in x-amz-meta
 headers. This can happen if you create metadata using an API like SOAP that
 supports more flexible metadata than the REST API. For example, using SOAP,
 you can create metadata whose values are not legal HTTP headers.</p>
-</div><span id='structfield.restore' class='structfield'>
+</div><span id='structfield.restore' class="structfield">
                            <span id='restore.v' class='invisible'>
-                           <code>restore: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Restore.html' title='aws_sdk_rust::aws::s3::writeparse::Restore'>Restore</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Provides information about object restoration operation and expiration time of
+                           <code>restore: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.Restore.html" title="type aws_sdk_rust::aws::s3::writeparse::Restore">Restore</a></code>
+                           </span></span><div class='docblock'><p>Provides information about object restoration operation and expiration time of
 the restored object copy.</p>
-</div><span id='structfield.sse_customer_algorithm' class='structfield'>
+</div><span id='structfield.sse_customer_algorithm' class="structfield">
                            <span id='sse_customer_algorithm.v' class='invisible'>
-                           <code>sse_customer_algorithm: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.SSECustomerAlgorithm.html' title='aws_sdk_rust::aws::s3::writeparse::SSECustomerAlgorithm'>SSECustomerAlgorithm</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>If server-side encryption with a customer-provided encryption key was
+                           <code>sse_customer_algorithm: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.SSECustomerAlgorithm.html" title="type aws_sdk_rust::aws::s3::writeparse::SSECustomerAlgorithm">SSECustomerAlgorithm</a></code>
+                           </span></span><div class='docblock'><p>If server-side encryption with a customer-provided encryption key was
 requested, the response will include this header confirming the encryption
 algorithm used.</p>
-</div><span id='structfield.content_type' class='structfield'>
+</div><span id='structfield.content_type' class="structfield">
                            <span id='content_type.v' class='invisible'>
-                           <code>content_type: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.ContentType.html' title='aws_sdk_rust::aws::s3::header::ContentType'>ContentType</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>A standard MIME type describing the format of the object data.</p>
-</div><span id='structfield.content_language' class='structfield'>
+                           <code>content_type: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.ContentType.html" title="type aws_sdk_rust::aws::s3::header::ContentType">ContentType</a></code>
+                           </span></span><div class='docblock'><p>A standard MIME type describing the format of the object data.</p>
+</div><span id='structfield.content_language' class="structfield">
                            <span id='content_language.v' class='invisible'>
-                           <code>content_language: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentLanguage.html' title='aws_sdk_rust::aws::s3::writeparse::ContentLanguage'>ContentLanguage</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>The language the content is in.</p>
-</div><span id='structfield.version_id' class='structfield'>
+                           <code>content_language: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ContentLanguage.html" title="type aws_sdk_rust::aws::s3::writeparse::ContentLanguage">ContentLanguage</a></code>
+                           </span></span><div class='docblock'><p>The language the content is in.</p>
+</div><span id='structfield.version_id' class="structfield">
                            <span id='version_id.v' class='invisible'>
-                           <code>version_id: <a class='type' href='../../../../aws_sdk_rust/aws/s3/object/type.ObjectVersionId.html' title='aws_sdk_rust::aws::s3::object::ObjectVersionId'>ObjectVersionId</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Version of the object.</p>
-</div><span id='structfield.e_tag' class='structfield'>
+                           <code>version_id: <a class="type" href="../../../../aws_sdk_rust/aws/s3/object/type.ObjectVersionId.html" title="type aws_sdk_rust::aws::s3::object::ObjectVersionId">ObjectVersionId</a></code>
+                           </span></span><div class='docblock'><p>Version of the object.</p>
+</div><span id='structfield.e_tag' class="structfield">
                            <span id='e_tag.v' class='invisible'>
-                           <code>e_tag: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.ETag.html' title='aws_sdk_rust::aws::s3::header::ETag'>ETag</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>An ETag is an opaque identifier assigned by a web server to a specific version
+                           <code>e_tag: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.ETag.html" title="type aws_sdk_rust::aws::s3::header::ETag">ETag</a></code>
+                           </span></span><div class='docblock'><p>An ETag is an opaque identifier assigned by a web server to a specific version
 of a resource found at a URL</p>
-</div><span id='structfield.sse_customer_key_md5' class='structfield'>
+</div><span id='structfield.sse_customer_key_md5' class="structfield">
                            <span id='sse_customer_key_md5.v' class='invisible'>
-                           <code>sse_customer_key_md5: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.SSECustomerKeyMD5.html' title='aws_sdk_rust::aws::s3::writeparse::SSECustomerKeyMD5'>SSECustomerKeyMD5</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>If server-side encryption with a customer-provided encryption key was
+                           <code>sse_customer_key_md5: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.SSECustomerKeyMD5.html" title="type aws_sdk_rust::aws::s3::writeparse::SSECustomerKeyMD5">SSECustomerKeyMD5</a></code>
+                           </span></span><div class='docblock'><p>If server-side encryption with a customer-provided encryption key was
 requested, the response will include this header to provide round trip message
 integrity verification of the customer-provided encryption key.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html' title='aws_sdk_rust::aws::s3::object::GetObjectOutput'>GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-3015' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#3863-3871' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.get_body' class='method'><span id='get_body.v' class='invisible'><code>fn <a href='#method.get_body' class='fnname'>get_body</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a></code></span></h4>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html' title='aws_sdk_rust::aws::s3::object::GetObjectOutput'>GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-9806' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#487' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class="struct" href="../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html" title="struct aws_sdk_rust::aws::s3::object::GetObjectOutput">GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/object.rs.html#3863-3871' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.get_body' class="method"><span id='get_body.v' class='invisible'><code>fn <a href='#method.get_body' class='fnname'>get_body</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html" title="struct aws_sdk_rust::aws::s3::object::GetObjectOutput">GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/object.rs.html#487' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span></h4>
 <div class='docblock'><p>Formats the value using the given formatter.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html' title='aws_sdk_rust::aws::s3::object::GetObjectOutput'>GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-9839' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#487' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.default' class='method'><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html' title='aws_sdk_rust::aws::s3::object::GetObjectOutput'>GetObjectOutput</a></code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html" title="trait core::default::Default">Default</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html" title="struct aws_sdk_rust::aws::s3::object::GetObjectOutput">GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/object.rs.html#487' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class="method"><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class="struct" href="../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html" title="struct aws_sdk_rust::aws::s3::object::GetObjectOutput">GetObjectOutput</a></code></span></h4>
 <div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html' title='rustc_serialize::serialize::Decodable'>Decodable</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html' title='aws_sdk_rust::aws::s3::object::GetObjectOutput'>GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-9841' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#487' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.decode' class='method'><span id='decode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;__D:&nbsp;<a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html' title='rustc_serialize::serialize::Decoder'>Decoder</a>&gt;(__arg_0: &amp;mut __D)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html' title='aws_sdk_rust::aws::s3::object::GetObjectOutput'>GetObjectOutput</a>, __D::Error&gt;</code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html" title="trait rustc_serialize::serialize::Decodable">Decodable</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html" title="struct aws_sdk_rust::aws::s3::object::GetObjectOutput">GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/object.rs.html#487' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.decode' class="method"><span id='decode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;__D:&nbsp;<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html" title="trait rustc_serialize::serialize::Decoder">Decoder</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;__arg_0: &amp;mut __D<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html" title="struct aws_sdk_rust::aws::s3::object::GetObjectOutput">GetObjectOutput</a>, __D::<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html" title="trait rustc_serialize::serialize::Decoder">Error</a>&gt;</code></span></h4>
 <div class='docblock'><p>Deserialize a value using a <code>Decoder</code>.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html' title='rustc_serialize::serialize::Encodable'>Encodable</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html' title='aws_sdk_rust::aws::s3::object::GetObjectOutput'>GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-9903' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/object.rs.html#487' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.encode' class='method'><span id='encode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html#tymethod.encode' class='fnname'>encode</a>&lt;__S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html' title='rustc_serialize::serialize::Encoder'>Encoder</a>&gt;(&amp;self, __arg_0: &amp;mut __S) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, __S::Error&gt;</code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html" title="trait rustc_serialize::serialize::Encodable">Encodable</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/object/struct.GetObjectOutput.html" title="struct aws_sdk_rust::aws::s3::object::GetObjectOutput">GetObjectOutput</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/object.rs.html#487' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.encode' class="method"><span id='encode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html#tymethod.encode' class='fnname'>encode</a>&lt;__S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html" title="trait rustc_serialize::serialize::Encoder">Encoder</a>&gt;(&amp;self, __arg_0: &amp;mut __S) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>, __S::<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html" title="trait rustc_serialize::serialize::Encoder">Error</a>&gt;</code></span></h4>
 <div class='docblock'><p>Serialize a value using an <code>Encoder</code>.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
@@ -273,7 +274,6 @@ integrity verification of the customer-provided encryption key.</p>
         window.rootPath = "../../../../";
         window.currentCrate = "aws_sdk_rust";
     </script>
-    <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     <script defer src="../../../../search-index.js"></script>
 </body>

@@ -9,6 +9,7 @@
 
     <title>aws_sdk_rust::aws::s3::admin::AdminRequest - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
     
@@ -16,7 +17,7 @@
     <link rel="shortcut icon" href="https://lambdastackio.github.io/static/images/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc struct">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -28,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../../../../aws_sdk_rust/index.html'><img src='https://lambdastackio.github.io/static/images/lambdastack-200x200.png' alt='logo' width='100'></a>
-        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>admin</a></p><script>window.sidebarCurrent = {name: 'AdminRequest', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct AdminRequest</p><div class="block items"><ul><li><a href="#fields">Fields</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>admin</a></p><script>window.sidebarCurrent = {name: 'AdminRequest', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,80 +43,80 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>admin</a>::<wbr><a class='struct' href=''>AdminRequest</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>admin</a>::<wbr><a class="struct" href=''>AdminRequest</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-17493' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/admin.rs.html#28-52' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/admin.rs.html#28-52' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct AdminRequest {
-    pub method: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
-    pub admin_path: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
-    pub path_options: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
-    pub uid: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
-    pub bucket: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
-    pub object: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
-    pub params: <a class='type' href='../../../../aws_sdk_rust/aws/common/params/type.Params.html' title='aws_sdk_rust::aws::common::params::Params'>Params</a>,
-    pub endpoint: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/endpoint/struct.Endpoint.html' title='aws_sdk_rust::aws::s3::endpoint::Endpoint'>Endpoint</a>&gt;,
-    pub access_key: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
-    pub secret_key: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
-    pub format: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='enum' href='../../../../aws_sdk_rust/aws/s3/admin/enum.AdminOutputType.html' title='aws_sdk_rust::aws::s3::admin::AdminOutputType'>AdminOutputType</a>&gt;,
+    pub method: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;,
+    pub admin_path: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;,
+    pub path_options: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;,
+    pub uid: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;,
+    pub bucket: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;,
+    pub object: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;,
+    pub params: <a class="type" href="../../../../aws_sdk_rust/aws/common/params/type.Params.html" title="type aws_sdk_rust::aws::common::params::Params">Params</a>,
+    pub endpoint: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../../../../aws_sdk_rust/aws/s3/endpoint/struct.Endpoint.html" title="struct aws_sdk_rust::aws::s3::endpoint::Endpoint">Endpoint</a>&gt;,
+    pub access_key: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;,
+    pub secret_key: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;,
+    pub format: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="enum" href="../../../../aws_sdk_rust/aws/s3/admin/enum.AdminOutputType.html" title="enum aws_sdk_rust::aws::s3::admin::AdminOutputType">AdminOutputType</a>&gt;,
 }</pre><div class='docblock'><p>Admin request for Ceph RGW Admin</p>
-</div><h2 class='fields'>Fields</h2><span id='structfield.method' class='structfield'>
+</div><h2 id='fields' class='fields'>Fields</h2><span id='structfield.method' class="structfield">
                            <span id='method.v' class='invisible'>
-                           <code>method: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Defaults to GET</p>
-</div><span id='structfield.admin_path' class='structfield'>
+                           <code>method: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Defaults to GET</p>
+</div><span id='structfield.admin_path' class="structfield">
                            <span id='admin_path.v' class='invisible'>
-                           <code>admin_path: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Specify the path using the default &#39;admin&#39;. For example, admin/bucket etc.</p>
-</div><span id='structfield.path_options' class='structfield'>
+                           <code>admin_path: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Specify the path using the default &#39;admin&#39;. For example, admin/bucket etc.</p>
+</div><span id='structfield.path_options' class="structfield">
                            <span id='path_options.v' class='invisible'>
-                           <code>path_options: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Allows for speacial path option that does NOT have a value but only a key like
+                           <code>path_options: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Allows for speacial path option that does NOT have a value but only a key like
 <code>admin/user?quota</code> where you would admin/user in admin_path and quota in path_options.</p>
-</div><span id='structfield.uid' class='structfield'>
+</div><span id='structfield.uid' class="structfield">
                            <span id='uid.v' class='invisible'>
-                           <code>uid: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>User&#39;s ID</p>
-</div><span id='structfield.bucket' class='structfield'>
+                           <code>uid: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;</code>
+                           </span></span><div class='docblock'><p>User&#39;s ID</p>
+</div><span id='structfield.bucket' class="structfield">
                            <span id='bucket.v' class='invisible'>
-                           <code>bucket: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Name of bucket</p>
-</div><span id='structfield.object' class='structfield'>
+                           <code>bucket: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Name of bucket</p>
+</div><span id='structfield.object' class="structfield">
                            <span id='object.v' class='invisible'>
-                           <code>object: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Name of Object</p>
-</div><span id='structfield.params' class='structfield'>
+                           <code>object: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Name of Object</p>
+</div><span id='structfield.params' class="structfield">
                            <span id='params.v' class='invisible'>
-                           <code>params: <a class='type' href='../../../../aws_sdk_rust/aws/common/params/type.Params.html' title='aws_sdk_rust::aws::common::params::Params'>Params</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Parameters used in the query string</p>
-</div><span id='structfield.endpoint' class='structfield'>
+                           <code>params: <a class="type" href="../../../../aws_sdk_rust/aws/common/params/type.Params.html" title="type aws_sdk_rust::aws::common::params::Params">Params</a></code>
+                           </span></span><div class='docblock'><p>Parameters used in the query string</p>
+</div><span id='structfield.endpoint' class="structfield">
                            <span id='endpoint.v' class='invisible'>
-                           <code>endpoint: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/endpoint/struct.Endpoint.html' title='aws_sdk_rust::aws::s3::endpoint::Endpoint'>Endpoint</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Endpoint that can override the default</p>
-</div><span id='structfield.access_key' class='structfield'>
+                           <code>endpoint: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../../../../aws_sdk_rust/aws/s3/endpoint/struct.Endpoint.html" title="struct aws_sdk_rust::aws::s3::endpoint::Endpoint">Endpoint</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Endpoint that can override the default</p>
+</div><span id='structfield.access_key' class="structfield">
                            <span id='access_key.v' class='invisible'>
-                           <code>access_key: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Access key ID</p>
-</div><span id='structfield.secret_key' class='structfield'>
+                           <code>access_key: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Access key ID</p>
+</div><span id='structfield.secret_key' class="structfield">
                            <span id='secret_key.v' class='invisible'>
-                           <code>secret_key: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Secret key ID</p>
-</div><span id='structfield.format' class='structfield'>
+                           <code>secret_key: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Secret key ID</p>
+</div><span id='structfield.format' class="structfield">
                            <span id='format.v' class='invisible'>
-                           <code>format: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='enum' href='../../../../aws_sdk_rust/aws/s3/admin/enum.AdminOutputType.html' title='aws_sdk_rust::aws::s3::admin::AdminOutputType'>AdminOutputType</a>&gt;</code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Output format (JSON or XML). Default is JSON</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html' title='aws_sdk_rust::aws::s3::admin::AdminRequest'>AdminRequest</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-17505' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/admin.rs.html#27' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+                           <code>format: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="enum" href="../../../../aws_sdk_rust/aws/s3/admin/enum.AdminOutputType.html" title="enum aws_sdk_rust::aws::s3::admin::AdminOutputType">AdminOutputType</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Output format (JSON or XML). Default is JSON</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html" title="struct aws_sdk_rust::aws::s3::admin::AdminRequest">AdminRequest</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/admin.rs.html#27' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span></h4>
 <div class='docblock'><p>Formats the value using the given formatter.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html' title='aws_sdk_rust::aws::s3::admin::AdminRequest'>AdminRequest</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-17521' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/admin.rs.html#27' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html' title='aws_sdk_rust::aws::s3::admin::AdminRequest'>AdminRequest</a></code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html" title="struct aws_sdk_rust::aws::s3::admin::AdminRequest">AdminRequest</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/admin.rs.html#27' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html" title="struct aws_sdk_rust::aws::s3::admin::AdminRequest">AdminRequest</a></code></span></h4>
 <div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
-</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
 <div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html' title='aws_sdk_rust::aws::s3::admin::AdminRequest'>AdminRequest</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-17535' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/admin.rs.html#27' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.default' class='method'><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html' title='aws_sdk_rust::aws::s3::admin::AdminRequest'>AdminRequest</a></code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html" title="trait core::default::Default">Default</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html" title="struct aws_sdk_rust::aws::s3::admin::AdminRequest">AdminRequest</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/admin.rs.html#27' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class="method"><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class="struct" href="../../../../aws_sdk_rust/aws/s3/admin/struct.AdminRequest.html" title="struct aws_sdk_rust::aws::s3::admin::AdminRequest">AdminRequest</a></code></span></h4>
 <div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
@@ -174,7 +175,6 @@
         window.rootPath = "../../../../";
         window.currentCrate = "aws_sdk_rust";
     </script>
-    <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     <script defer src="../../../../search-index.js"></script>
 </body>

@@ -1,4 +1,4 @@
-// Copyright 2016 LambdaStack All rights reserved.
+// Copyright 2017 LambdaStack All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ use hyper::client::{Client, ProxyConfig, RedirectPolicy};
 use hyper::net::HttpsConnector;
 use hyper_openssl::OpensslClient;
 use url::Url;
-use xml::reader::EventReader;
+use xml::EventReader;
 use chrono::{self, UTC};
 
 use aws::common::credentials::{AwsCredentials, AwsCredentialsProvider};
@@ -227,7 +227,7 @@ impl<P, D> S3Client<P, D>
             },
             _ => {
                 let mut reader = EventReader::from_str(&result.body);
-                let mut stack = XmlResponse::new(reader.events().peekable());
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 stack.next(); // xml start tag
 
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
@@ -257,7 +257,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         //let mut reader = EventReader::from_str(&result.body);
-        //let mut stack = XmlResponse::new(reader.events().peekable());
+        //let mut stack = XmlResponse::new(reader.into_iter().peekable());
         //stack.next(); // xml start tag
         //stack.next();
 
@@ -289,7 +289,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
 
         stack.next(); // xml start tag
 
@@ -330,7 +330,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -371,7 +371,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -411,7 +411,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -450,7 +450,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -491,7 +491,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -532,7 +532,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -582,7 +582,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -622,7 +622,7 @@ impl<P, D> S3Client<P, D>
             },
             _ => {
                 let mut reader = EventReader::from_str(&result.body);
-                let mut stack = XmlResponse::new(reader.events().peekable());
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 stack.next(); // xml start tag
 
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
@@ -656,7 +656,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -696,7 +696,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -736,7 +736,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -776,7 +776,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -816,7 +816,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -856,7 +856,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -899,7 +899,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -943,7 +943,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -988,7 +988,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -1032,7 +1032,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
 
         stack.next(); // xml start tag
         match status {
@@ -1080,7 +1080,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         match status {
             200 => {
@@ -1175,7 +1175,7 @@ impl<P, D> S3Client<P, D>
             },
             _ => {
                 let mut reader = EventReader::from_str(&result.body);
-                let mut stack = XmlResponse::new(reader.events().peekable());
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 stack.next(); // xml start tag
 
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
@@ -1219,7 +1219,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         match status {
             200 => {
@@ -1422,7 +1422,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -1510,7 +1510,7 @@ impl<P, D> S3Client<P, D>
             },
             _ => {
                 let mut reader = EventReader::from_str(&result.body);
-                let mut stack = XmlResponse::new(reader.events().peekable());
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 stack.next(); // xml start tag
 
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
@@ -1564,7 +1564,7 @@ impl<P, D> S3Client<P, D>
         let status = result.status;
 
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -1632,7 +1632,7 @@ impl<P, D> S3Client<P, D>
             },
             _ => {
                 let mut reader = EventReader::from_str(&result.body);
-                let mut stack = XmlResponse::new(reader.events().peekable());
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 stack.next(); // xml start tag
 
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
@@ -1679,7 +1679,7 @@ impl<P, D> S3Client<P, D>
         let status = result.status;
 
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -1716,7 +1716,7 @@ impl<P, D> S3Client<P, D>
         let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -1763,7 +1763,7 @@ impl<P, D> S3Client<P, D>
         let status = result.status;
 
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -1813,7 +1813,7 @@ impl<P, D> S3Client<P, D>
         let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
 
         match status {
@@ -1856,7 +1856,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
         stack.next(); // xml start tag
         stack.next();
 
@@ -1955,7 +1955,7 @@ impl<P, D> S3Client<P, D>
             },
             _ => {
                 let mut reader = EventReader::from_str(&result.body);
-                let mut stack = XmlResponse::new(reader.events().peekable());
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 stack.next(); // xml start tag
 
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
@@ -2006,7 +2006,7 @@ impl<P, D> S3Client<P, D>
             }
             _ => {
                 let mut reader = EventReader::from_str(&result.body);
-                let mut stack = XmlResponse::new(reader.events().peekable());
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 stack.next(); // xml start tag
 
                 let aws = try!(AWSError::parse_xml("Error", &mut stack));
@@ -2040,7 +2040,7 @@ impl<P, D> S3Client<P, D>
                                       try!(self.credentials_provider.credentials()));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
 
         stack.next(); // xml start tag
 
@@ -2153,7 +2153,7 @@ impl<P, D> S3Client<P, D>
 /// `extract_s3_redirect_location` takes a Hyper `Response` and attempts to pull out the temporary endpoint.
 fn extract_s3_redirect_location(response: HttpResponse) -> Result<String, S3Error> {
     let mut reader = EventReader::from_str(&response.body);
-    let mut stack = XmlResponse::new(reader.events().peekable());
+    let mut stack = XmlResponse::new(reader.into_iter().peekable());
     stack.next(); // xml start tag
 
     // extract and return temporary endpoint location

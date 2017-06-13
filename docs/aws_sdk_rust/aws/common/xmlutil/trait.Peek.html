@@ -9,6 +9,7 @@
 
     <title>aws_sdk_rust::aws::common::xmlutil::Peek - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
     
@@ -16,7 +17,7 @@
     <link rel="shortcut icon" href="https://lambdastackio.github.io/static/images/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc trait">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -28,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../../../../aws_sdk_rust/index.html'><img src='https://lambdastackio.github.io/static/images/lambdastack-200x200.png' alt='logo' width='100'></a>
-        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a>::<wbr><a href='index.html'>xmlutil</a></p><script>window.sidebarCurrent = {name: 'Peek', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait Peek</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a>::<wbr><a href='index.html'>xmlutil</a></p><script>window.sidebarCurrent = {name: 'Peek', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,22 +43,22 @@
         </form>
     </nav>
 
-    <section id='main' class="content trait">
-<h1 class='fqn'><span class='in-band'>Trait <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a>::<wbr><a href='index.html'>xmlutil</a>::<wbr><a class='trait' href=''>Peek</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Trait <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>common</a>::<wbr><a href='index.html'>xmlutil</a>::<wbr><a class="trait" href=''>Peek</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-575' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/common/xmlutil.rs.html#87-89' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../../../src/aws_sdk_rust/aws/common/xmlutil.rs.html#87-90' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait Peek {
-    fn <a href='#tymethod.peek' class='fnname'>peek</a>(&amp;mut self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;XmlEvent&gt;;
+    fn <a href='#tymethod.peek' class='fnname'>peek</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;XmlEvent, Error&gt;&gt;;
 }</pre><div class='docblock'><p>Peek at next items in the XML stack</p>
 </div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.peek' class='method stab '><span id='peek.v' class='invisible'><code>fn <a href='#tymethod.peek' class='fnname'>peek</a>(&amp;mut self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;XmlEvent&gt;</code></span></h3></div>
+        <h3 id='tymethod.peek' class='method'><span id='peek.v' class='invisible'><code>fn <a href='#tymethod.peek' class='fnname'>peek</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;XmlEvent, Error&gt;&gt;</code></span></h3></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;'b&gt; Peek for <a class='struct' href='../../../../aws_sdk_rust/aws/common/xmlutil/struct.XmlResponse.html' title='aws_sdk_rust::aws::common::xmlutil::XmlResponse'>XmlResponse</a>&lt;'b&gt;</code></li>
+    <li><code>impl&lt;'b&gt; Peek for <a class="struct" href="../../../../aws_sdk_rust/aws/common/xmlutil/struct.XmlResponse.html" title="struct aws_sdk_rust::aws::common::xmlutil::XmlResponse">XmlResponse</a>&lt;'b&gt;</code></li>
 </ul><script type="text/javascript" async
                          src="../../../../implementors/aws_sdk_rust/aws/common/xmlutil/trait.Peek.js">
                  </script></section>
@@ -117,7 +118,6 @@
         window.rootPath = "../../../../";
         window.currentCrate = "aws_sdk_rust";
     </script>
-    <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     <script defer src="../../../../search-index.js"></script>
 </body>
