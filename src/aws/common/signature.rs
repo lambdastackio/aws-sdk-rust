@@ -1,4 +1,4 @@
-// Copyright 2016 LambdaStack All rights reserved.
+// Copyright 2017 LambdaStack All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ use std::io::prelude::*;
 use openssl::sign::Signer;
 use openssl::hash::MessageDigest;
 use openssl::pkey::PKey;
-use openssl::hash::hash;
+use openssl::hash::hash2;
 use rustc_serialize::hex::ToHex;
 use rustc_serialize::base64::{STANDARD, ToBase64};
 use time::Tm;
@@ -435,7 +435,7 @@ impl<'a> SignedRequest<'a> {
 
         self.add_header("content-type", &ct);
 
-        // use the hashed canonical request to build the string to sign
+        // use the ed canonical request to build the string to sign
         let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
         let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), self.region, &self.service);
         let string_to_sign = string_to_sign_v4(date, &hashed_canonical_request, &scope);
@@ -599,12 +599,12 @@ fn byte_serialize(input: &str) -> String {
 }
 
 fn to_hexdigest_from_string(val: &str) -> String {
-    let h = hash(MessageDigest::sha256(), val.as_bytes()).unwrap();
+    let h = hash2(MessageDigest::sha256(), val.as_bytes()).unwrap();
     h.to_hex().to_string()
 }
 
 fn to_hexdigest_from_bytes(val: &[u8]) -> String {
-    let h = hash(MessageDigest::sha256(), val).unwrap();
+    let h = hash2(MessageDigest::sha256(), val).unwrap();
     h.to_hex().to_string()
 }
 

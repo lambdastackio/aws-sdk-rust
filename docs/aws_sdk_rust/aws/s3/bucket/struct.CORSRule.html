@@ -9,6 +9,7 @@
 
     <title>aws_sdk_rust::aws::s3::bucket::CORSRule - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
     
@@ -16,7 +17,7 @@
     <link rel="shortcut icon" href="https://lambdastackio.github.io/static/images/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc struct">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -28,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../../../../aws_sdk_rust/index.html'><img src='https://lambdastackio.github.io/static/images/lambdastack-200x200.png' alt='logo' width='100'></a>
-        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>bucket</a></p><script>window.sidebarCurrent = {name: 'CORSRule', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct CORSRule</p><div class="block items"><ul><li><a href="#fields">Fields</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>bucket</a></p><script>window.sidebarCurrent = {name: 'CORSRule', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,53 +43,53 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>bucket</a>::<wbr><a class='struct' href=''>CORSRule</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>bucket</a>::<wbr><a class="struct" href=''>CORSRule</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-8455' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#242-257' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#242-257' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct CORSRule {
-    pub allowed_headers: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.AllowedHeaders.html' title='aws_sdk_rust::aws::s3::header::AllowedHeaders'>AllowedHeaders</a>,
-    pub expose_headers: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ExposeHeaders.html' title='aws_sdk_rust::aws::s3::writeparse::ExposeHeaders'>ExposeHeaders</a>,
-    pub allowed_methods: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.AllowedMethods.html' title='aws_sdk_rust::aws::s3::writeparse::AllowedMethods'>AllowedMethods</a>,
-    pub max_age_seconds: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.MaxAgeSeconds.html' title='aws_sdk_rust::aws::s3::writeparse::MaxAgeSeconds'>MaxAgeSeconds</a>,
-    pub allowed_origins: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.AllowedOrigins.html' title='aws_sdk_rust::aws::s3::writeparse::AllowedOrigins'>AllowedOrigins</a>,
-}</pre><h2 class='fields'>Fields</h2><span id='structfield.allowed_headers' class='structfield'>
+    pub allowed_headers: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.AllowedHeaders.html" title="type aws_sdk_rust::aws::s3::header::AllowedHeaders">AllowedHeaders</a>,
+    pub expose_headers: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ExposeHeaders.html" title="type aws_sdk_rust::aws::s3::writeparse::ExposeHeaders">ExposeHeaders</a>,
+    pub allowed_methods: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.AllowedMethods.html" title="type aws_sdk_rust::aws::s3::writeparse::AllowedMethods">AllowedMethods</a>,
+    pub max_age_seconds: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.MaxAgeSeconds.html" title="type aws_sdk_rust::aws::s3::writeparse::MaxAgeSeconds">MaxAgeSeconds</a>,
+    pub allowed_origins: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.AllowedOrigins.html" title="type aws_sdk_rust::aws::s3::writeparse::AllowedOrigins">AllowedOrigins</a>,
+}</pre><h2 id='fields' class='fields'>Fields</h2><span id='structfield.allowed_headers' class="structfield">
                            <span id='allowed_headers.v' class='invisible'>
-                           <code>allowed_headers: <a class='type' href='../../../../aws_sdk_rust/aws/s3/header/type.AllowedHeaders.html' title='aws_sdk_rust::aws::s3::header::AllowedHeaders'>AllowedHeaders</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Specifies which headers are allowed in a pre-flight OPTIONS request.</p>
-</div><span id='structfield.expose_headers' class='structfield'>
+                           <code>allowed_headers: <a class="type" href="../../../../aws_sdk_rust/aws/s3/header/type.AllowedHeaders.html" title="type aws_sdk_rust::aws::s3::header::AllowedHeaders">AllowedHeaders</a></code>
+                           </span></span><div class='docblock'><p>Specifies which headers are allowed in a pre-flight OPTIONS request.</p>
+</div><span id='structfield.expose_headers' class="structfield">
                            <span id='expose_headers.v' class='invisible'>
-                           <code>expose_headers: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.ExposeHeaders.html' title='aws_sdk_rust::aws::s3::writeparse::ExposeHeaders'>ExposeHeaders</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>One or more headers in the response that you want customers to be able to
+                           <code>expose_headers: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.ExposeHeaders.html" title="type aws_sdk_rust::aws::s3::writeparse::ExposeHeaders">ExposeHeaders</a></code>
+                           </span></span><div class='docblock'><p>One or more headers in the response that you want customers to be able to
 access from their applications (for example, from a JavaScript XMLHttpRequest
 object).</p>
-</div><span id='structfield.allowed_methods' class='structfield'>
+</div><span id='structfield.allowed_methods' class="structfield">
                            <span id='allowed_methods.v' class='invisible'>
-                           <code>allowed_methods: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.AllowedMethods.html' title='aws_sdk_rust::aws::s3::writeparse::AllowedMethods'>AllowedMethods</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Identifies HTTP methods that the domain/origin specified in the rule is
+                           <code>allowed_methods: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.AllowedMethods.html" title="type aws_sdk_rust::aws::s3::writeparse::AllowedMethods">AllowedMethods</a></code>
+                           </span></span><div class='docblock'><p>Identifies HTTP methods that the domain/origin specified in the rule is
 allowed to execute.</p>
-</div><span id='structfield.max_age_seconds' class='structfield'>
+</div><span id='structfield.max_age_seconds' class="structfield">
                            <span id='max_age_seconds.v' class='invisible'>
-                           <code>max_age_seconds: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.MaxAgeSeconds.html' title='aws_sdk_rust::aws::s3::writeparse::MaxAgeSeconds'>MaxAgeSeconds</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>The time in seconds that your browser is to cache the preflight response for
+                           <code>max_age_seconds: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.MaxAgeSeconds.html" title="type aws_sdk_rust::aws::s3::writeparse::MaxAgeSeconds">MaxAgeSeconds</a></code>
+                           </span></span><div class='docblock'><p>The time in seconds that your browser is to cache the preflight response for
 the specified resource.</p>
-</div><span id='structfield.allowed_origins' class='structfield'>
+</div><span id='structfield.allowed_origins' class="structfield">
                            <span id='allowed_origins.v' class='invisible'>
-                           <code>allowed_origins: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.AllowedOrigins.html' title='aws_sdk_rust::aws::s3::writeparse::AllowedOrigins'>AllowedOrigins</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>One or more origins you want customers to be able to access the bucket from.</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html' title='aws_sdk_rust::aws::s3::bucket::CORSRule'>CORSRule</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-8461' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#241' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+                           <code>allowed_origins: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.AllowedOrigins.html" title="type aws_sdk_rust::aws::s3::writeparse::AllowedOrigins">AllowedOrigins</a></code>
+                           </span></span><div class='docblock'><p>One or more origins you want customers to be able to access the bucket from.</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html" title="struct aws_sdk_rust::aws::s3::bucket::CORSRule">CORSRule</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#241' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span></h4>
 <div class='docblock'><p>Formats the value using the given formatter.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html' title='aws_sdk_rust::aws::s3::bucket::CORSRule'>CORSRule</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-8471' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#241' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.default' class='method'><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html' title='aws_sdk_rust::aws::s3::bucket::CORSRule'>CORSRule</a></code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html" title="trait core::default::Default">Default</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html" title="struct aws_sdk_rust::aws::s3::bucket::CORSRule">CORSRule</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#241' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class="method"><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html" title="struct aws_sdk_rust::aws::s3::bucket::CORSRule">CORSRule</a></code></span></h4>
 <div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html' title='rustc_serialize::serialize::Decodable'>Decodable</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html' title='aws_sdk_rust::aws::s3::bucket::CORSRule'>CORSRule</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-8473' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#241' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.decode' class='method'><span id='decode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;__D:&nbsp;<a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html' title='rustc_serialize::serialize::Decoder'>Decoder</a>&gt;(__arg_0: &amp;mut __D) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html' title='aws_sdk_rust::aws::s3::bucket::CORSRule'>CORSRule</a>, __D::Error&gt;</code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html" title="trait rustc_serialize::serialize::Decodable">Decodable</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html" title="struct aws_sdk_rust::aws::s3::bucket::CORSRule">CORSRule</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#241' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.decode' class="method"><span id='decode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;__D:&nbsp;<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html" title="trait rustc_serialize::serialize::Decoder">Decoder</a>&gt;(__arg_0: &amp;mut __D) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html" title="struct aws_sdk_rust::aws::s3::bucket::CORSRule">CORSRule</a>, __D::<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html" title="trait rustc_serialize::serialize::Decoder">Error</a>&gt;</code></span></h4>
 <div class='docblock'><p>Deserialize a value using a <code>Decoder</code>.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html' title='rustc_serialize::serialize::Encodable'>Encodable</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html' title='aws_sdk_rust::aws::s3::bucket::CORSRule'>CORSRule</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-8489' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#241' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.encode' class='method'><span id='encode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html#tymethod.encode' class='fnname'>encode</a>&lt;__S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html' title='rustc_serialize::serialize::Encoder'>Encoder</a>&gt;(&amp;self, __arg_0: &amp;mut __S) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, __S::Error&gt;</code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html" title="trait rustc_serialize::serialize::Encodable">Encodable</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.CORSRule.html" title="struct aws_sdk_rust::aws::s3::bucket::CORSRule">CORSRule</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#241' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.encode' class="method"><span id='encode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html#tymethod.encode' class='fnname'>encode</a>&lt;__S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html" title="trait rustc_serialize::serialize::Encoder">Encoder</a>&gt;(&amp;self, __arg_0: &amp;mut __S) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>, __S::<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html" title="trait rustc_serialize::serialize::Encoder">Error</a>&gt;</code></span></h4>
 <div class='docblock'><p>Serialize a value using an <code>Encoder</code>.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
@@ -147,7 +148,6 @@ the specified resource.</p>
         window.rootPath = "../../../../";
         window.currentCrate = "aws_sdk_rust";
     </script>
-    <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     <script defer src="../../../../search-index.js"></script>
 </body>

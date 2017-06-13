@@ -9,6 +9,7 @@
 
     <title>aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
     
@@ -16,7 +17,7 @@
     <link rel="shortcut icon" href="https://lambdastackio.github.io/static/images/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc struct">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -28,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../../../../aws_sdk_rust/index.html'><img src='https://lambdastackio.github.io/static/images/lambdastack-200x200.png' alt='logo' width='100'></a>
-        <p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>bucket</a></p><script>window.sidebarCurrent = {name: 'TopicConfigurationDeprecated', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct TopicConfigurationDeprecated</p><div class="block items"><ul><li><a href="#fields">Fields</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>bucket</a></p><script>window.sidebarCurrent = {name: 'TopicConfigurationDeprecated', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,43 +43,43 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>bucket</a>::<wbr><a class='struct' href=''>TopicConfigurationDeprecated</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>aws_sdk_rust</a>::<wbr><a href='../../index.html'>aws</a>::<wbr><a href='../index.html'>s3</a>::<wbr><a href='index.html'>bucket</a>::<wbr><a class="struct" href=''>TopicConfigurationDeprecated</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-7939' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#140-148' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#140-148' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct TopicConfigurationDeprecated {
-    pub topic: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.TopicArn.html' title='aws_sdk_rust::aws::s3::writeparse::TopicArn'>TopicArn</a>,
-    pub id: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.NotificationId.html' title='aws_sdk_rust::aws::s3::writeparse::NotificationId'>NotificationId</a>,
-    pub event: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Event.html' title='aws_sdk_rust::aws::s3::writeparse::Event'>Event</a>,
-    pub events: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.EventList.html' title='aws_sdk_rust::aws::s3::writeparse::EventList'>EventList</a>,
-}</pre><h2 class='fields'>Fields</h2><span id='structfield.topic' class='structfield'>
+    pub topic: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.TopicArn.html" title="type aws_sdk_rust::aws::s3::writeparse::TopicArn">TopicArn</a>,
+    pub id: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.NotificationId.html" title="type aws_sdk_rust::aws::s3::writeparse::NotificationId">NotificationId</a>,
+    pub event: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.Event.html" title="type aws_sdk_rust::aws::s3::writeparse::Event">Event</a>,
+    pub events: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.EventList.html" title="type aws_sdk_rust::aws::s3::writeparse::EventList">EventList</a>,
+}</pre><h2 id='fields' class='fields'>Fields</h2><span id='structfield.topic' class="structfield">
                            <span id='topic.v' class='invisible'>
-                           <code>topic: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.TopicArn.html' title='aws_sdk_rust::aws::s3::writeparse::TopicArn'>TopicArn</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Amazon SNS topic to which Amazon S3 will publish a message to report the
+                           <code>topic: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.TopicArn.html" title="type aws_sdk_rust::aws::s3::writeparse::TopicArn">TopicArn</a></code>
+                           </span></span><div class='docblock'><p>Amazon SNS topic to which Amazon S3 will publish a message to report the
 specified events for the bucket.</p>
-</div><span id='structfield.id' class='structfield'>
+</div><span id='structfield.id' class="structfield">
                            <span id='id.v' class='invisible'>
-                           <code>id: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.NotificationId.html' title='aws_sdk_rust::aws::s3::writeparse::NotificationId'>NotificationId</a></code>
-                           </span></span><span class='stab '></span><span id='structfield.event' class='structfield'>
+                           <code>id: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.NotificationId.html" title="type aws_sdk_rust::aws::s3::writeparse::NotificationId">NotificationId</a></code>
+                           </span></span><span id='structfield.event' class="structfield">
                            <span id='event.v' class='invisible'>
-                           <code>event: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.Event.html' title='aws_sdk_rust::aws::s3::writeparse::Event'>Event</a></code>
-                           </span></span><span class='stab '></span><div class='docblock'><p>Bucket event for which to send notifications.</p>
-</div><span id='structfield.events' class='structfield'>
+                           <code>event: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.Event.html" title="type aws_sdk_rust::aws::s3::writeparse::Event">Event</a></code>
+                           </span></span><div class='docblock'><p>Bucket event for which to send notifications.</p>
+</div><span id='structfield.events' class="structfield">
                            <span id='events.v' class='invisible'>
-                           <code>events: <a class='type' href='../../../../aws_sdk_rust/aws/s3/writeparse/type.EventList.html' title='aws_sdk_rust::aws::s3::writeparse::EventList'>EventList</a></code>
-                           </span></span><span class='stab '></span><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html' title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated'>TopicConfigurationDeprecated</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-7944' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#139' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+                           <code>events: <a class="type" href="../../../../aws_sdk_rust/aws/s3/writeparse/type.EventList.html" title="type aws_sdk_rust::aws::s3::writeparse::EventList">EventList</a></code>
+                           </span></span><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html" title="struct aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated">TopicConfigurationDeprecated</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#139' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span></h4>
 <div class='docblock'><p>Formats the value using the given formatter.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html' title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated'>TopicConfigurationDeprecated</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-7953' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#139' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.default' class='method'><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html' title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated'>TopicConfigurationDeprecated</a></code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html" title="trait core::default::Default">Default</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html" title="struct aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated">TopicConfigurationDeprecated</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#139' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class="method"><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html" title="struct aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated">TopicConfigurationDeprecated</a></code></span></h4>
 <div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html' title='rustc_serialize::serialize::Decodable'>Decodable</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html' title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated'>TopicConfigurationDeprecated</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-7955' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#139' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.decode' class='method'><span id='decode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;__D:&nbsp;<a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html' title='rustc_serialize::serialize::Decoder'>Decoder</a>&gt;(__arg_0: &amp;mut __D)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html' title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated'>TopicConfigurationDeprecated</a>, __D::Error&gt;</code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html" title="trait rustc_serialize::serialize::Decodable">Decodable</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html" title="struct aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated">TopicConfigurationDeprecated</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#139' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.decode' class="method"><span id='decode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;__D:&nbsp;<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html" title="trait rustc_serialize::serialize::Decoder">Decoder</a>&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;__arg_0: &amp;mut __D<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html" title="struct aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated">TopicConfigurationDeprecated</a>, __D::<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html" title="trait rustc_serialize::serialize::Decoder">Error</a>&gt;</code></span></h4>
 <div class='docblock'><p>Deserialize a value using a <code>Decoder</code>.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html' title='rustc_serialize::serialize::Encodable'>Encodable</a> for <a class='struct' href='../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html' title='aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated'>TopicConfigurationDeprecated</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-7969' class='srclink' href='../../../../src/aws_sdk_rust/src/aws/s3/bucket.rs.html#139' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.encode' class='method'><span id='encode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html#tymethod.encode' class='fnname'>encode</a>&lt;__S:&nbsp;<a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html' title='rustc_serialize::serialize::Encoder'>Encoder</a>&gt;(&amp;self, __arg_0: &amp;mut __S) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, __S::Error&gt;</code></span></h4>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html" title="trait rustc_serialize::serialize::Encodable">Encodable</a> for <a class="struct" href="../../../../aws_sdk_rust/aws/s3/bucket/struct.TopicConfigurationDeprecated.html" title="struct aws_sdk_rust::aws::s3::bucket::TopicConfigurationDeprecated">TopicConfigurationDeprecated</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../../src/aws_sdk_rust/aws/s3/bucket.rs.html#139' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.encode' class="method"><span id='encode.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encodable.html#tymethod.encode' class='fnname'>encode</a>&lt;__S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html" title="trait rustc_serialize::serialize::Encoder">Encoder</a>&gt;(&amp;self, __arg_0: &amp;mut __S) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>, __S::<a class="trait" href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Encoder.html" title="trait rustc_serialize::serialize::Encoder">Error</a>&gt;</code></span></h4>
 <div class='docblock'><p>Serialize a value using an <code>Encoder</code>.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
@@ -137,7 +138,6 @@ specified events for the bucket.</p>
         window.rootPath = "../../../../";
         window.currentCrate = "aws_sdk_rust";
     </script>
-    <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     <script defer src="../../../../search-index.js"></script>
 </body>

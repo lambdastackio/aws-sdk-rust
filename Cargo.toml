@@ -1,7 +1,7 @@
 [package]
 name = "aws-sdk-rust"
-version = "0.1.41"
-authors = ["Chris Jones"]
+version = "0.1.42"
+authors = ["Hans Chris Jones"]
 license = "Apache-2.0"
 readme = "README.md"
 keywords = ["aws", "s3"]
@@ -18,7 +18,7 @@ Works only for S3. Other AWS Storage features are coming soon!
 """
 
 [dependencies]
-lsio = "0.1, >=0.1.16"
+lsio = "0"
 chrono = "0.2"
 httparse = "1"
 hyper = "0.10"
@@ -32,7 +32,7 @@ serde = "0.8"
 serde_json = "0.8"
 time = "0.1"
 url = "1.2"
-xml-rs = "0.1"
+xml-rs = "0"
 
 [dev-dependencies]
 # NOTE: term is only used for the example
