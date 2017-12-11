@@ -171,7 +171,7 @@ fn main() {
     get_object.key = "mytest.txt".to_string();
 
     match client.get_object(&get_object, None) {
-        Ok(output) => println_color!(term::color::GREEN, "\n\n{:#?}\n\n", str::from_utf8(&output.body).unwrap()),
+        Ok(output) => println_color!(term::color::GREEN, "\n\n{:#?}\n\n", str::from_utf8(&output.body_buffer).unwrap()),
         Err(e) => println_color!(term::color::RED, "{:#?}", e),
     }
 
