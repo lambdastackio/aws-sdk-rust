@@ -3076,14 +3076,14 @@ impl TransitionStorageClassWriter {
     }
 }
 
-pub type ContentLength = i32;
+pub type ContentLength = i64;
 /// Parse `ContentLength` from XML
 pub struct ContentLengthParser;
 
 impl ContentLengthParser {
     pub fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentLength, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
