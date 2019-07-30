@@ -1264,7 +1264,7 @@ impl<P, D> S3Client<P, D>
         let cache_control = try!(S3Client::<P,D>::get_value_for_header("Cache-Control".to_string(), response));
 
         let content_length_string = try!(S3Client::<P,D>::get_value_for_header("Content-Length".to_string(), response));
-        let content_length = try!(content_length_string.parse::<i32>());
+        let content_length = try!(content_length_string.parse::<i64>());
 
         let expiration = try!(S3Client::<P,D>::get_value_for_header("x-amz-expiration".to_string(), response));
         let missing_meta_string = try!(S3Client::<P,D>::get_value_for_header("x-amz-missing-meta".to_string(), response));
@@ -1279,7 +1279,10 @@ impl<P, D> S3Client<P, D>
         let content_type = try!(S3Client::<P,D>::get_value_for_header("Content-Type".to_string(), response));
         let content_language = try!(S3Client::<P,D>::get_value_for_header("Content-Language".to_string(), response));
         let version_id = try!(S3Client::<P,D>::get_value_for_header("x-amz-version-id".to_string(), response));
-        let e_tag = try!(S3Client::<P,D>::get_value_for_header("ETag".to_string(), response));
+        let mut e_tag = try!(S3Client::<P,D>::get_value_for_header("Etag".to_string(), response));
+        if e_tag.is_empty() {
+            e_tag = try!(S3Client::<P,D>::get_value_for_header("ETag".to_string(), response));
+        }
         let sse_customer_key_md5 = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-customer-key-MD5".to_string(), response));
         // make the object to return
         let head_object = HeadObjectOutput {
@@ -1346,7 +1349,7 @@ impl<P, D> S3Client<P, D>
         let cache_control = try!(S3Client::<P, D>::get_value_for_header("Cache-Control".to_string(), response));
         let content_length_string = try!(S3Client::<P, D>::get_value_for_header("Content-Length".to_string(),
                                                                                 response));
-        let content_length = try!(content_length_string.parse::<i32>());
+        let content_length = try!(content_length_string.parse::<i64>());
         let expiration = try!(S3Client::<P, D>::get_value_for_header("x-amz-expiration".to_string(), response));
         let missing_meta_string = try!(S3Client::<P, D>::get_value_for_header("x-amz-missing-meta".to_string(),
                                                                               response));
@@ -1363,7 +1366,12 @@ impl<P, D> S3Client<P, D>
         let content_type = try!(S3Client::<P, D>::get_value_for_header("Content-Type".to_string(), response));
         let content_language = try!(S3Client::<P, D>::get_value_for_header("Content-Language".to_string(), response));
         let version_id = try!(S3Client::<P, D>::get_value_for_header("x-amz-version-id".to_string(), response));
-        let e_tag = try!(S3Client::<P, D>::get_value_for_header("ETag".to_string(), response));
+        
+        let mut e_tag = try!(S3Client::<P, D>::get_value_for_header("ETag".to_string(), response));
+        if e_tag.is_empty() {
+            e_tag = try!(S3Client::<P, D>::get_value_for_header("Etag".to_string(), response));
+        }
+
         let sse_customer_key_md5 =
             try!(S3Client::<P, D>::get_value_for_header("x-amz-server-side-encryption-customer-key-MD5".to_string(),
                                                         response));
@@ -1625,7 +1633,12 @@ impl<P, D> S3Client<P, D>
 
         match status {
             200 => {
-                match result.headers.get("ETag") {
+                let mut etag = result.headers.get("ETag");
+                if etag == None {
+                    etag = result.headers.get("Etag");
+                }
+
+                match etag {
                     Some(ref value) => Ok(value.to_string()),
                     None => Err(S3Error::new("Couldn't find etag in response headers.")),
                 }
